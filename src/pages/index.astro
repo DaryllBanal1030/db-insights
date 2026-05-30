@@ -8,11 +8,15 @@
 ============================================================================= */
 
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
 import Section from "../components/Section.astro";
 import Carousel from "../components/Carousel.astro";
 ---
 
 <BaseLayout>
+  <!-- Hero: top-of-page intro with the grid motif. -->
+  <Hero />
+
   <!-- 01 — Featured work: the carousel, sourced from the projects collection. -->
   <Section id="work" index={1} label="featured work">
     <Carousel />
