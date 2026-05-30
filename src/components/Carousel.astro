@@ -1,0 +1,182 @@
+---
+/* =============================================================================
+   Carousel.astro — the featured-work carousel (our second interactive island).
+   =============================================================================
+   Sources cards from the projects collection: featured entries, sorted by order.
+
+   DESIGN OF THE INTERACTION (and why it's robust + accessible):
+   - The track is a horizontally scrolling flex row with CSS scroll-snap. That
+     means TOUCH SWIPE works for free, natively, even before any JS loads.
+   - The arrows and dots are progressive enhancement: a small <script> wires
+     them to scroll the track. NO autoplay.
+   - It looks right with any number of cards (1, 2, 3, …) because each slide is
+     exactly one viewport-width of the track.
+   - Keyboard: the arrow buttons and dots are real <button>s (focusable,
+     Enter/Space activate them); the track also responds to ← / → keys.
+============================================================================= */
+
+import { getCollection } from "astro:content";
+import ProjectCard from "./ProjectCard.astro";
+
+// getCollection reads every file in src/content/projects, validated against the
+// schema. We keep only featured ones and sort by `order`.
+const projects = (await getCollection("projects"))
+  .filter((p) => p.data.featured)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const hasControls = projects.length > 1;
+---
+
+<div class="carousel mx-auto max-w-3xl" data-carousel>
+  <!-- The scrolling track. tabindex=0 makes it keyboard-focusable so ←/→ work. -->
+  <div
+    class="carousel-track flex snap-x snap-mandatory gap-5 overflow-x-auto"
+    data-track
+    tabindex="0"
+    role="group"
+    aria-roledescription="carousel"
+    aria-label="Featured projects"
+  >
+    {
+      projects.map((p, i) => (
+        <div
+          class="carousel-slide w-full shrink-0 snap-center"
+          role="group"
+          aria-roledescription="slide"
+          aria-label={`${i + 1} of ${projects.length}: ${p.data.title}`}
+        >
+          <ProjectCard project={p.data} />
+        </div>
+      ))
+    }
+  </div>
+
+  {
+    hasControls && (
+      <div class="mt-6 flex items-center justify-center gap-4">
+        <button
+          type="button"
+          data-prev
+          class="grid h-10 w-10 place-items-center rounded-full border border-border text-muted transition-colors hover:border-accent hover:text-accent"
+          aria-label="Previous project"
+        >
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+        </button>
+
+        <div class="flex items-center gap-2" data-dots role="tablist" aria-label="Choose project">
+          {projects.map((p, i) => (
+            <button
+              type="button"
+              data-dot
+              data-index={i}
+              class="h-2.5 w-2.5 rounded-full border border-border transition-colors"
+              aria-label={`Go to project ${i + 1}: ${p.data.title}`}
+            />
+          ))}
+        </div>
+
+        <button
+          type="button"
+          data-next
+          class="grid h-10 w-10 place-items-center rounded-full border border-border text-muted transition-colors hover:border-accent hover:text-accent"
+          aria-label="Next project"
+        >
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 18l6-6-6-6" />
+          </svg>
+        </button>
+      </div>
+    )
+  }
+</div>
+
+<style>
+  /* Hide the native scrollbar — we navigate via swipe/arrows/dots. */
+  .carousel-track {
+    scrollbar-width: none; /* Firefox */
+  }
+  .carousel-track::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+  }
+  /* The active dot is filled with the accent. */
+  [data-dot][aria-current="true"] {
+    background-color: var(--accent);
+    border-color: var(--accent);
+  }
+</style>
+
+<script>
+  // Each [data-carousel] on the page is wired independently.
+  document.querySelectorAll<HTMLElement>("[data-carousel]").forEach((root) => {
+    const track = root.querySelector<HTMLElement>("[data-track]");
+    if (!track) return;
+
+    const slides = Array.from(
+      track.querySelectorAll<HTMLElement>(".carousel-slide"),
+    );
+    const dots = Array.from(root.querySelectorAll<HTMLElement>("[data-dot]"));
+    const prev = root.querySelector<HTMLElement>("[data-prev]");
+    const next = root.querySelector<HTMLElement>("[data-next]");
+    if (slides.length === 0) return;
+
+    let current = 0;
+
+    // Honor reduced-motion: skip smooth scrolling for those users.
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    const behavior: ScrollBehavior = prefersReduced ? "auto" : "smooth";
+
+    // Scroll the track so slide `i` is in view. Computing the offset relative to
+    // the track works regardless of positioning/padding.
+    const goTo = (i: number) => {
+      const clamped = (i + slides.length) % slides.length; // wraps around
+      const slide = slides[clamped];
+      const left =
+        slide.getBoundingClientRect().left -
+        track.getBoundingClientRect().left +
+        track.scrollLeft;
+      track.scrollTo({ left, behavior });
+    };
+
+    // Reflect the active slide in the dots + aria state.
+    const setActive = (i: number) => {
+      current = i;
+      dots.forEach((dot, di) =>
+        dot.setAttribute("aria-current", di === i ? "true" : "false"),
+      );
+    };
+    setActive(0);
+
+    // Detect the current slide as the user swipes, using IntersectionObserver
+    // (more reliable than scroll math).
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.6) {
+            setActive(slides.indexOf(entry.target as HTMLElement));
+          }
+        });
+      },
+      { root: track, threshold: [0.6] },
+    );
+    slides.forEach((s) => io.observe(s));
+
+    prev?.addEventListener("click", () => goTo(current - 1));
+    next?.addEventListener("click", () => goTo(current + 1));
+    dots.forEach((dot, i) => dot.addEventListener("click", () => goTo(i)));
+
+    // ←/→ keys when the track region is focused.
+    track.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        goTo(current - 1);
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        goTo(current + 1);
+      }
+    });
+  });
+</script>

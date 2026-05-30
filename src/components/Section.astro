@@ -1,0 +1,37 @@
+---
+/* =============================================================================
+   Section.astro — a reusable wrapper for each anchored page section.
+   =============================================================================
+   Gives every section a consistent container, an anchor `id` (for the nav
+   links), and the "engineered" mono marker like  "01 — featured work".
+   The number is accented; the label is lowercase mono.
+
+   `<slot />` is where the section's actual content goes — this is the Astro
+   equivalent of children/props.children. The `data-reveal` attribute is a hook
+   the scroll-in animation (step 7) will use; it does nothing on its own yet.
+============================================================================= */
+
+interface Props {
+  id: string; // anchor target, e.g. "work" -> href="#work"
+  index: number; // section number, shown zero-padded (1 -> "01")
+  label: string; // lowercase marker text, e.g. "featured work"
+  class?: string; // optional extra classes on the <section>
+}
+
+const { id, index, label, class: className } = Astro.props;
+const num = String(index).padStart(2, "0");
+---
+
+<section id={id} class:list={["scroll-mt-20", className]}>
+  <div class="mx-auto max-w-6xl px-6 py-20 sm:py-28">
+    <p
+      class="font-mono text-xs uppercase tracking-[0.2em] text-faint"
+      data-reveal
+    >
+      <span class="text-accent">{num}</span> — {label}
+    </p>
+    <div class="mt-8" data-reveal>
+      <slot />
+    </div>
+  </div>
+</section>
