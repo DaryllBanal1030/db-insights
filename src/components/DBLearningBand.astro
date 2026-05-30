@@ -1,0 +1,98 @@
+---
+/* =============================================================================
+   DBLearningBand.astro — a distinct branded band for the DBLearning venture.
+   =============================================================================
+   DELIBERATELY different from the teal data-project cards so it reads as a
+   SEPARATE venture:
+     - centered layout (the project cards are left-aligned)
+     - a soft warm/red glow + gradient (vs. the site's teal accent)
+     - its own logo mark and a YouTube-red call-to-action
+   Brand-only: no co-creator is named. Static — no API.
+
+   PLACEHOLDER: replace DBLEARNING_URL with the real channel link.
+============================================================================= */
+
+const DBLEARNING_URL = "https://youtube.com/@dblearning";
+---
+
+<section id="dblearning" class="scroll-mt-20">
+  <div class="mx-auto max-w-6xl px-6 py-12 sm:py-16">
+    <!-- The band itself: rounded, gradient surface, distinct from cards. -->
+    <div
+      class="relative overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-surface to-bg px-6 py-12 text-center sm:px-12 sm:py-16"
+      data-reveal
+    >
+      <!-- Decorative warm glow (purely visual) to separate this venture from
+           the teal data work. aria-hidden so screen readers skip it. -->
+      <div
+        class="pointer-events-none absolute -top-24 left-1/2 h-64 w-[36rem] -translate-x-1/2 rounded-full opacity-20 blur-3xl"
+        style="background: radial-gradient(closest-side, #FF4D4D, transparent);"
+        aria-hidden="true"
+      >
+      </div>
+
+      <div class="relative">
+        <!-- Logo mark + wordmark. -->
+        <div class="flex items-center justify-center gap-3">
+          <span
+            class="grid h-11 w-11 place-items-center rounded-xl bg-[#FF0000] text-white"
+            aria-hidden="true"
+          >
+            <!-- Play triangle. -->
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8 5v14l11-7z"></path>
+            </svg>
+          </span>
+          <span class="font-sans text-2xl font-bold tracking-tight sm:text-3xl">
+            DBLearning
+          </span>
+        </div>
+
+        <!-- Tagline (mono for the engineered detail). -->
+        <p class="mt-4 font-mono text-sm uppercase tracking-[0.2em] text-faint">
+          learning made simple
+        </p>
+
+        <!-- Audience + status pills. -->
+        <div class="mt-5 flex flex-wrap items-center justify-center gap-3">
+          <span
+            class="rounded-full border border-border bg-bg/40 px-3 py-1 font-mono text-xs text-muted"
+          >
+            preschool to college
+          </span>
+          <span
+            class="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1 font-mono text-xs text-amber-400"
+          >
+            <span class="h-1.5 w-1.5 rounded-full bg-amber-400" aria-hidden="true"
+            ></span>
+            In progress
+          </span>
+        </div>
+
+        <!-- One-line description. -->
+        <p class="mx-auto mt-6 max-w-xl text-muted">
+          An educational YouTube channel turning school subjects into clear,
+          bite-sized lessons — for learners from preschool all the way to
+          college.
+        </p>
+
+        <!-- Subscribe call-to-action: YouTube red so the platform is obvious. -->
+        <div class="mt-8">
+          <a
+            href={DBLEARNING_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 rounded-md bg-[#FF0000] px-6 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90"
+          >
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path
+                d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.5 15.5v-7l6.3 3.5-6.3 3.5z"
+              ></path>
+            </svg>
+            Subscribe on YouTube
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

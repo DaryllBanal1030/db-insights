@@ -11,6 +11,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Hero from "../components/Hero.astro";
 import Section from "../components/Section.astro";
 import Carousel from "../components/Carousel.astro";
+import DBLearningBand from "../components/DBLearningBand.astro";
 ---
 
 <BaseLayout>
@@ -21,4 +22,7 @@ import Carousel from "../components/Carousel.astro";
   <Section id="work" index={1} label="featured work">
     <Carousel />
   </Section>
+
+  <!-- DBLearning: a distinct branded band (no section number — separate venture). -->
+  <DBLearningBand />
 </BaseLayout>
