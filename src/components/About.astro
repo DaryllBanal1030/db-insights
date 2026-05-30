@@ -1,0 +1,106 @@
+---
+/* =============================================================================
+   About.astro — short intro paragraph, photo, and the Gather → Store →
+   Analyze → Present workflow.
+   =============================================================================
+   Static. The photo is a placeholder (/daryll.jpg) — drop your image in public/.
+============================================================================= */
+
+import Section from "./Section.astro";
+
+// The four-step workflow. Each step has a tiny inline icon (an SVG path).
+const steps = [
+  {
+    label: "Gather",
+    caption: "scrape & collect raw market data",
+    // download / collect
+    icon: "M12 3v12m0 0l-4-4m4 4l4-4M5 21h14",
+  },
+  {
+    label: "Store",
+    caption: "model & load into PostgreSQL",
+    // database
+    icon: "M12 3c4.97 0 9 1.34 9 3s-4.03 3-9 3-9-1.34-9-3 4.03-3 9-3zM3 6v12c0 1.66 4.03 3 9 3s9-1.34 9-3V6",
+  },
+  {
+    label: "Analyze",
+    caption: "clean, transform, find the signal",
+    // chart
+    icon: "M3 3v18h18M7 15l3-4 3 2 4-6",
+  },
+  {
+    label: "Present",
+    caption: "dashboards & downloadable CSVs",
+    // presentation
+    icon: "M3 4h18M4 4v10a2 2 0 002 2h12a2 2 0 002-2V4M9 20l3-4 3 4",
+  },
+];
+---
+
+<Section id="about" index={2} label="about">
+  <!-- Intro + photo. -->
+  <div class="grid gap-10 md:grid-cols-3 md:items-center">
+    <div class="md:col-span-2">
+      <p class="max-w-prose text-lg text-muted">
+        I'm a research analyst at PRIME Philippines who likes turning messy,
+        real-world market data into something people can actually use. My work
+        runs the full pipeline — from gathering and modeling data to shipping
+        dashboards and clean, downloadable datasets — and I'm steadily growing
+        into data engineering.
+      </p>
+    </div>
+    <div class="md:col-span-1">
+      <!-- Photo placeholder. aspect-ratio + bg keep the layout stable even
+           before the image loads (or while it's a placeholder). -->
+      <img
+        src="/daryll.jpg"
+        alt="Daryll Banal"
+        width="480"
+        height="600"
+        loading="lazy"
+        class="aspect-[4/5] w-full rounded-xl border border-border bg-surface object-cover"
+      />
+    </div>
+  </div>
+
+  <!-- The workflow. A horizontal flow on desktop, stacked on mobile, with a
+       connector arrow between steps (→ on desktop, ↓ on mobile). -->
+  <div class="mt-14">
+    <p class="font-mono text-xs uppercase tracking-[0.2em] text-faint">
+      how I work
+    </p>
+    <ol class="mt-6 flex flex-col gap-3 lg:flex-row lg:items-stretch">
+      {
+        steps.map((step, i) => (
+          <>
+            <li class="flex flex-1 items-start gap-4 rounded-xl border border-border bg-surface p-5">
+              <span class="grid h-10 w-10 shrink-0 place-items-center rounded-lg border border-border text-accent">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d={step.icon} />
+                </svg>
+              </span>
+              <span>
+                <span class="block font-semibold tracking-tight">
+                  {step.label}
+                </span>
+                <span class="mt-1 block font-mono text-xs text-muted">
+                  {step.caption}
+                </span>
+              </span>
+            </li>
+            {i < steps.length - 1 && (
+              <li
+                class="grid shrink-0 place-items-center text-faint lg:px-1"
+                aria-hidden="true"
+              >
+                {/* down arrow on mobile, right arrow on desktop */}
+                <span class="lg:hidden">↓</span>
+                <span class="hidden lg:inline">→</span>
+              </li>
+            )}
+          </>
+        ))
+      }
+    </ol>
+  </div>
+</Section>

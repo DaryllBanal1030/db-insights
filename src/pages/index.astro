@@ -12,6 +12,11 @@ import Hero from "../components/Hero.astro";
 import Section from "../components/Section.astro";
 import Carousel from "../components/Carousel.astro";
 import DBLearningBand from "../components/DBLearningBand.astro";
+import About from "../components/About.astro";
+import Experience from "../components/Experience.astro";
+import Skills from "../components/Skills.astro";
+import Credentials from "../components/Credentials.astro";
+import Contact from "../components/Contact.astro";
 ---
 
 <BaseLayout>
@@ -25,4 +30,19 @@ import DBLearningBand from "../components/DBLearningBand.astro";
 
   <!-- DBLearning: a distinct branded band (no section number — separate venture). -->
   <DBLearningBand />
+
+  <!-- 02 — About: intro, photo, and the Gather → Store → Analyze → Present flow. -->
+  <About />
+
+  <!-- 03 — Experience: vertical timeline. -->
+  <Experience />
+
+  <!-- 04 — Skills: four grouped cards. -->
+  <Skills />
+
+  <!-- 05 — Credentials: flat grid from the credentials collection. -->
+  <Credentials />
+
+  <!-- 06 — Contact: real email + social links. -->
+  <Contact />
 </BaseLayout>

@@ -1,0 +1,59 @@
+---
+/* =============================================================================
+   Contact.astro — email + social links.
+   =============================================================================
+   IMPORTANT: the email button uses the REAL address darylllbanal@gmail.com
+   (the old site shipped a broken your.email@example.com placeholder — fixed here).
+============================================================================= */
+
+import Section from "./Section.astro";
+
+const email = "darylllbanal@gmail.com";
+const linkedin = "https://linkedin.com/in/darylllbanal/";
+const github = "https://github.com/DaryllBanal1030";
+---
+
+<Section id="contact" index={6} label="contact">
+  <p class="max-w-prose text-lg text-muted">
+    Open to data-engineering and analytics roles, collaborations, and good
+    conversations. The fastest way to reach me is email.
+  </p>
+
+  <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+    <!-- Primary email button. The visible label IS the real address. -->
+    <a
+      href={`mailto:${email}`}
+      class="inline-flex items-center justify-center gap-2 rounded-md bg-accent px-6 py-3 text-sm font-medium text-on-accent transition-opacity hover:opacity-90"
+    >
+      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="3" y="5" width="18" height="14" rx="2" />
+        <path d="M3 7l9 6 9-6" />
+      </svg>
+      {email}
+    </a>
+
+    <a
+      href={linkedin}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex items-center justify-center gap-2 rounded-md border border-border px-6 py-3 text-sm font-medium text-text transition-colors hover:border-accent hover:text-accent"
+    >
+      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M4.98 3.5A2.5 2.5 0 1 1 0 3.5a2.5 2.5 0 0 1 4.98 0zM.5 8h4V24h-4V8zm7.5 0h3.8v2.2h.05c.53-1 1.83-2.2 3.77-2.2 4.03 0 4.78 2.65 4.78 6.1V24h-4v-7.1c0-1.7-.03-3.9-2.37-3.9-2.38 0-2.74 1.86-2.74 3.78V24h-4V8z" />
+      </svg>
+      LinkedIn ↗
+    </a>
+
+    <a
+      href={github}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex items-center justify-center gap-2 rounded-md border border-border px-6 py-3 text-sm font-medium text-text transition-colors hover:border-accent hover:text-accent"
+    >
+      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.3-1.7-1.3-1.7-1.05-.72.08-.71.08-.71 1.17.08 1.78 1.2 1.78 1.2 1.04 1.78 2.73 1.27 3.4.97.1-.75.4-1.27.73-1.56-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.2-3.1-.12-.29-.52-1.46.11-3.05 0 0 .98-.31 3.2 1.18a11.1 11.1 0 0 1 5.82 0c2.22-1.49 3.2-1.18 3.2-1.18.63 1.59.23 2.76.11 3.05.75.81 1.2 1.84 1.2 3.1 0 4.43-2.7 5.41-5.26 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z" />
+      </svg>
+      GitHub ↗
+    </a>
+  </div>
+</Section>

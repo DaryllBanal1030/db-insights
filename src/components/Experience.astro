@@ -1,0 +1,83 @@
+---
+/* =============================================================================
+   Experience.astro — a vertical timeline.
+   =============================================================================
+   Static. Entries are a plain data array; the markup maps over them. A vertical
+   line runs down the left, with an accent dot marking each entry.
+============================================================================= */
+
+import Section from "./Section.astro";
+
+const timeline = [
+  {
+    role: "Research Analyst",
+    org: "PRIME Philippines",
+    period: "May 2025 – present",
+    bullets: [
+      "Build Python and SQL pipelines that turn raw market data into analysis-ready datasets.",
+      "Produce dashboards and reports that inform real-estate and macroeconomic decisions.",
+      "Automate recurring data collection and cleaning to speed up research turnaround.",
+    ],
+    tags: ["Python", "SQL", "Power BI", "Excel"],
+  },
+  {
+    role: "Self-directed data projects",
+    org: "Independent",
+    period: "2024 – ongoing",
+    bullets: [
+      "Designed an end-to-end Philippine macroeconomy dashboard with downloadable CSV exports.",
+      "Modeled data in PostgreSQL and built ETL workflows to keep the series up to date.",
+      "Used these projects to deepen data-engineering skills beyond day-to-day analysis.",
+    ],
+    tags: ["PostgreSQL", "Streamlit", "ETL", "Docker"],
+  },
+  {
+    role: "BS Computer Engineering, cum laude",
+    org: "Pamantasan ng Lungsod ng Maynila",
+    period: "2021 – 2025",
+    bullets: [
+      "Graduated cum laude with a focus on computing fundamentals and systems.",
+      "Built a foundation in programming, databases, and engineering problem-solving.",
+    ],
+    tags: ["Computer Engineering", "Programming", "Databases"],
+  },
+];
+---
+
+<Section id="experience" index={3} label="experience">
+  <ol class="relative space-y-12 border-l border-border">
+    {
+      timeline.map((entry) => (
+        <li class="relative pl-8">
+          {/* Accent dot sitting on the line; bg fill so the line passes behind. */}
+          <span
+            class="absolute -left-[7px] top-1.5 h-3.5 w-3.5 rounded-full border-2 border-accent bg-bg"
+            aria-hidden="true"
+          />
+          <p class="font-mono text-xs uppercase tracking-[0.15em] text-faint">
+            {entry.period}
+          </p>
+          <h3 class="mt-2 text-lg font-semibold tracking-tight">
+            {entry.role}
+            <span class="text-muted"> · {entry.org}</span>
+          </h3>
+          <ul class="mt-3 space-y-2">
+            {entry.bullets.map((b) => (
+              <li class="flex gap-3 text-muted">
+                <span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-faint" aria-hidden="true" />
+                <span>{b}</span>
+              </li>
+            ))}
+          </ul>
+          <ul class="mt-4 flex flex-wrap gap-2">
+            {entry.tags.map((tag) => (
+              <li class="rounded-md border border-hairline px-2.5 py-1 font-mono text-xs text-muted">
+                {tag}
+              </li>
+            ))}
+          </ul>
+        </li>
+      ))
+    }
+  </ol>
+</Section>

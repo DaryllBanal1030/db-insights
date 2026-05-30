@@ -1,0 +1,56 @@
+---
+/* =============================================================================
+   Skills.astro — four grouped, scannable cards.
+   =============================================================================
+   Static. Each group is a card; skills render as mono pills so they're quick
+   to scan. The "Data Engineering Foundations" group is flagged as "learning".
+============================================================================= */
+
+import Section from "./Section.astro";
+
+const groups = [
+  {
+    title: "Data & Analytics",
+    items: ["Python (pandas, NumPy)", "SQL", "Power BI", "Streamlit", "Excel", "Data visualization"],
+  },
+  {
+    title: "Data Engineering Foundations",
+    note: "learning",
+    items: ["PostgreSQL modeling", "ETL pipelines", "dbt", "DuckDB", "Docker", "Workflow orchestration"],
+  },
+  {
+    title: "Research & Domain Knowledge",
+    items: ["Macroeconomic analysis", "Real-estate market research", "Data sourcing", "Report writing"],
+  },
+  {
+    title: "Developer & Portfolio Tools",
+    items: ["Git & GitHub", "VS Code", "Astro", "Tailwind CSS", "Command line"],
+  },
+];
+---
+
+<Section id="skills" index={4} label="skills">
+  <div class="grid gap-5 sm:grid-cols-2">
+    {
+      groups.map((group) => (
+        <div class="rounded-xl border border-border bg-surface p-6">
+          <div class="flex items-center gap-3">
+            <h3 class="font-semibold tracking-tight">{group.title}</h3>
+            {group.note && (
+              <span class="rounded-full border border-border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide text-amber-400">
+                {group.note}
+              </span>
+            )}
+          </div>
+          <ul class="mt-4 flex flex-wrap gap-2">
+            {group.items.map((item) => (
+              <li class="rounded-md border border-hairline px-2.5 py-1 font-mono text-xs text-muted">
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </div>
+</Section>
