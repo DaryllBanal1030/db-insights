@@ -16,6 +16,8 @@
 ============================================================================= */
 
 import "../styles/global.css";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
 
 // Props let a page customize the per-page SEO bits. We give sensible defaults
 // so most pages don't have to pass anything.
@@ -103,15 +105,15 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
       Skip to content
     </a>
 
-    <!-- Nav slot — the <Nav> component lands here in step 2. -->
-    <slot name="nav" />
+    <!-- Site-wide navigation. -->
+    <Nav />
 
-    <!-- Main page content. -->
+    <!-- Main page content. Pages render here via the default <slot />. -->
     <main id="main" class="flex-1">
       <slot />
     </main>
 
-    <!-- Footer slot — the <Footer> component lands here in step 2. -->
-    <slot name="footer" />
+    <!-- Site-wide footer. -->
+    <Footer />
   </body>
 </html>

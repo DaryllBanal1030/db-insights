@@ -1,0 +1,135 @@
+---
+/* =============================================================================
+   Nav.astro — sticky top navigation.
+   =============================================================================
+   Left:  "DB" monogram + "Daryll Banal".
+   Right: anchor links + a Résumé link + the theme toggle.
+   Mobile: the links collapse into a <details> dropdown (a native, accessible,
+           zero-JS disclosure widget — no framework island needed).
+============================================================================= */
+
+import ThemeToggle from "./ThemeToggle.astro";
+
+// Anchor links to the page sections. Adding/removing a section link = editing
+// this one array. The hrefs match the `id`s on each <section> (added in later steps).
+const links = [
+  { href: "#work", label: "Work" },
+  { href: "#about", label: "About" },
+  { href: "#experience", label: "Experience" },
+  { href: "#credentials", label: "Credentials" },
+  { href: "#contact", label: "Contact" },
+];
+---
+
+<header
+  class="sticky top-0 z-40 border-b border-hairline bg-bg/80 backdrop-blur-md"
+>
+  <nav
+    aria-label="Primary"
+    class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-3"
+  >
+    <!-- Brand. `#top` is a special fragment that scrolls to the page top. -->
+    <a href="#top" class="flex items-center gap-3" aria-label="Daryll Banal — home">
+      <span
+        class="grid h-9 w-9 place-items-center rounded-md border border-border bg-surface font-mono text-sm font-bold tracking-tight text-accent"
+        aria-hidden="true"
+      >
+        DB
+      </span>
+      <span class="font-sans text-sm font-semibold tracking-tight">
+        Daryll Banal
+      </span>
+    </a>
+
+    <!-- Right cluster. -->
+    <div class="flex items-center gap-3 md:gap-6">
+      <!-- Desktop links: hidden on mobile (they live in the dropdown there). -->
+      <ul class="hidden items-center gap-6 md:flex">
+        {
+          links.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class="text-sm text-muted transition-colors hover:text-text"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+        <li>
+          <a
+            href="/resume.pdf"
+            class="rounded-md border border-border px-3 py-1.5 font-mono text-xs text-text transition-colors hover:border-accent hover:text-accent"
+          >
+            Résumé ↗
+          </a>
+        </li>
+      </ul>
+
+      <!-- Theme toggle: a single instance, visible at every breakpoint. -->
+      <ThemeToggle />
+
+      <!-- Mobile menu: native <details> disclosure, only shown below md. -->
+      <details class="nav-menu relative md:hidden">
+        <summary
+          class="grid h-9 w-9 cursor-pointer list-none place-items-center rounded-md border border-border text-muted transition-colors hover:text-text hover:border-accent"
+          aria-label="Open navigation menu"
+        >
+          <!-- Hamburger icon. -->
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <path d="M3 6h18M3 12h18M3 18h18" />
+          </svg>
+        </summary>
+
+        <!-- Dropdown panel: absolutely positioned under the button. -->
+        <div
+          class="absolute right-0 top-full mt-2 flex w-56 flex-col gap-1 rounded-lg border border-border bg-surface p-2 shadow-xl shadow-black/20"
+        >
+          {
+            links.map((link) => (
+              <a
+                href={link.href}
+                class="rounded-md px-3 py-2 text-sm text-muted transition-colors hover:bg-bg hover:text-text"
+              >
+                {link.label}
+              </a>
+            ))
+          }
+          <a
+            href="/resume.pdf"
+            class="rounded-md px-3 py-2 font-mono text-xs text-text transition-colors hover:bg-bg hover:text-accent"
+          >
+            Résumé ↗
+          </a>
+        </div>
+      </details>
+    </div>
+  </nav>
+</header>
+
+<style>
+  /* Hide the default disclosure triangle on the <summary>. */
+  .nav-menu summary::-webkit-details-marker {
+    display: none;
+  }
+  .nav-menu summary {
+    list-style: none;
+  }
+</style>
+
+<script>
+  // Progressive enhancement (NOT an island — just a tiny vanilla listener):
+  // close the mobile dropdown after a link is tapped, and when clicking away.
+  const menu = document.querySelector<HTMLDetailsElement>(".nav-menu");
+  if (menu) {
+    menu.querySelectorAll("a").forEach((a) =>
+      a.addEventListener("click", () => menu.removeAttribute("open")),
+    );
+    document.addEventListener("click", (e) => {
+      if (menu.open && !menu.contains(e.target as Node)) {
+        menu.removeAttribute("open");
+      }
+    });
+  }
+</script>

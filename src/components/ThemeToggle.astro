@@ -1,0 +1,86 @@
+---
+/* =============================================================================
+   ThemeToggle.astro — the light/dark switch (one of our two interactive islands)
+   =============================================================================
+
+   ISLAND CONCEPT: most of this site is static HTML. A handful of components need
+   to run in the browser. In Astro, any plain <script> inside a .astro component
+   is automatically bundled and shipped to the client — that's all an "island" is
+   here. (The `client:*` directives you may have read about are only needed for
+   framework components like React; for .astro + <script> it just works.)
+
+   This button flips `data-theme="light"` on the <html> element and saves the
+   choice to localStorage. The no-flash script in BaseLayout reads that same key
+   on the next page load, so the choice persists. Dark is the default (no
+   attribute set); only light sets the attribute.
+============================================================================= */
+---
+
+<button
+  id="theme-toggle"
+  type="button"
+  class="grid h-9 w-9 place-items-center rounded-md border border-border text-muted transition-colors hover:text-text hover:border-accent"
+  aria-label="Switch to light theme"
+  aria-pressed="false"
+>
+  <!-- Moon icon: shown in dark mode (the default). -->
+  <svg class="icon-moon h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+  </svg>
+  <!-- Sun icon: shown in light mode. -->
+  <svg class="icon-sun h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+  </svg>
+</button>
+
+<style>
+  /* Swap which icon is visible based on the active theme. The :global() wrapper
+     lets us match the data-theme attribute that lives on <html> (outside this
+     component's scoped styles). */
+  .icon-sun {
+    display: none;
+  }
+  :global(:root[data-theme="light"]) .icon-moon {
+    display: none;
+  }
+  :global(:root[data-theme="light"]) .icon-sun {
+    display: block;
+  }
+</style>
+
+<script>
+  // Runs in the browser. Reads/writes the same "theme" key the no-flash script uses.
+  const btn = document.getElementById("theme-toggle");
+
+  if (btn) {
+    const isLight = () =>
+      document.documentElement.getAttribute("data-theme") === "light";
+
+    // Keep the accessible label + pressed state in sync with the current theme.
+    const syncLabel = () => {
+      btn.setAttribute(
+        "aria-label",
+        isLight() ? "Switch to dark theme" : "Switch to light theme",
+      );
+      btn.setAttribute("aria-pressed", String(isLight()));
+    };
+
+    syncLabel();
+
+    btn.addEventListener("click", () => {
+      const next = isLight() ? "dark" : "light";
+      if (next === "light") {
+        document.documentElement.setAttribute("data-theme", "light");
+      } else {
+        document.documentElement.removeAttribute("data-theme");
+      }
+      try {
+        localStorage.setItem("theme", next);
+      } catch (e) {
+        /* localStorage unavailable — the toggle still works for this session. */
+      }
+      syncLabel();
+    });
+  }
+</script>
