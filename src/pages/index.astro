@@ -1,0 +1,43 @@
+---
+/* =============================================================================
+   index.astro — the single page of this site.
+   =============================================================================
+   Pages live in src/pages/. Each .astro file here becomes a route based on its
+   filename: index.astro -> "/". This page is intentionally minimal for step 1
+   (foundation). Sections (hero, work carousel, about, etc.) get composed in
+   here in later steps.
+============================================================================= */
+
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout>
+  <!-- Temporary foundation check: confirms fonts + both theme palettes work.
+       This whole block gets replaced by real sections in steps 2–6. -->
+  <section class="mx-auto max-w-3xl px-6 py-24">
+    <p class="font-mono text-sm uppercase tracking-widest text-accent">
+      research analyst · aspiring data engineer
+    </p>
+    <h1 class="mt-4 font-sans text-4xl font-bold tracking-tight sm:text-5xl">
+      Daryll Banal
+    </h1>
+    <p class="mt-4 max-w-prose text-muted">
+      Foundation is live. Astro + Tailwind + Inter/JetBrains&nbsp;Mono with a
+      dark-first design system and a fully designed light theme. Real sections
+      arrive in the next steps.
+    </p>
+
+    <!-- A few swatches so we can eyeball both palettes during development. -->
+    <div class="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3">
+      <div class="rounded-lg border border-border bg-surface p-4">
+        <span class="font-mono text-xs text-faint">surface</span>
+      </div>
+      <div class="rounded-lg border border-border bg-accent p-4 text-on-accent">
+        <span class="font-mono text-xs">accent</span>
+      </div>
+      <div class="rounded-lg border border-border bg-surface p-4">
+        <span class="font-mono text-xs text-live">live</span>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
