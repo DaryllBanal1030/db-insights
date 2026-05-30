@@ -24,12 +24,14 @@ const num = String(index).padStart(2, "0");
 
 <section id={id} class:list={["scroll-mt-20", className]}>
   <div class="mx-auto max-w-6xl px-6 py-20 sm:py-28">
-    <p
-      class="font-mono text-xs uppercase tracking-[0.2em] text-faint"
+    <!-- The marker doubles as the section's <h2> so the heading hierarchy is
+         h1 (hero) -> h2 (section) -> h3 (cards/entries) with no skips. -->
+    <h2
+      class="font-mono text-xs font-normal uppercase tracking-[0.2em] text-faint"
       data-reveal
     >
       <span class="text-accent">{num}</span> — {label}
-    </p>
+    </h2>
     <div class="mt-8" data-reveal>
       <slot />
     </div>

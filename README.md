@@ -95,6 +95,15 @@ order: 4
 
 That's it — the carousel and the credentials grid pick the new file up automatically.
 
+## Regenerating the social image + iOS icon
+
+`public/og.png` (the social-share preview) and `public/apple-touch-icon.png` are
+generated from SVG definitions in `scripts/generate-images.mjs`. To tweak and rebuild them:
+
+```sh
+node scripts/generate-images.mjs
+```
+
 ## Placeholders to fill in
 
 - `public/resume.pdf` — your résumé (linked from the nav).

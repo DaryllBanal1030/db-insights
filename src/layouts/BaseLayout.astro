@@ -44,9 +44,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
 
-    <!-- Favicons -->
+    <!-- Favicons. The SVG covers modern browsers; the PNG is the iOS home-screen icon. -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
     <!-- Primary SEO -->
     <title>{title}</title>
@@ -89,6 +89,18 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
         } catch (e) {
           /* localStorage may be unavailable (e.g. privacy mode) — ignore. */
         }
+
+        // Enable scroll-in motion ONLY when JS runs and the user is fine with
+        // motion. Added here (in <head>, pre-paint) so [data-reveal] elements
+        // start hidden without a flash. If this line never runs (JS off) or
+        // reduced motion is set, content stays fully visible.
+        try {
+          if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            document.documentElement.classList.add("reveal-enabled");
+          }
+        } catch (e) {
+          /* ignore */
+        }
       })();
     </script>
   </head>
@@ -115,5 +127,30 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
     <!-- Site-wide footer. -->
     <Footer />
+
+    <!--
+      Scroll-in reveal. Bundled <script> (runs after the DOM is ready). Watches
+      every [data-reveal] element and adds `is-visible` as it scrolls into view,
+      which triggers the CSS fade/slide. Only matters when `reveal-enabled` is
+      present (see the head script); otherwise these elements were never hidden.
+    -->
+    <script>
+      if (document.documentElement.classList.contains("reveal-enabled")) {
+        const observer = new IntersectionObserver(
+          (entries, obs) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+                obs.unobserve(entry.target); // reveal once, then stop watching
+              }
+            });
+          },
+          { rootMargin: "0px 0px -10% 0px", threshold: 0.1 },
+        );
+        document
+          .querySelectorAll("[data-reveal]")
+          .forEach((el) => observer.observe(el));
+      }
+    </script>
   </body>
 </html>
