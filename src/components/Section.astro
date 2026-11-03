@@ -3,8 +3,8 @@
    Section.astro — a reusable wrapper for each anchored page section.
    =============================================================================
    Gives every section a consistent container, an anchor `id` (for the nav
-   links), and the "engineered" mono marker like  "01 — featured work".
-   The number is accented; the label is lowercase mono.
+   links), and the uppercase marker like "01 — featured work" in Plus Jakarta Sans.
+   The number is in the Masterbrand ink; the label is uppercase and letter-spaced.
 
    `<slot />` is where the section's actual content goes — this is the Astro
    equivalent of children/props.children. The `data-reveal` attribute is a hook
@@ -27,7 +27,7 @@ const num = String(index).padStart(2, "0");
     <!-- The marker doubles as the section's <h2> so the heading hierarchy is
          h1 (hero) -> h2 (section) -> h3 (cards/entries) with no skips. -->
     <h2
-      class="font-mono text-xs font-normal uppercase tracking-[0.2em] text-faint"
+      class="font-display text-xs font-semibold uppercase tracking-[0.2em] text-faint"
       data-reveal
     >
       <span class="text-accent">{num}</span> — {label}

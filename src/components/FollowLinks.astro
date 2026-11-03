@@ -1,0 +1,45 @@
+---
+/* =============================================================================
+   FollowLinks.astro — where to follow DB Insights.
+   =============================================================================
+   Reads FOLLOW_LINKS from src/lib/hub.ts. A platform that hasn't started yet
+   shows its start note instead of a link, so there are no dead links before
+   the Facebook Page (Dec 7, 2026) or YouTube (Phase 3) go live. To switch one
+   on, set its `startsNote` to null in hub.ts.
+============================================================================= */
+
+import Section from "./Section.astro";
+import { BRAND, FOLLOW_LINKS } from "../lib/hub";
+---
+
+<Section id="follow" index={3} label="follow">
+  <p class="max-w-prose text-lg text-muted">
+    Every post goes up on LinkedIn first. Tag your own PH data and map posts
+    with <span class="font-semibold text-text">{BRAND.hashtag}</span>.
+  </p>
+
+  <ul class="mt-8 grid gap-4 sm:grid-cols-3">
+    {
+      FOLLOW_LINKS.map((link) => (
+        <li class="rounded-xl border border-border bg-surface p-5">
+          <p class="font-display text-lg font-bold tracking-tight">{link.platform}</p>
+          <p class="mt-1 text-sm text-muted">
+            {link.handle} · {link.speaksAs === "Personal" ? "Daryll in person" : "the DB Insights Page"}
+          </p>
+          {link.startsNote ? (
+            <p class="mt-4 text-sm text-faint">{link.startsNote}</p>
+          ) : (
+            <a
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="mt-4 inline-block text-sm font-medium text-text underline underline-offset-4 hover:opacity-80"
+            >
+              Follow ↗
+            </a>
+          )}
+        </li>
+      ))
+    }
+  </ul>
+</Section>

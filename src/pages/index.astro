@@ -1,14 +1,21 @@
 ---
 /* =============================================================================
-   index.astro — the single page of this site.
+   index.astro — the Hub home page, route "/".
    =============================================================================
    Pages live in src/pages/. index.astro -> route "/". This page composes the
-   section components in order. More sections (hero, about, etc.) get added in
-   later steps.
+   section components in order: first DB Insights (what it is, its sections,
+   latest posts, where to follow), then Daryll's own portfolio (work, about,
+   experience, skills, credentials, contact).
+
+   The section pages (/spatial, /analytics, …) are built by
+   src/pages/[section]/index.astro.
 ============================================================================= */
 
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Hero from "../components/Hero.astro";
+import SectionCards from "../components/SectionCards.astro";
+import LatestPosts from "../components/LatestPosts.astro";
+import FollowLinks from "../components/FollowLinks.astro";
 import Section from "../components/Section.astro";
 import Carousel from "../components/Carousel.astro";
 import DBLearningBand from "../components/DBLearningBand.astro";
@@ -20,29 +27,38 @@ import Contact from "../components/Contact.astro";
 ---
 
 <BaseLayout>
-  <!-- Hero: top-of-page intro with the grid motif. -->
+  <!-- Hero: the bio line, tagline and the main follow button. -->
   <Hero />
 
-  <!-- 01 — Featured work: the carousel, sourced from the projects collection. -->
-  <Section id="work" index={1} label="featured work">
+  <!-- 01 — The sections: one card per Sub-brand + Field Notes. -->
+  <SectionCards />
+
+  <!-- 02 — Latest posts across every section (or the launch date, before launch). -->
+  <LatestPosts />
+
+  <!-- 03 — Follow: LinkedIn now; Facebook and YouTube with their start dates. -->
+  <FollowLinks />
+
+  <!-- 04 — Featured work: the carousel, sourced from the projects collection. -->
+  <Section id="work" index={4} label="featured work">
     <Carousel />
   </Section>
 
-  <!-- DBLearning: a distinct branded band (no section number — separate venture). -->
+  <!-- DBLearning: a distinct branded band in the coral Sub-brand Accent. -->
   <DBLearningBand />
 
-  <!-- 02 — About: intro, photo, and the Gather → Store → Analyze → Present flow. -->
+  <!-- 05 — About: intro, photo, and the Gather → Store → Analyze → Present flow. -->
   <About />
 
-  <!-- 03 — Experience: vertical timeline. -->
+  <!-- 06 — Experience: vertical timeline. -->
   <Experience />
 
-  <!-- 04 — Skills: four grouped cards. -->
+  <!-- 07 — Skills: four grouped cards. -->
   <Skills />
 
-  <!-- 05 — Credentials: flat grid from the credentials collection. -->
+  <!-- 08 — Credentials: flat grid from the credentials collection. -->
   <Credentials />
 
-  <!-- 06 — Contact: real email + social links. -->
+  <!-- 09 — Contact: real email + social links. -->
   <Contact />
 </BaseLayout>

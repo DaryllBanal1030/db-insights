@@ -18,10 +18,11 @@ const { project } = Astro.props;
 const { title, status, summary, tags, liveUrl, repoUrl } = project;
 
 // Map each status to its badge styling (dot + text color). These are functional
-// status colors, intentionally separate from the single decorative accent.
+// status colors. Only "Live" gets a colour (green); the others stay neutral so
+// they never look like a Sub-brand Accent (e.g. amber would read as DBAnalytics).
 const statusStyles: Record<typeof status, { dot: string; text: string }> = {
   Live: { dot: "bg-live", text: "text-live" },
-  "In progress": { dot: "bg-amber-400", text: "text-amber-400" },
+  "In progress": { dot: "bg-muted", text: "text-muted" },
   Concept: { dot: "bg-faint", text: "text-faint" },
 };
 const badge = statusStyles[status];
@@ -34,7 +35,7 @@ const badge = statusStyles[status];
   <div class="flex items-start justify-between gap-4">
     <h3 class="font-sans text-xl font-semibold tracking-tight">{title}</h3>
     <span
-      class={`inline-flex shrink-0 items-center gap-2 rounded-full border border-border px-3 py-1 font-mono text-xs ${badge.text}`}
+      class={`inline-flex shrink-0 items-center gap-2 rounded-full border border-border px-3 py-1 text-xs ${badge.text}`}
     >
       <span class={`h-1.5 w-1.5 rounded-full ${badge.dot}`} aria-hidden="true"
       ></span>
@@ -45,11 +46,11 @@ const badge = statusStyles[status];
   <!-- The brief blurb. -->
   <p class="mt-4 text-muted">{summary}</p>
 
-  <!-- Tech tags as mono pills. -->
+  <!-- Tech tags as small pills. -->
   <ul class="mt-6 flex flex-wrap gap-2">
     {
       tags.map((tag) => (
-        <li class="rounded-md border border-hairline px-2.5 py-1 font-mono text-xs text-muted">
+        <li class="rounded-md border border-hairline px-2.5 py-1 text-xs text-muted">
           {tag}
         </li>
       ))

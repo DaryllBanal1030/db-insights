@@ -1,0 +1,29 @@
+---
+/* =============================================================================
+   SubBrandTag.astro — the small label saying which Sub-brand something is.
+   =============================================================================
+   This is the ONE place a Sub-brand Accent is used as a fill (plus the thin
+   accent bars on cards). Navy text on the accent colour reads well in both
+   themes. Pass `section={null}` for a Masterbrand item and it shows
+   "DB Insights" in the navy/white ink instead.
+============================================================================= */
+
+import { BRAND, type Section } from "../lib/hub";
+
+interface Props {
+  section: Section | null;
+  class?: string;
+}
+
+const { section, class: className } = Astro.props;
+---
+
+<span
+  class:list={[
+    "inline-flex items-center rounded-full px-2.5 py-0.5 font-display text-xs font-bold tracking-tight",
+    section ? section.tagClass : "bg-accent text-on-accent",
+    className,
+  ]}
+>
+  {section ? section.name : BRAND.name}
+</span>

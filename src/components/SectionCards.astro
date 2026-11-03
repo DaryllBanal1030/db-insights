@@ -1,0 +1,41 @@
+---
+/* =============================================================================
+   SectionCards.astro — one card per Hub section (the four Sub-brands plus
+   Field Notes), linking to /spatial, /analytics, etc.
+   =============================================================================
+   Static. Each card has a thin bar in its Sub-brand Accent, the Sub-brand Tag,
+   what it covers, its Post Formats and its Phase. All the wording comes from
+   SECTIONS in src/lib/hub.ts; this component only lays it out.
+============================================================================= */
+
+import Section from "./Section.astro";
+import SubBrandTag from "./SubBrandTag.astro";
+import { SECTION_LIST } from "../lib/hub";
+---
+
+<Section id="sub-brands" index={1} label="the sections">
+  <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      SECTION_LIST.map((section) => (
+        <a
+          href={section.path}
+          class="group flex flex-col rounded-xl border border-border bg-surface p-6 transition-colors hover:border-accent"
+        >
+          <span class:list={["h-1 w-10 rounded-full", section.barClass]} aria-hidden="true" />
+          <span class="mt-5">
+            {/* Field Notes isn't a Sub-brand, so it gets the Masterbrand tag. */}
+            <SubBrandTag section={section.key === "notes" ? null : section} />
+          </span>
+          <h3 class="mt-3 text-xl font-bold tracking-tight">{section.name}</h3>
+          <p class="mt-2 flex-1 text-sm text-muted">{section.focus}</p>
+          <p class="mt-5 text-xs text-faint">
+            {section.formats.join(" · ")} · Phase {section.phase}
+          </p>
+          <span class="mt-3 text-sm font-medium text-text group-hover:underline group-hover:underline-offset-4">
+            {section.path} →
+          </span>
+        </a>
+      ))
+    }
+  </div>
+</Section>

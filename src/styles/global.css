@@ -24,8 +24,11 @@
 @import "tailwindcss";
 
 /* Self-hosted fonts (no external CDN -> faster, privacy-friendly, no layout
-   shift). Inter for body/headings; JetBrains Mono (variable) for the
-   "engineered" details — eyebrows, tags, section markers, small labels. */
+   shift). The three brand fonts from BRAND-GUIDE.md "Typography":
+   - Plus Jakarta Sans (variable): headlines, labels and the "db insights" wordmark.
+   - Inter: body text.
+   - JetBrains Mono (variable): code snippets ONLY (Build Logs, Lessons). */
+@import "@fontsource-variable/plus-jakarta-sans";
 @import "@fontsource/inter/400.css";
 @import "@fontsource/inter/500.css";
 @import "@fontsource/inter/600.css";
@@ -48,48 +51,64 @@
   --color-on-accent: var(--on-accent);
   --color-live: var(--live);
 
+  /* Sub-brand Accents. Fixed hex values (they don't change between themes)
+     because they're only ever used as FILLS with navy text on top — the
+     Sub-brand Tag and thin accent bars — never as text on the page. That keeps
+     contrast safe in both light and dark. Gives us `bg-spatial`,
+     `border-analytics`, etc. Masterbrand navy is `--color-navy`. */
+  --color-navy: #0b1b39;
+  --color-spatial: #2dd4bf;   /* DBSpatial   — teal   */
+  --color-analytics: #f5b700; /* DBAnalytics — amber  */
+  --color-automate: #8b7cf6;  /* DBAutomate  — violet */
+  --color-learning: #ff6b5b;  /* DBLearning  — coral  */
+
+  /* `font-display` = Plus Jakarta Sans (headlines + wordmark). */
+  --font-display: "Plus Jakarta Sans Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono Variable", ui-monospace, "SFMono-Regular", monospace;
 }
 
 /* -----------------------------------------------------------------------------
-   DARK PALETTE — the default (dark-first).
+   DARK PALETTE — the default (dark-first). Built on the Masterbrand navy
+   #0B1B39 (BRAND-GUIDE.md "Colour"); surfaces are slightly lighter navies.
+   `--accent` is the Masterbrand "ink" (white on navy): buttons, focus rings,
+   section numbers. Sub-brand colours live in the @theme block above.
 ----------------------------------------------------------------------------- */
 :root {
-  --bg: #0a0c12;
-  --surface: #11151e;
-  --border: #232c39;       /* card borders */
-  --hairline: #1c2230;     /* subtle dividers */
-  --text: #eaeef5;
-  --muted: #9aa4b4;
-  --faint: #6b7383;
-  --accent: #2dd4bf;       /* single accent color, used sparingly */
-  --on-accent: #06302a;    /* text that sits ON the accent fill */
+  --bg: #0b1b39;           /* Masterbrand navy */
+  --surface: #11244a;
+  --border: #22396a;       /* card borders */
+  --hairline: #182d58;     /* subtle dividers */
+  --text: #f2f5fa;
+  --muted: #aab7cd;
+  --faint: #8494b1;
+  --accent: #ffffff;       /* Masterbrand white */
+  --on-accent: #0b1b39;    /* text that sits ON the accent fill */
   --live: #3ddc97;         /* "Live" status green */
 
   /* Faint line-grid motif behind the hero — light lines at very low opacity. */
-  --grid-line: rgba(255, 255, 255, 0.04);
+  --grid-line: rgba(255, 255, 255, 0.05);
 
   color-scheme: dark;
 }
 
 /* -----------------------------------------------------------------------------
-   LIGHT PALETTE — fully designed counterpart.
+   LIGHT PALETTE — white base, navy text and navy "ink".
 ----------------------------------------------------------------------------- */
 :root[data-theme="light"] {
   --bg: #ffffff;
-  --surface: #f5f6f3;
-  --border: #e3e5e0;
-  --hairline: #e3e5e0;
-  --text: #14181f;
-  --muted: #55606e;
-  --faint: #8a93a0;
-  --accent: #0f9e84;       /* darker teal for AA contrast on white */
+  --surface: #f3f5f9;
+  --border: #dce2ec;
+  --hairline: #e6eaf1;
+  --text: #0b1b39;         /* Masterbrand navy */
+  --muted: #4a5873;
+  --faint: #5d6a83;       /* AA (4.5:1+) on both white and --surface */
+  --accent: #0b1b39;       /* Masterbrand navy */
   --on-accent: #ffffff;
   --live: #0f9d6a;         /* readable green on light surfaces */
 
-  /* Grid motif on light = faint black lines. */
-  --grid-line: rgba(0, 0, 0, 0.04);
+  /* Grid motif on light = faint navy lines. */
+  --grid-line: rgba(11, 27, 57, 0.05);
 
   color-scheme: light;
 }
@@ -116,6 +135,18 @@ body {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
   border-radius: 2px;
+}
+
+/* Headlines use Plus Jakarta Sans. Wrapped in `@layer base` on purpose:
+   Tailwind utilities live in a later layer, so a class like `font-sans` on a
+   heading still wins over this default. (Unlayered CSS would beat them.) */
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+  }
 }
 
 ::selection {
@@ -165,4 +196,81 @@ body {
     linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
     linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
   background-size: 56px 56px;
+}
+
+/* The lowercase "db insights" wordmark: Plus Jakarta Sans Bold, slightly
+   tight letter-spacing, upright (the Brand Mark carries the slant).
+   Usage: <span class="wordmark">db insights</span> */
+.wordmark {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  text-transform: lowercase;
+}
+
+/* -----------------------------------------------------------------------------
+   Post body typography. A post's Markdown is rendered into plain HTML tags
+   (<h2>, <p>, <ul>, <code>…) with no classes, so we style those tags here,
+   scoped to the `.post-body` wrapper on the post page.
+----------------------------------------------------------------------------- */
+.post-body {
+  color: var(--text);
+  line-height: 1.75;
+}
+.post-body > * + * {
+  margin-top: 1.25em;
+}
+.post-body h2 {
+  margin-top: 2em;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.post-body h3 {
+  margin-top: 1.75em;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.post-body a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.post-body ul {
+  list-style: disc;
+  padding-left: 1.25em;
+}
+.post-body ol {
+  list-style: decimal;
+  padding-left: 1.25em;
+}
+.post-body li + li {
+  margin-top: 0.4em;
+}
+.post-body blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 1em;
+  color: var(--muted);
+}
+.post-body img {
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+}
+/* Inline code + code blocks: the one place JetBrains Mono is used. */
+.post-body code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+.post-body :not(pre) > code {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: 0.3rem;
+  padding: 0.1em 0.35em;
+}
+.post-body pre {
+  overflow-x: auto;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  padding: 1rem 1.25rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
 }

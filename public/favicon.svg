@@ -1,9 +1,2 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
-  <!-- DB monogram favicon. Dark rounded square + teal "DB" in a mono weight.
-       Files in public/ are served as-is from the site root (e.g. /favicon.svg). -->
-  <rect width="64" height="64" rx="14" fill="#0A0C12"/>
-  <rect x="1" y="1" width="62" height="62" rx="13" fill="none" stroke="#232C39" stroke-width="2"/>
-  <text x="32" y="34" dominant-baseline="central" text-anchor="middle"
-        font-family="'JetBrains Mono', ui-monospace, monospace"
-        font-size="26" font-weight="700" fill="#2DD4BF" letter-spacing="-1">DB</text>
-</svg>
+<!-- DB Insights app icon / avatar: white solid mark on a navy rounded square; mark height = tile height / phi. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-411.803 -397.214 794.427 794.427" width="512"><rect x="-411.803" y="-397.214" width="794.427" height="794.427" rx="174.774" fill="#0B1B39"/><g fill="#FFFFFF" transform="skewX(-13.283)"><path fill-rule="evenodd" d="M19.098 -100H-42.705A100 100 0 0 0 -42.705 100H19.098ZM-19.098 -61.803H-42.705A61.803 61.803 0 0 0 -42.705 61.803H-19.098Z"/><g transform="rotate(180 0 61.803)"><path fill-rule="evenodd" d="M19.098 -100H-42.705A100 100 0 0 0 -42.705 100H19.098ZM-19.098 -61.803H-42.705A61.803 61.803 0 0 0 -42.705 61.803H-19.098Z"/></g><rect x="-19.098" y="-223.607" width="38.197" height="447.214"/><circle cx="-61.803" cy="0" r="23.607"/></g></svg>

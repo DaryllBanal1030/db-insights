@@ -2,7 +2,7 @@
 /* =============================================================================
    Skills.astro — four grouped, scannable cards.
    =============================================================================
-   Static. Each group is a card; skills render as mono pills so they're quick
+   Static. Each group is a card; skills render as small pills so they're quick
    to scan. The "Data Engineering Foundations" group is flagged as "learning".
 ============================================================================= */
 
@@ -29,7 +29,7 @@ const groups = [
 ];
 ---
 
-<Section id="skills" index={4} label="skills">
+<Section id="skills" index={7} label="skills">
   <div class="grid gap-5 sm:grid-cols-2">
     {
       groups.map((group) => (
@@ -37,14 +37,14 @@ const groups = [
           <div class="flex items-center gap-3">
             <h3 class="font-semibold tracking-tight">{group.title}</h3>
             {group.note && (
-              <span class="rounded-full border border-border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide text-amber-400">
+              <span class="rounded-full border border-border px-2 py-0.5 font-display font-semibold text-[10px] uppercase tracking-wide text-muted">
                 {group.note}
               </span>
             )}
           </div>
           <ul class="mt-4 flex flex-wrap gap-2">
             {group.items.map((item) => (
-              <li class="rounded-md border border-hairline px-2.5 py-1 font-mono text-xs text-muted">
+              <li class="rounded-md border border-hairline px-2.5 py-1 text-xs text-muted">
                 {item}
               </li>
             ))}

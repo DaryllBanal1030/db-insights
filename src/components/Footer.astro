@@ -2,15 +2,24 @@
 /* =============================================================================
    Footer.astro — site footer.
    =============================================================================
-   Two small mono lines: the brand mark and the build credit.
+   Left: the Solid Mark + the copyright line. Right: the brand hashtag and the
+   build credit. "DB Insights" is always two words (never "DBInsights").
 ============================================================================= */
+
+import BrandMark from "./BrandMark.astro";
+import { BRAND } from "../lib/hub";
 ---
 
 <footer class="border-t border-hairline">
   <div
-    class="mx-auto flex max-w-6xl flex-col gap-2 px-6 py-8 sm:flex-row sm:items-center sm:justify-between"
+    class="mx-auto flex max-w-6xl flex-col gap-3 px-6 py-8 sm:flex-row sm:items-center sm:justify-between"
   >
-    <p class="font-mono text-sm text-faint">© 2026 DB Insights</p>
-    <p class="font-mono text-sm text-faint">Built with Astro &amp; Tailwind</p>
+    <p class="flex items-center gap-2.5 text-sm text-faint">
+      <BrandMark class="h-5 w-auto text-muted" />
+      © 2026 {BRAND.name} · by Daryll Banal
+    </p>
+    <p class="text-sm text-faint">
+      {BRAND.hashtag} · Built with Astro &amp; Tailwind
+    </p>
   </div>
 </footer>

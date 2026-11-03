@@ -37,7 +37,7 @@ const steps = [
 ];
 ---
 
-<Section id="about" index={2} label="about">
+<Section id="about" index={5} label="about">
   <!-- Intro + photo. -->
   <div class="grid gap-10 md:grid-cols-3 md:items-center">
     <div class="md:col-span-2">
@@ -66,7 +66,7 @@ const steps = [
   <!-- The workflow. A horizontal flow on desktop, stacked on mobile, with a
        connector arrow between steps (→ on desktop, ↓ on mobile). -->
   <div class="mt-14">
-    <p class="font-mono text-xs uppercase tracking-[0.2em] text-faint">
+    <p class="font-display font-semibold text-xs uppercase tracking-[0.2em] text-faint">
       how I work
     </p>
     <ol class="mt-6 flex flex-col gap-3 lg:flex-row lg:items-stretch">
@@ -83,7 +83,7 @@ const steps = [
                 <span class="block font-semibold tracking-tight">
                   {step.label}
                 </span>
-                <span class="mt-1 block font-mono text-xs text-muted">
+                <span class="mt-1 block text-xs text-muted">
                   {step.caption}
                 </span>
               </span>

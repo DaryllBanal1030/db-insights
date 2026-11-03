@@ -18,21 +18,24 @@
 import "../styles/global.css";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
+import { BRAND } from "../lib/hub";
 
 // Props let a page customize the per-page SEO bits. We give sensible defaults
-// so most pages don't have to pass anything.
+// so most pages don't have to pass anything. The default description is the
+// standard bio line from BRAND-GUIDE.md (kept in src/lib/hub.ts).
 interface Props {
   title?: string;
   description?: string;
 }
 
 const {
-  title = "Daryll Banal — research analyst & aspiring data engineer",
-  description = "I build data-driven insights and interactive dashboards.",
+  title = `${BRAND.name} · by Daryll Banal`,
+  description = BRAND.bio,
 } = Astro.props;
 
-// Astro.site comes from `site` in astro.config.mjs. new URL(..., Astro.site)
-// builds absolute URLs, which Open Graph / Twitter cards require.
+// Astro.site comes from `site` in astro.config.mjs (https://daryllbanal.com).
+// new URL(..., Astro.site) builds absolute URLs, which Open Graph / Twitter
+// cards require.
 const ogImage = new URL("/og.png", Astro.site).href;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 ---
@@ -44,7 +47,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
 
-    <!-- Favicons. The SVG covers modern browsers; the PNG is the iOS home-screen icon. -->
+    <!-- Favicons: the DB Insights app icon (white Solid Mark on a navy tile, a
+         copy of dbinsights-brand/logo/app-icon.svg). The SVG covers modern
+         browsers; the PNG is the iOS home-screen icon. -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
@@ -55,6 +60,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
     <!-- Open Graph (Facebook, LinkedIn, etc.) -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={BRAND.name} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />

@@ -21,6 +21,42 @@
 
 import { defineCollection, z } from "astro:content";
 import { glob } from "astro/loaders";
+import { FORMATS, SUB_BRAND_KEYS } from "./lib/hub";
+
+// POSTS — every Hub post (Map Breakdown, Data Story, Field Note…), all in one
+// folder: src/content/posts/. A new post = one new .md file there. Its
+// `format` decides which section it shows up in (see FORMAT_SECTION in
+// src/lib/hub.ts), so there's no folder-per-section to keep in sync.
+//
+// The pattern "**/[^_]*.md" means "every .md file whose name does NOT start
+// with an underscore". That lets src/content/posts/_TEMPLATE.md sit in the
+// folder as a copy-me example without being published.
+//
+// Until the first real post exists, `npm run build` prints "The collection
+// "posts" does not exist or is empty". That's expected and harmless; the
+// section pages show their coming-soon state instead.
+const posts = defineCollection({
+  loader: glob({ pattern: "**/[^_]*.md", base: "./src/content/posts" }),
+  schema: z.object({
+    title: z.string(),
+    // `z.coerce.date()` turns the frontmatter text "2026-11-09" into a real
+    // Date object, so we can sort posts and format the date nicely.
+    date: z.coerce.date(),
+    // Must be one of the Post Formats in src/lib/hub.ts (e.g. "Data Story").
+    format: z.enum(FORMATS),
+    // One or two sentences, shown in post lists and as the SEO description.
+    summary: z.string(),
+    // Only for Field Notes: which Sub-brand Tag to show (optional). Other
+    // formats get their Tag from their section automatically.
+    subBrand: z.enum(SUB_BRAND_KEYS).optional(),
+    // The Public Source(s) the post is built from, e.g. "PSA CPI (2018=100)".
+    source: z.string().optional(),
+    // Link to the original post on LinkedIn (the Home Platform).
+    linkedinUrl: z.string().url().optional(),
+    // `draft: true` keeps a post out of the built site while you work on it.
+    draft: z.boolean().default(false),
+  }),
+});
 
 // PROJECTS — each becomes a card in the featured-work carousel.
 const projects = defineCollection({
@@ -62,4 +98,4 @@ const credentials = defineCollection({
 });
 
 // Register the collections so `getCollection("projects")` etc. work.
-export const collections = { projects, credentials };
+export const collections = { posts, projects, credentials };

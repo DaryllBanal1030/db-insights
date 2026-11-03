@@ -1,0 +1,46 @@
+---
+/* =============================================================================
+   BrandMark.astro — the Solid Mark (the golden "db" ligature), inline.
+   =============================================================================
+   The shapes below are copied VERBATIM from the master file
+   dbinsights-brand/logo/brand-mark.svg — never redraw them. The only change is
+   `fill="currentColor"` instead of the master's navy, so the mark takes the
+   surrounding text colour: navy in light mode, white in dark mode (the brand
+   guide allows recolouring the same file for white-on-navy).
+
+   Why inline instead of <img src="...svg">? An <img> can't inherit the text
+   colour, so it would stay navy and vanish on the dark theme.
+
+   Usage: <BrandMark class="h-8 w-auto" />  — size it with height classes.
+   Use it at 48 px and below; large uses call for the Outline Mark.
+============================================================================= */
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="-167.313 -245.492 305.446 490.983"
+  class={className}
+  aria-hidden="true"
+  focusable="false"
+>
+  <g fill="currentColor" transform="skewX(-13.283)">
+    <path
+      fill-rule="evenodd"
+      d="M19.098 -100H-42.705A100 100 0 0 0 -42.705 100H19.098ZM-19.098 -61.803H-42.705A61.803 61.803 0 0 0 -42.705 61.803H-19.098Z"
+    ></path>
+    <g transform="rotate(180 0 61.803)">
+      <path
+        fill-rule="evenodd"
+        d="M19.098 -100H-42.705A100 100 0 0 0 -42.705 100H19.098ZM-19.098 -61.803H-42.705A61.803 61.803 0 0 0 -42.705 61.803H-19.098Z"
+      ></path>
+    </g>
+    <rect x="-19.098" y="-223.607" width="38.197" height="447.214"></rect>
+    <circle cx="-61.803" cy="0" r="23.607"></circle>
+  </g>
+</svg>
