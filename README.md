@@ -160,7 +160,6 @@ node scripts/generate-images.mjs
 
 - `public/resume.pdf` — your résumé (linked from the nav).
 - `public/daryll.jpg` — your photo (used in the About section).
-- `DBLEARNING_URL` — the DBLearning YouTube channel link (in `src/components/DBLearningBand.astro`).
 - Follow links: when the Facebook Page (Dec 7, 2026) and YouTube (Phase 3) go live, set their
   `startsNote` to `null` in `src/lib/hub.ts` so they become links.
 - Each project's `liveUrl` / `repoUrl` (in `src/content/projects/*.md`).

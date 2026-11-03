@@ -1,20 +1,30 @@
 ---
 /* =============================================================================
-   DBLearningBand.astro — a distinct branded band for the DBLearning venture.
+   DBLearningBand.astro — a distinct band on the home page for DBLearning.
    =============================================================================
-   DELIBERATELY different from the project cards so it reads as a SEPARATE
-   venture:
+   DBLearning is the Sub-brand for upskilling: short on-camera Lessons that
+   teach Learners (students, fresh grads, career shifters, early-career
+   analysts) one data skill each. It starts in Phase 3 (Mon Mar 1, 2027), on
+   YouTube @daryllbanal. See dbinsights-brand/CONTEXT.md.
+
+   Deliberately different from the project cards so it stands out:
      - centered layout (the project cards are left-aligned)
      - a soft glow + gradient in the DBLearning coral (#FF6B5B), the
        Sub-brand Accent from BRAND-GUIDE.md (`bg-learning` in Tailwind)
-     - its own play-button icon and a coral call-to-action
-   Navy text sits on the coral (white on coral is too low-contrast to read).
-   Brand-only: no co-creator is named. Static — no API.
+     - a coral call-to-action, with navy text (white on coral is too
+       low-contrast to read)
 
-   PLACEHOLDER: replace DBLEARNING_URL with the real channel link.
+   All the facts (Phase, start date, YouTube handle) come from src/lib/hub.ts.
+   Before Phase 3 the YouTube line shows its start note; once you set the
+   YouTube `startsNote` to null in hub.ts, it turns into a Subscribe link.
+   Static — no API.
 ============================================================================= */
 
-const DBLEARNING_URL = "https://youtube.com/@dblearning";
+import SubBrandTag from "./SubBrandTag.astro";
+import { FOLLOW_LINKS, SECTIONS } from "../lib/hub";
+
+const learning = SECTIONS.learning;
+const youtube = FOLLOW_LINKS.find((link) => link.platform === "YouTube")!;
 ---
 
 <section id="dblearning" class="scroll-mt-20">
@@ -24,9 +34,9 @@ const DBLEARNING_URL = "https://youtube.com/@dblearning";
       class="relative overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-surface to-bg px-6 py-12 text-center sm:px-12 sm:py-16"
       data-reveal
     >
-      <!-- Decorative coral glow (purely visual) to separate this venture from
-           the data work. aria-hidden so screen readers skip it.
-           `var(--color-learning)` is the coral token defined in global.css. -->
+      <!-- Decorative coral glow (purely visual). aria-hidden so screen
+           readers skip it. `var(--color-learning)` is the coral token
+           defined in global.css. -->
       <div
         class="pointer-events-none absolute -top-24 left-1/2 h-64 w-[36rem] -translate-x-1/2 rounded-full opacity-20 blur-3xl"
         style="background: radial-gradient(closest-side, var(--color-learning), transparent);"
@@ -35,65 +45,60 @@ const DBLEARNING_URL = "https://youtube.com/@dblearning";
       </div>
 
       <div class="relative">
-        <!-- Logo mark + wordmark. -->
-        <div class="flex items-center justify-center gap-3">
-          <span
-            class="grid h-11 w-11 place-items-center rounded-xl bg-learning text-navy"
-            aria-hidden="true"
-          >
-            <!-- Play triangle. -->
-            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M8 5v14l11-7z"></path>
-            </svg>
-          </span>
-          <h2 class="font-sans text-2xl font-bold tracking-tight sm:text-3xl">
-            DBLearning
-          </h2>
-        </div>
+        <!-- Sub-brand Tag + heading, the same pattern as the section pages. -->
+        <SubBrandTag section={learning} />
+        <h2 class="mt-4 text-2xl font-bold tracking-tight sm:text-3xl">
+          Learn the data skills behind every post
+        </h2>
 
-        <!-- Tagline: uppercase and letter-spaced, like the Masterbrand tagline. -->
-        <p class="mt-4 font-display text-sm font-semibold uppercase tracking-[0.2em] text-faint">
-          learning made simple
-        </p>
-
-        <!-- Audience + status pills. -->
+        <!-- Audience + Phase pills. -->
         <div class="mt-5 flex flex-wrap items-center justify-center gap-3">
           <span
             class="rounded-full border border-border bg-bg/40 px-3 py-1 text-xs text-muted"
           >
-            preschool to college
+            for students, fresh grads &amp; career shifters
           </span>
           <span
             class="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1 text-xs text-muted"
           >
             <span class="h-1.5 w-1.5 rounded-full bg-learning" aria-hidden="true"
             ></span>
-            In progress
+            Phase {learning.phase} · from {learning.starts}
           </span>
         </div>
 
         <!-- One-line description. -->
         <p class="mx-auto mt-6 max-w-xl text-muted">
-          An educational YouTube channel turning school subjects into clear,
-          bite-sized lessons — for learners from preschool all the way to
-          college.
+          Short on-camera Lessons, 60 to 90 seconds each, that teach one data,
+          GIS or automation skill you can put to use.
         </p>
 
-        <!-- Subscribe call-to-action in the DBLearning coral, with navy text. -->
-        <div class="mt-8">
+        <!-- Call-to-action: the /learning section, in the DBLearning coral. -->
+        <div class="mt-8 flex flex-col items-center gap-3">
           <a
-            href={DBLEARNING_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={learning.path}
             class="inline-flex items-center gap-2 rounded-md bg-learning px-6 py-3 text-sm font-semibold text-navy transition-opacity hover:opacity-90"
           >
-            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path
-                d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.5 15.5v-7l6.3 3.5-6.3 3.5z"
-              ></path>
-            </svg>
-            Subscribe on YouTube
+            See {learning.name} →
           </a>
+
+          <!-- YouTube: a note until Phase 3, then a link (see hub.ts). -->
+          {
+            youtube.startsNote ? (
+              <p class="text-sm text-faint">
+                On YouTube as {youtube.handle} · {youtube.startsNote}
+              </p>
+            ) : (
+              <a
+                href={youtube.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-sm font-medium text-text underline underline-offset-4 hover:opacity-80"
+              >
+                Subscribe on YouTube, {youtube.handle} ↗
+              </a>
+            )
+          }
         </div>
       </div>
     </div>
