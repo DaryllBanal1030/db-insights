@@ -14,14 +14,14 @@ import BrandMark from "./BrandMark.astro";
 import { SECTION_LIST } from "../lib/hub";
 
 // The nav links, built from the sections in src/lib/hub.ts plus "About"
-// (a section of the home page, so its href is "/#about").
+// (the portfolio page, src/pages/about.astro).
 const links = [
   ...SECTION_LIST.map((section) => ({
     href: section.path,
     label: section.navLabel,
     dot: section.barClass,
   })),
-  { href: "/#about", label: "About", dot: null },
+  { href: "/about", label: "About", dot: null },
 ];
 
 // Astro.url is the URL of the page being built. We use it to mark the link

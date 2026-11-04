@@ -2,10 +2,10 @@
 /* =============================================================================
    index.astro — the Hub home page, route "/".
    =============================================================================
-   Pages live in src/pages/. index.astro -> route "/". This page composes the
-   section components in order: first DB Insights (what it is, its sections,
-   latest posts, where to follow), then Daryll's own portfolio (work, about,
-   experience, skills, credentials, contact).
+   Pages live in src/pages/. index.astro -> route "/". The home page is about
+   DB Insights: what it is, its sections, the latest posts, the DBLearning
+   preview, where to follow, and a short "About Daryll" with a link to the
+   full portfolio on /about (src/pages/about.astro).
 
    The section pages (/spatial, /analytics, …) are built by
    src/pages/[section]/index.astro.
@@ -15,15 +15,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Hero from "../components/Hero.astro";
 import SectionCards from "../components/SectionCards.astro";
 import LatestPosts from "../components/LatestPosts.astro";
-import FollowLinks from "../components/FollowLinks.astro";
-import Section from "../components/Section.astro";
-import Carousel from "../components/Carousel.astro";
 import DBLearningBand from "../components/DBLearningBand.astro";
-import About from "../components/About.astro";
-import Experience from "../components/Experience.astro";
-import Skills from "../components/Skills.astro";
-import Credentials from "../components/Credentials.astro";
-import Contact from "../components/Contact.astro";
+import FollowLinks from "../components/FollowLinks.astro";
+import AboutTeaser from "../components/AboutTeaser.astro";
 ---
 
 <BaseLayout>
@@ -36,29 +30,12 @@ import Contact from "../components/Contact.astro";
   <!-- 02 — Latest posts across every section (or the launch date, before launch). -->
   <LatestPosts />
 
+  <!-- DBLearning: a distinct band in the coral Sub-brand Accent (Phase 3 preview). -->
+  <DBLearningBand />
+
   <!-- 03 — Follow: LinkedIn now; Facebook and YouTube with their start dates. -->
   <FollowLinks />
 
-  <!-- 04 — Featured work: the carousel, sourced from the projects collection. -->
-  <Section id="work" index={4} label="featured work">
-    <Carousel />
-  </Section>
-
-  <!-- DBLearning: a distinct branded band in the coral Sub-brand Accent. -->
-  <DBLearningBand />
-
-  <!-- 05 — About: intro, photo, and the Gather → Store → Analyze → Present flow. -->
-  <About />
-
-  <!-- 06 — Experience: vertical timeline. -->
-  <Experience />
-
-  <!-- 07 — Skills: four grouped cards. -->
-  <Skills />
-
-  <!-- 08 — Credentials: flat grid from the credentials collection. -->
-  <Credentials />
-
-  <!-- 09 — Contact: real email + social links. -->
-  <Contact />
+  <!-- 04 — About Daryll: two sentences + links to /about. -->
+  <AboutTeaser />
 </BaseLayout>

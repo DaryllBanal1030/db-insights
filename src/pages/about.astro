@@ -1,0 +1,66 @@
+---
+/* =============================================================================
+   about.astro — Daryll's portfolio page, route "/about".
+   =============================================================================
+   A plain file in src/pages/ becomes a route by its name: about.astro -> /about.
+   This page holds everything about Daryll himself (bio, featured work,
+   experience, skills, credentials, contact), so the home page can stay about
+   DB Insights. The home page links here from its "About Daryll" section and
+   the nav's "About" link.
+
+   The sections are the same components the home page used before; only their
+   numbers changed (01–06, in this page's order).
+============================================================================= */
+
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Section from "../components/Section.astro";
+import Carousel from "../components/Carousel.astro";
+import About from "../components/About.astro";
+import Experience from "../components/Experience.astro";
+import Skills from "../components/Skills.astro";
+import Credentials from "../components/Credentials.astro";
+import Contact from "../components/Contact.astro";
+import { BRAND } from "../lib/hub";
+---
+
+<BaseLayout
+  title={`About Daryll Banal · ${BRAND.name}`}
+  description="Daryll Banal, the research analyst behind DB Insights: Python and SQL data pipelines, dashboards and downloadable datasets."
+>
+  <!-- Page header: the one <h1> on this page. -->
+  <section class="mx-auto max-w-6xl px-6 pt-16 sm:pt-24">
+    <p
+      class="font-display text-xs font-semibold uppercase tracking-[0.2em] text-faint"
+      data-reveal
+    >
+      About
+    </p>
+    <h1 class="mt-4 text-4xl font-bold tracking-tight sm:text-5xl" data-reveal>
+      Daryll Banal
+    </h1>
+    <p class="mt-4 max-w-2xl text-lg text-muted" data-reveal>
+      The research analyst behind <span class="wordmark text-text">db insights</span>.
+      My work, experience and how to reach me.
+    </p>
+  </section>
+
+  <!-- 01 — About: intro, photo, and the Gather → Store → Analyze → Present flow. -->
+  <About />
+
+  <!-- 02 — Featured work: the carousel, sourced from the projects collection. -->
+  <Section id="work" index={2} label="featured work">
+    <Carousel />
+  </Section>
+
+  <!-- 03 — Experience: vertical timeline. -->
+  <Experience />
+
+  <!-- 04 — Skills: four grouped cards. -->
+  <Skills />
+
+  <!-- 05 — Credentials: flat grid from the credentials collection. -->
+  <Credentials />
+
+  <!-- 06 — Contact: real email + social links. -->
+  <Contact />
+</BaseLayout>

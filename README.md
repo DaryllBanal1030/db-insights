@@ -8,12 +8,13 @@ Each Sub-brand is a section of the Hub, never a separate domain
 
 | Path | Section |
 | :--- | :--- |
-| `/` | Daryll + DB Insights overview, latest posts, follow links, then the portfolio (work, about, experience, skills, credentials, contact) |
+| `/` | DB Insights overview: sections, latest posts, DBLearning preview, follow links, a short "About Daryll" |
 | `/spatial` | DBSpatial: Map Breakdowns, Map Reels (Phase 1) |
 | `/analytics` | DBAnalytics: Data Stories (Phase 1) |
 | `/automate` | DBAutomate: Build Logs (Phase 2) |
 | `/learning` | DBLearning: Lessons (Phase 3) |
 | `/notes` | Field Notes (Phase 1) |
+| `/about` | Daryll's portfolio: about, featured work, experience, skills, credentials, contact |
 
 A section with no posts shows a "coming soon" state naming its Sub-brand and Phase.
 Always write **DB Insights** as two words (never "DBInsights").
@@ -75,6 +76,7 @@ portfolio/
 │   ├── styles/global.css   # design system: Tailwind + both theme palettes
 │   └── pages/
 │       ├── index.astro             # the home page "/"
+│       ├── about.astro             # "/about", the portfolio sections
 │       ├── 404.astro               # "page not found", with links back to each section
 │       └── [section]/
 │           ├── index.astro         # /spatial, /analytics, /automate, /learning, /notes
