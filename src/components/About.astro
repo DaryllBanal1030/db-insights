@@ -3,10 +3,17 @@
    About.astro — short intro paragraph, photo, and the Gather → Store →
    Analyze → Present workflow.
    =============================================================================
-   Static. The photo is a placeholder (/daryll.jpg) — drop your image in public/.
+   Static. The photo is public/daryll.jpg. Until that file exists the photo
+   slot is left out and the intro takes the full width, so there's never a
+   broken image. Drop your photo in public/ and it appears on the next build.
 ============================================================================= */
 
+import { existsSync } from "node:fs";
 import Section from "./Section.astro";
+
+// The frontmatter runs at build time on your computer (or Vercel's), so it
+// can check the file system. The path is relative to the portfolio/ folder.
+const hasPhoto = existsSync("public/daryll.jpg");
 
 // The four-step workflow. Each step has a tiny inline icon (an SVG path).
 const steps = [
@@ -40,7 +47,7 @@ const steps = [
 <Section id="about" index={1} label="about">
   <!-- Intro + photo. -->
   <div class="grid gap-10 md:grid-cols-3 md:items-center">
-    <div class="md:col-span-2">
+    <div class:list={[hasPhoto ? "md:col-span-2" : "md:col-span-3"]}>
       <p class="max-w-prose text-lg text-muted">
         I'm a research analyst at PRIME Philippines who likes turning messy,
         real-world market data into something people can actually use. My work
@@ -49,18 +56,21 @@ const steps = [
         into data engineering.
       </p>
     </div>
-    <div class="md:col-span-1">
-      <!-- Photo placeholder. aspect-ratio + bg keep the layout stable even
-           before the image loads (or while it's a placeholder). -->
-      <img
-        src="/daryll.jpg"
-        alt="Daryll Banal"
-        width="480"
-        height="600"
-        loading="lazy"
-        class="aspect-[4/5] w-full rounded-xl border border-border bg-surface object-cover"
-      />
-    </div>
+    {
+      hasPhoto && (
+        <div class="md:col-span-1">
+          {/* aspect-ratio + bg keep the layout stable while the image loads. */}
+          <img
+            src="/daryll.jpg"
+            alt="Daryll Banal"
+            width="480"
+            height="600"
+            loading="lazy"
+            class="aspect-[4/5] w-full rounded-xl border border-border bg-surface object-cover"
+          />
+        </div>
+      )
+    }
   </div>
 
   <!-- The workflow. A horizontal flow on desktop, stacked on mobile, with a

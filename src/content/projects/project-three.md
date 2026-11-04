@@ -6,6 +6,7 @@ summary: "A placeholder concept card. Swap in a real project, or delete this fil
 tags: ["SQL", "Power BI"]
 liveUrl: "https://example.com"
 repoUrl: "https://github.com/DaryllBanal1030/labor-market-explorer"
-featured: true
+# Hidden until it's real: set back to true once liveUrl points at a real site.
+featured: false
 order: 3
 ---

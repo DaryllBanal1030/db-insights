@@ -164,6 +164,10 @@ node scripts/generate-images.mjs
 
 ## Placeholders to fill in
 
+Unfinished placeholders are hidden from the live site until you fill them in: the photo slot
+only appears once `public/daryll.jpg` exists, the two placeholder projects have
+`featured: false`, and credential years and "Verify" links are commented out in their `.md` files.
+
 - `public/resume.pdf` — your résumé (linked from the nav).
 - `public/daryll.jpg` — your photo (used in the About section).
 - Follow links: when the Facebook Page (Dec 7, 2026) and YouTube (Phase 3) go live, set their

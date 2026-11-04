@@ -88,7 +88,8 @@ const credentials = defineCollection({
     title: z.string(),
     issuer: z.string(),
     // Kept as a string so values like "2025" or "2021–2025" both work.
-    year: z.string(),
+    // Optional: when it's missing, the card just shows the issuer.
+    year: z.string().optional(),
     // Optional short label, e.g. "DataCamp" or "CSE".
     tag: z.string().optional(),
     // Optional "Verify ↗" link.
