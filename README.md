@@ -33,6 +33,8 @@ Replaces the previous site at `db-insights.vercel.app`.
 - **Colours**: Masterbrand navy `#0B1B39` + white, and one Sub-brand Accent per section
   (teal Spatial, amber Analytics, violet Automate, coral Learning), all in `src/styles/global.css`.
 - **Deploy target**: Vercel (static).
+- **Sitemap**: `@astrojs/sitemap` writes `sitemap-index.xml` on every build so Google can find
+  every page. Nothing to maintain; new posts are added automatically.
 
 ## A few Astro concepts (for the frontend-curious)
 
@@ -55,6 +57,7 @@ Replaces the previous site at `db-insights.vercel.app`.
 portfolio/
 ├── public/                 # static assets served at the site root
 │   ├── favicon.svg         # DB Insights app icon (copy of dbinsights-brand/logo/app-icon.svg)
+│   ├── robots.txt          # lets search engines crawl everything; points to the sitemap
 │   ├── resume.pdf          # ← PLACEHOLDER: drop your résumé here
 │   ├── daryll.jpg          # ← PLACEHOLDER: drop your photo here
 │   └── og.png              # social-share preview image
@@ -72,6 +75,7 @@ portfolio/
 │   ├── styles/global.css   # design system: Tailwind + both theme palettes
 │   └── pages/
 │       ├── index.astro             # the home page "/"
+│       ├── 404.astro               # "page not found", with links back to each section
 │       └── [section]/
 │           ├── index.astro         # /spatial, /analytics, /automate, /learning, /notes
 │           └── [slug].astro        # one page per post

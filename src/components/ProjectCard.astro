@@ -8,6 +8,7 @@
 ============================================================================= */
 
 import type { CollectionEntry } from "astro:content";
+import NewTabNote from "./NewTabNote.astro";
 
 interface Props {
   // The validated frontmatter of one projects-collection entry.
@@ -64,9 +65,10 @@ const badge = statusStyles[status];
       href={liveUrl}
       target="_blank"
       rel="noopener noreferrer"
-      class="rounded-md bg-accent px-4 py-2 text-sm font-medium text-on-accent transition-opacity hover:opacity-90"
+      class="inline-flex min-h-11 items-center rounded-md bg-accent px-4 text-sm font-medium text-on-accent transition-opacity hover:opacity-90"
     >
       Visit site ↗
+      <NewTabNote />
     </a>
     {
       repoUrl && (
@@ -74,9 +76,10 @@ const badge = statusStyles[status];
           href={repoUrl}
           target="_blank"
           rel="noopener noreferrer"
-          class="rounded-md border border-border px-4 py-2 text-sm font-medium text-text transition-colors hover:border-accent hover:text-accent"
+          class="inline-flex min-h-11 items-center rounded-md border border-border px-4 text-sm font-medium text-text transition-colors hover:border-accent hover:text-accent"
         >
           Code ↗
+          <NewTabNote />
         </a>
       )
     }

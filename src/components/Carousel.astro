@@ -13,6 +13,9 @@
      exactly one viewport-width of the track.
    - Keyboard: the arrow buttons and dots are real <button>s (focusable,
      Enter/Space activate them); the track also responds to ← / → keys.
+   - Touch: every control is a 44×44px tap area (the comfortable minimum for
+     a finger). Each dot is a small visible circle inside a big invisible
+     button, so it looks the same but is easy to hit.
 ============================================================================= */
 
 import { getCollection } from "astro:content";
@@ -28,9 +31,13 @@ const hasControls = projects.length > 1;
 ---
 
 <div class="carousel mx-auto max-w-3xl" data-carousel>
-  <!-- The scrolling track. tabindex=0 makes it keyboard-focusable so ←/→ work. -->
+  <!-- The scrolling track. tabindex=0 makes it keyboard-focusable so ←/→ work.
+       `relative` matters: hidden screen-reader text (NewTabNote's sr-only
+       span) is absolutely positioned, and without a positioned ancestor here
+       it would escape the track's overflow clip and widen the whole page on
+       phones. -->
   <div
-    class="carousel-track flex snap-x snap-mandatory gap-5 overflow-x-auto"
+    class="carousel-track relative flex snap-x snap-mandatory gap-5 overflow-x-auto"
     data-track
     tabindex="0"
     role="group"
@@ -53,11 +60,11 @@ const hasControls = projects.length > 1;
 
   {
     hasControls && (
-      <div class="mt-6 flex items-center justify-center gap-4">
+      <div class="mt-6 flex items-center justify-center gap-2">
         <button
           type="button"
           data-prev
-          class="grid h-10 w-10 place-items-center rounded-full border border-border text-muted transition-colors hover:border-accent hover:text-accent"
+          class="grid h-11 w-11 place-items-center rounded-full border border-border text-muted transition-colors hover:border-accent hover:text-accent"
           aria-label="Previous project"
         >
           <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -65,22 +72,26 @@ const hasControls = projects.length > 1;
           </svg>
         </button>
 
-        <div class="flex items-center gap-2" data-dots role="tablist" aria-label="Choose project">
+        {/* role="group" (not "tablist"): these are plain buttons, and the
+            current one is marked with aria-current by the script below. */}
+        <div class="flex items-center" data-dots role="group" aria-label="Choose project">
           {projects.map((p, i) => (
             <button
               type="button"
               data-dot
               data-index={i}
-              class="h-2.5 w-2.5 rounded-full border border-border transition-colors"
+              class="grid h-11 w-11 place-items-center rounded-full"
               aria-label={`Go to project ${i + 1}: ${p.data.title}`}
-            />
+            >
+              <span class="dot-mark h-2.5 w-2.5 rounded-full border border-border transition-colors" aria-hidden="true" />
+            </button>
           ))}
         </div>
 
         <button
           type="button"
           data-next
-          class="grid h-10 w-10 place-items-center rounded-full border border-border text-muted transition-colors hover:border-accent hover:text-accent"
+          class="grid h-11 w-11 place-items-center rounded-full border border-border text-muted transition-colors hover:border-accent hover:text-accent"
           aria-label="Next project"
         >
           <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -100,8 +111,8 @@ const hasControls = projects.length > 1;
   .carousel-track::-webkit-scrollbar {
     display: none; /* Chrome/Safari */
   }
-  /* The active dot is filled with the accent. */
-  [data-dot][aria-current="true"] {
+  /* The active dot's visible circle is filled with the accent. */
+  [data-dot][aria-current="true"] .dot-mark {
     background-color: var(--accent);
     border-color: var(--accent);
   }

@@ -22,6 +22,7 @@
 
 import SubBrandTag from "./SubBrandTag.astro";
 import { FOLLOW_LINKS, SECTIONS } from "../lib/hub";
+import NewTabNote from "./NewTabNote.astro";
 
 const learning = SECTIONS.learning;
 const youtube = FOLLOW_LINKS.find((link) => link.platform === "YouTube")!;
@@ -96,6 +97,7 @@ const youtube = FOLLOW_LINKS.find((link) => link.platform === "YouTube")!;
                 class="text-sm font-medium text-text underline underline-offset-4 hover:opacity-80"
               >
                 Subscribe on YouTube, {youtube.handle} ↗
+                <NewTabNote />
               </a>
             )
           }

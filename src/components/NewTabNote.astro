@@ -1,0 +1,14 @@
+---
+/* =============================================================================
+   NewTabNote.astro — tells screen-reader users a link opens a new tab.
+   =============================================================================
+   Sighted visitors see the ↗ arrow on external links; this hidden text gives
+   screen-reader users the same warning. `sr-only` is a Tailwind class that
+   hides text visually but keeps it readable by assistive tech.
+
+   Usage: put it inside any link with target="_blank", after the visible text:
+     <a href="…" target="_blank" rel="noopener noreferrer">GitHub ↗<NewTabNote /></a>
+============================================================================= */
+---
+
+<span class="sr-only"> (opens in new tab)</span>

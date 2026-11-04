@@ -16,6 +16,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import SubBrandTag from "../../components/SubBrandTag.astro";
 import { BRAND, SECTIONS } from "../../lib/hub";
 import { formatDate, getPosts, sectionOf, tagOf, type Post } from "../../lib/posts";
+import NewTabNote from "../../components/NewTabNote.astro";
 
 export async function getStaticPaths() {
   const posts = await getPosts();
@@ -76,6 +77,7 @@ const section = SECTIONS[sectionOf(post)];
               class="mt-3 inline-block underline underline-offset-4 hover:text-text"
             >
               Read and comment on LinkedIn ↗
+              <NewTabNote />
             </a>
           )}
         </footer>

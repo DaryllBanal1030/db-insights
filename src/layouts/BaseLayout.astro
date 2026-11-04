@@ -57,6 +57,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    <!-- Points search engines at the sitemap built by @astrojs/sitemap. -->
+    <link rel="sitemap" href="/sitemap-index.xml" />
 
     <!-- Open Graph (Facebook, LinkedIn, etc.) -->
     <meta property="og:type" content="website" />

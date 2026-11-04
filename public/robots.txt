@@ -1,0 +1,6 @@
+# robots.txt — tells search engines they may crawl the whole Hub, and where
+# the sitemap is. Files in public/ are served as-is from the site root.
+User-agent: *
+Allow: /
+
+Sitemap: https://daryllbanal.com/sitemap-index.xml

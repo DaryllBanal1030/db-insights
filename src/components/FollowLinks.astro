@@ -10,6 +10,7 @@
 
 import Section from "./Section.astro";
 import { BRAND, FOLLOW_LINKS } from "../lib/hub";
+import NewTabNote from "./NewTabNote.astro";
 ---
 
 <Section id="follow" index={3} label="follow">
@@ -33,9 +34,10 @@ import { BRAND, FOLLOW_LINKS } from "../lib/hub";
               href={link.url}
               target="_blank"
               rel="noopener noreferrer"
-              class="mt-4 inline-block text-sm font-medium text-text underline underline-offset-4 hover:opacity-80"
+              class="mt-2 inline-flex min-h-11 items-center text-sm font-medium text-text underline underline-offset-4 hover:opacity-80"
             >
               Follow ↗
+              <NewTabNote />
             </a>
           )}
         </li>

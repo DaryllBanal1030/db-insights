@@ -8,6 +8,7 @@
 ============================================================================= */
 
 import { FOLLOW_LINKS, type Section } from "../lib/hub";
+import NewTabNote from "./NewTabNote.astro";
 
 interface Props {
   section: Section;
@@ -35,5 +36,6 @@ const linkedin = FOLLOW_LINKS.find((link) => link.platform === "LinkedIn")!;
     class="mt-6 inline-flex items-center gap-2 rounded-md bg-accent px-5 py-2.5 text-sm font-medium text-on-accent transition-opacity hover:opacity-90"
   >
     Follow on LinkedIn ↗
+    <NewTabNote />
   </a>
 </div>

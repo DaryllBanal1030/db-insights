@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
+import sitemap from '@astrojs/sitemap';
 
 // Astro config. The defaults give us a STATIC site (output: 'static'),
 // which is exactly what we want for Vercel — plain HTML/CSS/JS, no server.
@@ -12,8 +13,13 @@ import tailwindcss from '@tailwindcss/vite';
 // Tailwind v4 plugs in as a *Vite plugin* (this is the modern way — there is
 // no `tailwind.config.js` anymore; theme tokens live in CSS instead — see
 // src/styles/global.css).
+//
+// The sitemap integration writes dist/sitemap-index.xml at build time: a list
+// of every page, so Google can find and index the whole Hub. It needs `site`
+// to build full URLs. The 404 page is left out automatically.
 export default defineConfig({
   site: 'https://daryllbanal.com',
+  integrations: [sitemap()],
   vite: {
     plugins: [tailwindcss()],
   },

@@ -40,7 +40,7 @@ const isCurrent = (href: string) => !href.includes("#") && current.startsWith(hr
     class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-3"
   >
     <!-- Brand lockup: Solid Mark + wordmark. Links to the home page. -->
-    <a href="/" class="flex items-center gap-2.5" aria-label="DB Insights — home">
+    <a href="/" class="flex min-h-11 items-center gap-2.5" aria-label="DB Insights — home">
       <BrandMark class="h-8 w-auto text-text" />
       <span class="wordmark text-lg">db insights</span>
     </a>
@@ -73,7 +73,7 @@ const isCurrent = (href: string) => !href.includes("#") && current.startsWith(hr
       <!-- Mobile menu: native <details> disclosure, only shown below lg. -->
       <details class="nav-menu relative lg:hidden">
         <summary
-          class="grid h-9 w-9 cursor-pointer list-none place-items-center rounded-md border border-border text-muted transition-colors hover:text-text hover:border-accent"
+          class="grid h-11 w-11 cursor-pointer list-none place-items-center rounded-md border border-border text-muted transition-colors hover:text-text hover:border-accent"
           aria-label="Open navigation menu"
         >
           <!-- Hamburger icon. -->
@@ -91,7 +91,7 @@ const isCurrent = (href: string) => !href.includes("#") && current.startsWith(hr
               <a
                 href={link.href}
                 aria-current={isCurrent(link.href) ? "page" : undefined}
-                class="nav-link flex items-center gap-2.5 rounded-md px-3 py-2 text-sm text-muted transition-colors hover:bg-bg hover:text-text"
+                class="nav-link flex min-h-11 items-center gap-2.5 rounded-md px-3 text-sm text-muted transition-colors hover:bg-bg hover:text-text"
               >
                 {link.dot && (
                   <span class:list={["h-1.5 w-1.5 rounded-full", link.dot]} aria-hidden="true" />
