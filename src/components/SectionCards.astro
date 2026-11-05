@@ -1,41 +1,88 @@
 ---
 /* =============================================================================
-   SectionCards.astro — one card per Hub section (the four Sub-brands plus
-   Field Notes), linking to /spatial, /analytics, etc.
+   SectionCards.astro — the Hub sections as a "bento" grid of cards.
    =============================================================================
-   Static. Each card has a thin bar in its Sub-brand Accent, the Sub-brand Tag,
-   what it covers, its Post Formats and its Phase. All the wording comes from
-   SECTIONS in src/lib/hub.ts; this component only lays it out.
+   A bento grid is a grid of cards in mixed sizes (like a bento box). Here the
+   size says what's live first:
+     - DBSpatial and DBAnalytics (Phase 1, live from launch) are wide cards
+     - DBAutomate and DBLearning (Phases 2 and 3) are small cards
+     - Field Notes is wide and closes the grid
+   Phone: one column. sm (640px+): two columns. lg (1024px+): four columns.
+
+   Each card: Sub-brand Tag + a Phase chip, the name, one line on what it
+   covers, its Post Formats, and an arrow. The wide cards get a faint dot-grid
+   texture with ONE dot in the Sub-brand Accent: a highlighted data point,
+   which is exactly how the brand guide says an Accent may be used.
+
+   All wording comes from SECTIONS in src/lib/hub.ts.
 ============================================================================= */
 
 import Section from "./Section.astro";
 import SubBrandTag from "./SubBrandTag.astro";
-import { SECTION_LIST } from "../lib/hub";
+import { SECTIONS, type SectionKey } from "../lib/hub";
+
+// Display order + size of each card. `wide` cards span two columns.
+// Tailwind needs the full class names written out (see hub.ts), so the span
+// classes live here as literal strings.
+const layout: { key: SectionKey; wide: boolean; span: string }[] = [
+  { key: "spatial", wide: true, span: "lg:col-span-2" },
+  { key: "analytics", wide: true, span: "lg:col-span-2" },
+  { key: "automate", wide: false, span: "" },
+  { key: "learning", wide: false, span: "" },
+  { key: "notes", wide: true, span: "sm:col-span-2" },
+];
 ---
 
-<Section id="sub-brands" index={1} label="the sections">
-  <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+<Section
+  id="sub-brands"
+  index={1}
+  label="the sections"
+  title="Pick your corner of PH data"
+>
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
     {
-      SECTION_LIST.map((section) => (
-        <a
-          href={section.path}
-          class="group flex flex-col rounded-xl border border-border bg-surface p-6 transition-colors hover:border-accent"
-        >
-          <span class:list={["h-1 w-10 rounded-full", section.barClass]} aria-hidden="true" />
-          <span class="mt-5">
-            {/* Field Notes isn't a Sub-brand, so it gets the Masterbrand tag. */}
-            <SubBrandTag section={section.key === "notes" ? null : section} />
-          </span>
-          <h3 class="mt-3 text-xl font-bold tracking-tight">{section.name}</h3>
-          <p class="mt-2 flex-1 text-sm text-muted">{section.focus}</p>
-          <p class="mt-5 text-xs text-faint">
-            {section.formats.join(" · ")} · Phase {section.phase}
-          </p>
-          <span class="mt-3 text-sm font-medium text-text group-hover:underline group-hover:underline-offset-4">
-            {section.path} →
-          </span>
-        </a>
-      ))
+      layout.map(({ key, wide, span }) => {
+        const section = SECTIONS[key];
+        return (
+          <a
+            href={section.path}
+            class:list={[
+              "card-lift group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-surface p-5",
+              span,
+            ]}
+          >
+            {/* Decorative texture for the wide cards: dot grid + one accent dot. */}
+            {wide && (
+              <span class="pointer-events-none absolute -right-2 -top-2 h-28 w-36" aria-hidden="true">
+                <span class="dot-grid absolute inset-0 [mask-image:radial-gradient(circle_at_top_right,black,transparent_75%)]" />
+                <span class:list={["absolute right-12 top-10 h-2.5 w-2.5 rounded-full ring-4 ring-surface", section.barClass]} />
+              </span>
+            )}
+
+            <span class="relative flex flex-wrap items-center gap-2">
+              {/* Field Notes isn't a Sub-brand, so it gets the Masterbrand tag. */}
+              <SubBrandTag section={key === "notes" ? null : section} />
+              <span class="rounded-full border border-border px-2 py-0.5 text-xs text-muted">
+                Phase {section.phase} · {section.startsShort}
+              </span>
+            </span>
+
+            <h3 class="relative mt-4 text-lg font-bold tracking-tight">{section.name}</h3>
+            <p class="relative mt-1 flex-1 text-sm text-muted">{section.focus}</p>
+
+            <span class="relative mt-4 flex items-center justify-between gap-3 text-xs text-faint">
+              <span>{section.formats.join(" · ")}</span>
+              {/* Arrow nudges right on hover (transform only, no layout shift). */}
+              <span
+                class="text-base text-text transition-transform duration-200 group-hover:translate-x-1"
+                aria-hidden="true"
+              >
+                →
+              </span>
+            </span>
+          </a>
+        );
+      })
     }
   </div>
 </Section>

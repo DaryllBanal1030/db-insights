@@ -1,34 +1,35 @@
 ---
 /* =============================================================================
-   LatestPosts.astro — the newest posts from every section, on the home page.
+   LatestPosts.astro — the newest posts from every section.
    =============================================================================
-   Shows up to six. Before launch there are none, so it says when the first
-   post lands instead.
+   Content only (no section wrapper): the home page places it in the left
+   column of LatestAndFollow.astro. Shows up to four posts. Before launch
+   there are none, so it says when the first post lands instead.
 ============================================================================= */
 
-import Section from "./Section.astro";
 import PostList from "./PostList.astro";
 import { BRAND } from "../lib/hub";
 import { getPosts } from "../lib/posts";
 
-// .slice(0, 6) keeps only the first six (getPosts already sorts newest first).
-const posts = (await getPosts()).slice(0, 6);
+// .slice(0, 4) keeps only the first four (getPosts already sorts newest first).
+const posts = (await getPosts()).slice(0, 4);
 ---
 
-<Section id="latest" index={2} label="latest posts">
-  {
-    posts.length > 0 ? (
-      <PostList posts={posts} />
-    ) : (
-      <div class="rounded-xl border border-dashed border-border px-6 py-10 sm:px-10">
-        <p class="font-display text-xl font-bold tracking-tight sm:text-2xl">
-          The first post goes up on LinkedIn on {BRAND.launch}.
-        </p>
-        <p class="mt-3 max-w-prose text-muted">
-          After that, Map Breakdowns, Data Stories and Field Notes collect
-          here every Monday, Wednesday and Friday.
-        </p>
-      </div>
-    )
-  }
-</Section>
+{
+  posts.length > 0 ? (
+    <PostList posts={posts} />
+  ) : (
+    <div class="flex h-full flex-col justify-center rounded-2xl border border-dashed border-border px-6 py-8">
+      <p class="font-display text-xs font-semibold uppercase tracking-[0.2em] text-faint">
+        Launching soon
+      </p>
+      <p class="mt-2 text-balance font-display text-xl font-bold tracking-tight">
+        The first post goes up on LinkedIn on {BRAND.launch}.
+      </p>
+      <p class="mt-2 text-sm text-muted">
+        After that, Map Breakdowns, Data Stories and Field Notes collect here
+        every Monday, Wednesday and Friday.
+      </p>
+    </div>
+  )
+}

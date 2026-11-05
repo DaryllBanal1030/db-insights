@@ -45,6 +45,8 @@ export interface Section {
   phase: 1 | 2 | 3;
   /** When the first post lands, in words. */
   starts: string;
+  /** The same, short enough for a small chip, e.g. "Jan 2027". */
+  startsShort: string;
   /**
    * Tailwind classes for the section's colour. Sub-brands use their
    * Sub-brand Accent; Field Notes use the Masterbrand ink (navy/white).
@@ -65,6 +67,7 @@ export const SECTIONS: Record<SectionKey, Section> = {
     formats: ["Map Breakdowns", "Map Reels"],
     phase: 1,
     starts: "launch week, Mon Nov 9, 2026",
+    startsShort: "Nov 9",
     tagClass: "bg-spatial text-navy",
     barClass: "bg-spatial",
   },
@@ -77,6 +80,7 @@ export const SECTIONS: Record<SectionKey, Section> = {
     formats: ["Data Stories"],
     phase: 1,
     starts: "launch week, Mon Nov 9, 2026",
+    startsShort: "Nov 9",
     tagClass: "bg-analytics text-navy",
     barClass: "bg-analytics",
   },
@@ -89,6 +93,7 @@ export const SECTIONS: Record<SectionKey, Section> = {
     formats: ["Build Logs"],
     phase: 2,
     starts: "Mon Jan 4, 2027",
+    startsShort: "Jan 2027",
     tagClass: "bg-automate text-navy",
     barClass: "bg-automate",
   },
@@ -101,6 +106,7 @@ export const SECTIONS: Record<SectionKey, Section> = {
     formats: ["Lessons"],
     phase: 3,
     starts: "Mon Mar 1, 2027",
+    startsShort: "Mar 2027",
     tagClass: "bg-learning text-navy",
     barClass: "bg-learning",
   },
@@ -113,6 +119,7 @@ export const SECTIONS: Record<SectionKey, Section> = {
     formats: ["Field Notes"],
     phase: 1,
     starts: "launch week, Mon Nov 9, 2026",
+    startsShort: "Nov 9",
     tagClass: "bg-accent text-on-accent",
     barClass: "bg-accent",
   },
@@ -149,6 +156,31 @@ export const FORMAT_SECTION: Record<Format, SectionKey> = {
   Lesson: "learning",
   "Field Note": "notes",
 };
+
+// ---------------------------------------------------------------------------
+// The weekly rhythm (BRAND-GUIDE.md "Weekly slots")
+// ---------------------------------------------------------------------------
+
+export interface WeeklySlot {
+  day: string;
+  format: string;
+  /** Which section's tag to show; null = Masterbrand ("DB Insights"). */
+  section: SectionKey | null;
+  note?: string;
+}
+
+/**
+ * Mon / Wed / Fri, posted 7:30–8:00 AM Manila time. Monday and Wednesday
+ * never change; Friday is the Flex Slot, which changes by Phase. Update the
+ * Friday row when Phase 2 starts (Field Note / Build Log).
+ */
+export const WEEKLY_SLOTS: WeeklySlot[] = [
+  { day: "Mon", format: "Map Breakdown", section: "spatial" },
+  { day: "Wed", format: "Data Story", section: "analytics" },
+  { day: "Fri", format: "Field Note", section: null, note: "Flex Slot" },
+];
+
+export const POST_TIME = "7:30 AM Manila";
 
 // ---------------------------------------------------------------------------
 // Masterbrand + follow links

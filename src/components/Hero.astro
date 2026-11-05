@@ -2,25 +2,32 @@
 /* =============================================================================
    Hero.astro — the top-of-page introduction to Daryll and DB Insights.
    =============================================================================
-   Static (no JS). A faint engineered line-grid sits behind the content at very
-   low opacity, faded out toward the bottom with a CSS mask so it blends into
-   the page.
+   Static (no JS). Two columns from the `lg` breakpoint up (1024px):
+     left  — tagline, the bio-line headline, one line on the promise, buttons
+     right — the "Every week" card: the Mon / Wed / Fri posting rhythm, so a
+             visitor sees at a glance what they get by following.
+   On phones the card stacks under the text.
 
-   Copy comes from the brand docs: the tagline and bio line from BRAND
-   (src/lib/hub.ts), the promise from the LinkedIn headline. The employer is
-   named only in the Experience section, never up here (BRAND-GUIDE.md).
+   No `data-reveal` here on purpose: the hero is the first thing on screen,
+   so it shows immediately instead of fading in.
+
+   Copy comes from the brand docs: the tagline and bio line from BRAND, the
+   weekly slots from WEEKLY_SLOTS (both in src/lib/hub.ts), the promise from
+   the LinkedIn headline. The employer is named only on /about (Experience).
 ============================================================================= */
 
-import { BRAND, FOLLOW_LINKS } from "../lib/hub";
+import { BRAND, FOLLOW_LINKS, POST_TIME, SECTIONS, WEEKLY_SLOTS } from "../lib/hub";
+import { getPosts, urlOf } from "../lib/posts";
 import NewTabNote from "./NewTabNote.astro";
+import SubBrandTag from "./SubBrandTag.astro";
 
 const linkedin = FOLLOW_LINKS.find((link) => link.platform === "LinkedIn")!;
+
+// The card's footer: the newest post once there is one, the launch date before.
+const [latest] = await getPosts();
 ---
 
-<section
-  class="relative overflow-hidden"
-  aria-labelledby="hero-heading"
->
+<section class="relative overflow-hidden" aria-labelledby="hero-heading">
   <!-- Faint line-grid motif. `grid-motif` (from global.css) draws the lines;
        the mask fades them out toward the bottom so there's no hard edge.
        aria-hidden because it's purely decorative. -->
@@ -30,57 +37,98 @@ const linkedin = FOLLOW_LINKS.find((link) => link.platform === "LinkedIn")!;
   >
   </div>
 
-  <div class="mx-auto max-w-6xl px-6 pb-16 pt-24 sm:pb-24 sm:pt-32">
-    <!-- Tagline: uppercase and letter-spaced, as the brand guide specifies. -->
-    <p
-      class="font-display text-xs font-semibold uppercase tracking-[0.25em] text-muted sm:text-sm"
-      data-reveal
-    >
-      {BRAND.tagline}
-    </p>
+  <div
+    class="mx-auto grid max-w-6xl gap-10 px-6 pb-12 pt-14 sm:pb-16 sm:pt-20 lg:grid-cols-[1.3fr_1fr] lg:items-center lg:gap-14"
+  >
+    <!-- Left: the pitch. -->
+    <div>
+      <!-- Tagline: uppercase and letter-spaced, as the brand guide specifies. -->
+      <p class="font-display text-xs font-semibold uppercase tracking-[0.25em] text-muted">
+        {BRAND.tagline}
+      </p>
 
-    <!-- Headline: the standard bio line, with the wordmark in front. -->
-    <h1
-      id="hero-heading"
-      class="mt-6 max-w-4xl text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl"
-      data-reveal
-    >
-      <span class="wordmark">db insights</span>: data and maps of the
-      Philippines, by Daryll Banal.
-    </h1>
-
-    <!-- Subline. -->
-    <p class="mt-6 max-w-2xl text-lg text-muted" data-reveal>
-      I'm a research analyst teaching Filipinos to turn PH data and maps into
-      better decisions. A new post every Monday, Wednesday and Friday on
-      LinkedIn, built only from public data.
-    </p>
-
-    <!-- Four Sub-brand dots: a quiet preview of the sections below. -->
-    <ul class="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted" data-reveal>
-      <li class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-spatial" aria-hidden="true"></span>Maps</li>
-      <li class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-analytics" aria-hidden="true"></span>Data stories</li>
-      <li class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-automate" aria-hidden="true"></span>Automation</li>
-      <li class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-learning" aria-hidden="true"></span>Lessons</li>
-    </ul>
-
-    <!-- Buttons: full width on mobile, inline from sm up. -->
-    <div class="mt-10 flex flex-col gap-3 sm:flex-row" data-reveal>
-      <a
-        href={linkedin.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="rounded-md bg-accent px-6 py-3 text-center text-sm font-medium text-on-accent transition-opacity hover:opacity-90"
+      <!-- Headline: the standard bio line, with the wordmark in front.
+           `text-balance` evens out the line lengths of a short headline. -->
+      <h1
+        id="hero-heading"
+        class="mt-5 text-balance text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl lg:text-[3.4rem]"
       >
-        Follow on LinkedIn ↗
-        <NewTabNote />
-      </a>
-      <a
-        href="#sub-brands"
-        class="rounded-md border border-border px-6 py-3 text-center text-sm font-medium text-text transition-colors hover:border-accent"
-      >
-        Explore the sections
-      </a>
+        <span class="wordmark">db insights</span>: data and maps of the
+        Philippines, by Daryll Banal.
+      </h1>
+
+      <!-- Subline. -->
+      <p class="mt-5 max-w-xl text-lg text-muted">
+        Learn to turn PH data and maps into better decisions, one short post
+        at a time. Built only from public data.
+      </p>
+
+      <!-- Buttons: full width on mobile, inline from sm up. -->
+      <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+        <a
+          href={linkedin.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex min-h-12 items-center justify-center rounded-lg bg-accent px-6 text-sm font-semibold text-on-accent transition-opacity hover:opacity-90"
+        >
+          Follow on LinkedIn ↗
+          <NewTabNote />
+        </a>
+        <a
+          href="#sub-brands"
+          class="inline-flex min-h-12 items-center justify-center rounded-lg border border-border px-6 text-sm font-semibold text-text transition-colors hover:border-accent"
+        >
+          Explore the sections
+        </a>
+      </div>
     </div>
+
+    <!-- Right: the weekly rhythm card. -->
+    <aside
+      class="rounded-2xl border border-border bg-surface/80 p-5 shadow-xl shadow-black/10 backdrop-blur-sm sm:p-6"
+      aria-labelledby="weekly-heading"
+    >
+      <div class="flex items-baseline justify-between gap-3">
+        <h2 id="weekly-heading" class="font-display text-base font-bold tracking-tight">
+          Every week on LinkedIn
+        </h2>
+        <p class="text-xs text-faint">{POST_TIME}</p>
+      </div>
+
+      <ul class="mt-4 grid gap-2">
+        {
+          WEEKLY_SLOTS.map((slot) => (
+            <li class="flex items-center gap-3 rounded-xl border border-hairline bg-bg/60 p-3">
+              {/* The day, in a small square. */}
+              <span class="grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-border font-display text-sm font-bold">
+                {slot.day}
+              </span>
+              <span class="min-w-0 flex-1">
+                <span class="block text-sm font-semibold">{slot.format}</span>
+                {slot.note && <span class="block text-xs text-faint">{slot.note}</span>}
+              </span>
+              <SubBrandTag section={slot.section ? SECTIONS[slot.section] : null} />
+            </li>
+          ))
+        }
+      </ul>
+
+      <p class="mt-4 border-t border-hairline pt-4 text-sm text-muted">
+        {
+          latest ? (
+            <>
+              Latest:{" "}
+              <a href={urlOf(latest)} class="font-semibold text-text underline underline-offset-4">
+                {latest.data.title}
+              </a>
+            </>
+          ) : (
+            <>
+              First post: <span class="font-semibold text-text">{BRAND.launch}</span>
+            </>
+          )
+        }
+      </p>
+    </aside>
   </div>
 </section>

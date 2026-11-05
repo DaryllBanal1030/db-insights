@@ -88,6 +88,7 @@
 
   /* Faint line-grid motif behind the hero — light lines at very low opacity. */
   --grid-line: rgba(255, 255, 255, 0.05);
+  --dot: rgba(255, 255, 255, 0.12);
 
   color-scheme: dark;
 }
@@ -109,6 +110,7 @@
 
   /* Grid motif on light = faint navy lines. */
   --grid-line: rgba(11, 27, 57, 0.05);
+  --dot: rgba(11, 27, 57, 0.12);
 
   color-scheme: light;
 }
@@ -179,15 +181,37 @@ body {
    nothing is ever hidden (content is always accessible). */
 .reveal-enabled [data-reveal] {
   opacity: 0;
-  transform: translateY(12px);
+  transform: translateY(10px);
+  /* 0.4s with an ease-out curve: quick enough that nothing looks half-loaded
+     on a slow phone, slow enough to feel smooth. */
   transition:
-    opacity 0.6s ease,
-    transform 0.6s ease;
+    opacity 0.4s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
   will-change: opacity, transform;
 }
 .reveal-enabled [data-reveal].is-visible {
   opacity: 1;
   transform: none;
+}
+
+/* Card hover: a 2px lift plus the border turning to the Masterbrand ink.
+   Only `transform` and colours animate (cheap, no layout shift), and the
+   reduced-motion rule above shortens it to nothing for people who ask. */
+.card-lift {
+  transition:
+    transform 0.2s cubic-bezier(0.2, 0.7, 0.2, 1),
+    border-color 0.2s ease;
+}
+.card-lift:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+}
+
+/* A faint dot grid, like points on a map. Used as a texture in the corner of
+   the section cards; it uses the same low-contrast colour as the hero grid. */
+.dot-grid {
+  background-image: radial-gradient(var(--dot) 1.2px, transparent 1.2px);
+  background-size: 14px 14px;
 }
 
 /* The faint engineered line-grid drawn behind the hero. */

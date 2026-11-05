@@ -3,9 +3,9 @@
    index.astro — the Hub home page, route "/".
    =============================================================================
    Pages live in src/pages/. index.astro -> route "/". The home page is about
-   DB Insights: what it is, its sections, the latest posts, the DBLearning
-   preview, where to follow, and a short "About Daryll" with a link to the
-   full portfolio on /about (src/pages/about.astro).
+   DB Insights: the pitch + weekly rhythm, its sections, the latest posts
+   beside where to follow, the DBLearning preview, and a short "About Daryll"
+   card linking to the full portfolio on /about (src/pages/about.astro).
 
    The section pages (/spatial, /analytics, …) are built by
    src/pages/[section]/index.astro.
@@ -14,28 +14,24 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Hero from "../components/Hero.astro";
 import SectionCards from "../components/SectionCards.astro";
-import LatestPosts from "../components/LatestPosts.astro";
+import LatestAndFollow from "../components/LatestAndFollow.astro";
 import DBLearningBand from "../components/DBLearningBand.astro";
-import FollowLinks from "../components/FollowLinks.astro";
 import AboutTeaser from "../components/AboutTeaser.astro";
 ---
 
 <BaseLayout>
-  <!-- Hero: the bio line, tagline and the main follow button. -->
+  <!-- Hero: the bio line, the main follow button, and the Mon/Wed/Fri card. -->
   <Hero />
 
-  <!-- 01 — The sections: one card per Sub-brand + Field Notes. -->
+  <!-- 01 — The sections, as a bento grid (Phase 1 cards are the wide ones). -->
   <SectionCards />
 
-  <!-- 02 — Latest posts across every section (or the launch date, before launch). -->
-  <LatestPosts />
+  <!-- 02 — Latest posts (or the launch date) beside the follow links. -->
+  <LatestAndFollow />
 
-  <!-- DBLearning: a distinct band in the coral Sub-brand Accent (Phase 3 preview). -->
+  <!-- DBLearning: a compact strip in the coral Sub-brand Accent (Phase 3 preview). -->
   <DBLearningBand />
 
-  <!-- 03 — Follow: LinkedIn now; Facebook and YouTube with their start dates. -->
-  <FollowLinks />
-
-  <!-- 04 — About Daryll: two sentences + links to /about. -->
+  <!-- 03 — About Daryll: one card linking to /about. -->
   <AboutTeaser />
 </BaseLayout>

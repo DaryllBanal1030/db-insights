@@ -1,35 +1,49 @@
 ---
 /* =============================================================================
-   AboutTeaser.astro — a short "About Daryll" section on the home page.
+   AboutTeaser.astro — a short "About Daryll" card on the home page.
    =============================================================================
    The full portfolio lives on /about (src/pages/about.astro). This keeps the
-   "Daryll" half of the home page's job ("Daryll + DB Insights overview") in
-   two sentences and two links, so the home page stays short on a phone.
+   "Daryll" half of the home page's job ("Daryll + DB Insights overview") to
+   one card: the Brand Mark, two sentences, and two links. Text on the left
+   and buttons on the right from `md` up; stacked on phones.
    The employer is named on /about (Experience), not here.
 ============================================================================= */
 
 import Section from "./Section.astro";
+import BrandMark from "./BrandMark.astro";
 ---
 
-<Section id="about-daryll" index={4} label="about daryll">
-  <p class="max-w-prose text-lg text-muted">
-    Behind DB Insights is me, Daryll Banal: a research analyst who builds
-    Python and SQL data pipelines, dashboards and downloadable datasets, and
-    who is growing into data engineering.
-  </p>
+<Section id="about-daryll" index={3} label="about daryll" title="The person behind the posts">
+  <div
+    class="grid gap-6 rounded-2xl border border-border bg-surface p-6 sm:p-8 md:grid-cols-[auto_1fr_auto] md:items-center"
+  >
+    <!-- The Solid Mark in a small tile ("DB" = Daryll Banal). -->
+    <span
+      class="grid h-14 w-14 place-items-center rounded-xl bg-accent text-on-accent"
+      aria-hidden="true"
+    >
+      <BrandMark class="h-9 w-auto" />
+    </span>
 
-  <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-    <a
-      href="/about"
-      class="inline-flex min-h-11 items-center justify-center rounded-md bg-accent px-6 text-sm font-medium text-on-accent transition-opacity hover:opacity-90"
-    >
-      My work and experience →
-    </a>
-    <a
-      href="/about#contact"
-      class="inline-flex min-h-11 items-center justify-center rounded-md border border-border px-6 text-sm font-medium text-text transition-colors hover:border-accent"
-    >
-      Get in touch
-    </a>
+    <p class="max-w-prose text-muted">
+      I'm Daryll Banal, a research analyst who builds Python and SQL data
+      pipelines, dashboards and downloadable datasets, and who is growing into
+      data engineering. DB Insights is where I share what I learn.
+    </p>
+
+    <div class="flex flex-col gap-3 sm:flex-row md:flex-col lg:flex-row">
+      <a
+        href="/about"
+        class="inline-flex min-h-11 items-center justify-center rounded-lg bg-accent px-5 text-sm font-semibold text-on-accent transition-opacity hover:opacity-90"
+      >
+        My work →
+      </a>
+      <a
+        href="/about#contact"
+        class="inline-flex min-h-11 items-center justify-center rounded-lg border border-border px-5 text-sm font-semibold text-text transition-colors hover:border-accent"
+      >
+        Get in touch
+      </a>
+    </div>
   </div>
 </Section>

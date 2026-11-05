@@ -1,40 +1,45 @@
 ---
 /* =============================================================================
-   FollowLinks.astro — where to follow DB Insights.
+   FollowLinks.astro — where to follow DB Insights, as a compact list.
    =============================================================================
+   Content only (no section wrapper): the home page places it in the right
+   column of LatestAndFollow.astro.
+
    Reads FOLLOW_LINKS from src/lib/hub.ts. A platform that hasn't started yet
    shows its start note instead of a link, so there are no dead links before
    the Facebook Page (Dec 7, 2026) or YouTube (Phase 3) go live. To switch one
    on, set its `startsNote` to null in hub.ts.
 ============================================================================= */
 
-import Section from "./Section.astro";
 import { BRAND, FOLLOW_LINKS } from "../lib/hub";
 import NewTabNote from "./NewTabNote.astro";
 ---
 
-<Section id="follow" index={3} label="follow">
-  <p class="max-w-prose text-lg text-muted">
-    Every post goes up on LinkedIn first. Tag your own PH data and map posts
-    with <span class="font-semibold text-text">{BRAND.hashtag}</span>.
+<div class="rounded-2xl border border-border bg-surface p-5">
+  <h3 class="font-display text-base font-bold tracking-tight">Follow along</h3>
+  <p class="mt-1 text-sm text-muted">
+    Every post goes up on LinkedIn first. Tag your own PH data posts with
+    <span class="font-semibold text-text">{BRAND.hashtag}</span>.
   </p>
 
-  <ul class="mt-8 grid gap-4 sm:grid-cols-3">
+  <ul class="mt-4 divide-y divide-hairline">
     {
       FOLLOW_LINKS.map((link) => (
-        <li class="rounded-xl border border-border bg-surface p-5">
-          <p class="font-display text-lg font-bold tracking-tight">{link.platform}</p>
-          <p class="mt-1 text-sm text-muted">
-            {link.handle} · {link.speaksAs === "Personal" ? "Daryll in person" : "the DB Insights Page"}
-          </p>
+        <li class="flex min-h-14 items-center justify-between gap-3 py-2">
+          <span class="min-w-0">
+            <span class="block text-sm font-semibold">{link.platform}</span>
+            <span class="block text-xs text-faint">
+              {link.handle} · {link.speaksAs === "Personal" ? "Daryll" : "Brand Page"}
+            </span>
+          </span>
           {link.startsNote ? (
-            <p class="mt-4 text-sm text-faint">{link.startsNote}</p>
+            <span class="shrink-0 text-right text-xs text-faint">{link.startsNote}</span>
           ) : (
             <a
               href={link.url}
               target="_blank"
               rel="noopener noreferrer"
-              class="mt-2 inline-flex min-h-11 items-center text-sm font-medium text-text underline underline-offset-4 hover:opacity-80"
+              class="inline-flex min-h-11 shrink-0 items-center rounded-lg bg-accent px-4 text-sm font-semibold text-on-accent transition-opacity hover:opacity-90"
             >
               Follow ↗
               <NewTabNote />
@@ -44,4 +49,4 @@ import NewTabNote from "./NewTabNote.astro";
       ))
     }
   </ul>
-</Section>
+</div>

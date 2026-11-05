@@ -1,0 +1,24 @@
+---
+/* =============================================================================
+   LatestAndFollow.astro — home section 02: latest posts beside follow links.
+   =============================================================================
+   Two things a visitor wants next to each other: what's new, and where to get
+   more. Side by side from `lg` up (posts take 3/5 of the width, follow 2/5);
+   stacked on phones, posts first.
+============================================================================= */
+
+import Section from "./Section.astro";
+import LatestPosts from "./LatestPosts.astro";
+import FollowLinks from "./FollowLinks.astro";
+---
+
+<Section id="latest" index={2} label="latest posts" title="Fresh from LinkedIn">
+  <div class="grid gap-4 lg:grid-cols-5">
+    <div class="lg:col-span-3">
+      <LatestPosts />
+    </div>
+    <div class="lg:col-span-2">
+      <FollowLinks />
+    </div>
+  </div>
+</Section>

@@ -4,14 +4,18 @@
    =============================================================================
    Left:  the Solid Mark + the lowercase "db insights" wordmark (links home).
    Right: the Hub sections (/spatial … /notes), each with a dot in its
-          Sub-brand Accent, an About link, and the theme toggle.
+          Sub-brand Accent, an About link, a Follow button (sm and up), and
+          the theme toggle.
    Mobile: the links collapse into a <details> dropdown (a native, accessible,
            zero-JS disclosure widget — no framework island needed).
 ============================================================================= */
 
 import ThemeToggle from "./ThemeToggle.astro";
 import BrandMark from "./BrandMark.astro";
-import { SECTION_LIST } from "../lib/hub";
+import NewTabNote from "./NewTabNote.astro";
+import { FOLLOW_LINKS, SECTION_LIST } from "../lib/hub";
+
+const linkedin = FOLLOW_LINKS.find((link) => link.platform === "LinkedIn")!;
 
 // The nav links, built from the sections in src/lib/hub.ts plus "About"
 // (the portfolio page, src/pages/about.astro).
@@ -37,7 +41,7 @@ const isCurrent = (href: string) => !href.includes("#") && current.startsWith(hr
 >
   <nav
     aria-label="Primary"
-    class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-3"
+    class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-2"
   >
     <!-- Brand lockup: Solid Mark + wordmark. Links to the home page. -->
     <a href="/" class="flex min-h-11 items-center gap-2.5" aria-label="DB Insights — home">
@@ -66,6 +70,19 @@ const isCurrent = (href: string) => !href.includes("#") && current.startsWith(hr
           ))
         }
       </ul>
+
+      <!-- Follow button: the one call-to-action that matters most, always in
+           reach. Hidden on the narrowest phones (there isn't room, and the
+           hero's big Follow button is right below). -->
+      <a
+        href={linkedin.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hidden min-h-11 items-center rounded-lg bg-accent px-4 text-sm font-semibold text-on-accent transition-opacity hover:opacity-90 sm:inline-flex"
+      >
+        Follow ↗
+        <NewTabNote />
+      </a>
 
       <!-- Theme toggle: a single instance, visible at every breakpoint. -->
       <ThemeToggle />
