@@ -115,7 +115,7 @@
   --faint: #5d6a83;       /* AA (4.5:1+) on both white and --surface */
   --accent: #0b1b39;       /* Masterbrand navy */
   --on-accent: #ffffff;
-  --live: #0f9d6a;         /* readable green on light surfaces */
+  --live: #0b7f56;         /* green that passes AA (4.6:1) on light cards */
 
   /* Grid motif on light = faint navy lines. */
   --grid-line: rgba(11, 27, 57, 0.05);

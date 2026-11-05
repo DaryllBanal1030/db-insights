@@ -59,7 +59,7 @@ const isCurrent = (href: string) => !href.includes("#") && current.startsWith(hr
               <a
                 href={link.href}
                 aria-current={isCurrent(link.href) ? "page" : undefined}
-                class="nav-link flex items-center gap-2 text-sm text-muted transition-colors hover:text-text"
+                class="nav-link flex min-h-11 items-center gap-2 text-sm text-muted transition-colors hover:text-text"
               >
                 {link.dot && (
                   <span class:list={["h-1.5 w-1.5 rounded-full", link.dot]} aria-hidden="true" />

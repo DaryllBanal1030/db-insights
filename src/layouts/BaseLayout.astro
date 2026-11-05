@@ -19,6 +19,9 @@ import "../styles/global.css";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
 import { BRAND } from "../lib/hub";
+// `?url` asks Vite for the font file's final, hashed URL instead of its
+// contents, so we can preload exactly the file the CSS will use.
+import headlineFont from "@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2?url";
 
 // Props let a page customize the per-page SEO bits. We give sensible defaults
 // so most pages don't have to pass anything. The default description is the
@@ -52,6 +55,17 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
          browsers; the PNG is the iOS home-screen icon. -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Preload the headline font (Space Grotesk, Latin letters only) so the
+         big hero headline shows in its real font straight away, instead of
+         flashing a fallback font first. Only this one file is preloaded:
+         preloading every font would slow the page down instead. -->
+    <link rel="preload" href={headlineFont} as="font" type="font/woff2" crossorigin />
+
+    <!-- Colours the phone browser's address bar to match the site:
+         navy for dark-mode visitors, white for light-mode visitors. -->
+    <meta name="theme-color" content="#0b1b39" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
 
     <!-- Primary SEO -->
     <title>{title}</title>
