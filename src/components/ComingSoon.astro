@@ -18,13 +18,19 @@ const { section } = Astro.props;
 const linkedin = FOLLOW_LINKS.find((link) => link.platform === "LinkedIn")!;
 ---
 
-<div class="rounded-xl border border-dashed border-border px-6 py-10 sm:px-10">
+<!-- `--hl` makes the highlight below use this section's colour (teal on
+     /spatial, violet on /automate…). Field Notes keeps Insight Gold. -->
+<div
+  class="rounded-xl border border-dashed border-border px-6 py-10 sm:px-10"
+  style={section.key === "notes" ? undefined : `--hl: var(--color-${section.key})`}
+>
   <p class="flex items-center gap-2 font-display text-xs font-semibold uppercase tracking-[0.2em] text-faint">
     <span class:list={["h-1.5 w-1.5 rounded-full", section.barClass]} aria-hidden="true"></span>
     Coming soon · Phase {section.phase}
   </p>
   <p class="mt-3 font-display text-xl font-bold tracking-tight sm:text-2xl">
-    {section.name} starts in Phase {section.phase}, {section.starts}.
+    {section.name} starts in Phase {section.phase},
+    <span class="insight">{section.starts}</span>.
   </p>
   <p class="mt-3 max-w-prose text-muted">
     {section.formats.join(" and ")} will collect here. Every post goes up on

@@ -24,11 +24,14 @@
 @import "tailwindcss";
 
 /* Self-hosted fonts (no external CDN -> faster, privacy-friendly, no layout
-   shift). The three brand fonts from BRAND-GUIDE.md "Typography":
-   - Plus Jakarta Sans (variable): headlines, labels and the "db insights" wordmark.
+   shift). The three site fonts:
+   - Space Grotesk (variable): headlines, labels and the "db insights" wordmark.
+     Chosen by Daryll on Nov 5, 2026 over Plus Jakarta Sans (see the
+     comparison in the README); BRAND-GUIDE.md still lists Jakarta until the
+     brand docs are updated to match.
    - Inter: body text.
    - JetBrains Mono (variable): code snippets ONLY (Build Logs, Lessons). */
-@import "@fontsource-variable/plus-jakarta-sans";
+@import "@fontsource-variable/space-grotesk";
 @import "@fontsource/inter/400.css";
 @import "@fontsource/inter/500.css";
 @import "@fontsource/inter/600.css";
@@ -51,11 +54,12 @@
   --color-on-accent: var(--on-accent);
   --color-live: var(--live);
 
-  /* Two colour roles (BRAND-GUIDE.md "Colour"):
+  /* Colour roles:
      - Sub-brand Accent = what something is about: tags, bars, numbers,
-       bullets. Masterbrand items use the white/navy ink (`--accent`) instead.
-     - Insight Gold = the one thing to remember: ONE highlighted word or
-       number per screen, plus the Masterbrand's corner accents.
+       bullets, AND that Sub-brand's highlights (Daryll's rule, Nov 5, 2026:
+       a DBSpatial highlight is teal, a DBAutomate one violet, and so on).
+     - Insight Gold = Masterbrand highlights (home page, Field Notes without
+       a Sub-brand) and the corner accents.
      Fixed hex values (same in both themes). On the light theme they're used
      as fills, bars and highlighter marks, never as text colour, because
      teal/amber text on white is too faint to read.
@@ -67,8 +71,8 @@
   --color-automate: #8b7cf6;  /* DBAutomate  — violet */
   --color-learning: #ff6b5b;  /* DBLearning  — coral  */
 
-  /* `font-display` = Plus Jakarta Sans (headlines + wordmark). */
-  --font-display: "Plus Jakarta Sans Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
+  /* `font-display` = Space Grotesk (headlines + wordmark). */
+  --font-display: "Space Grotesk Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono Variable", ui-monospace, "SFMono-Regular", monospace;
 }
@@ -144,7 +148,7 @@ body {
   border-radius: 2px;
 }
 
-/* Headlines use Plus Jakarta Sans. Wrapped in `@layer base` on purpose:
+/* Headlines use Space Grotesk. Wrapped in `@layer base` on purpose:
    Tailwind utilities live in a later layer, so a class like `font-sans` on a
    heading still wins over this default. (Unlayered CSS would beat them.) */
 @layer base {
@@ -219,21 +223,31 @@ body {
   background-size: 14px 14px;
 }
 
-/* INSIGHT GOLD HIGHLIGHT — "the one thing to remember". Use on ONE word or
-   phrase per screen: <span class="insight">data and maps</span>.
-   Dark theme: gold text on navy (9.5:1 contrast).
-   Light theme: navy text over a gold highlighter stroke, because gold text
-   on white would be unreadable (1.9:1). `box-decoration-break: clone`
-   repeats the stroke cleanly when the phrase wraps onto two lines. */
-.insight {
-  color: var(--color-gold);
+/* HIGHLIGHTS — "the one thing to remember". Use on ONE word or phrase per
+   screen, either as <span class="insight">…</span> in a component, or as
+   ==text== in a post's Markdown or title (that becomes <mark>).
+
+   The colour comes from the `--hl` variable: Insight Gold by default (the
+   Masterbrand), set to the Sub-brand Accent on a Sub-brand's pages, e.g.
+   style="--hl: var(--color-spatial)" for a teal DBSpatial highlight.
+   Dark theme: the words in the accent colour on navy (5:1 to 9.5:1).
+   Light theme: navy words over a highlighter stroke in the accent colour,
+   because teal/amber/violet/coral text on white is too faint to read.
+   `box-decoration-break: clone` repeats the stroke when a phrase wraps. */
+.insight,
+.post-body mark,
+mark.insight {
+  color: var(--hl, var(--color-gold));
+  background: none;
+  font-weight: inherit;
 }
-:root[data-theme="light"] .insight {
+:root[data-theme="light"] .insight,
+:root[data-theme="light"] .post-body mark {
   color: inherit;
   background-image: linear-gradient(
     transparent 62%,
-    rgba(245, 183, 0, 0.6) 62%,
-    rgba(245, 183, 0, 0.6) 94%,
+    color-mix(in srgb, var(--hl, var(--color-gold)) 60%, transparent) 62%,
+    color-mix(in srgb, var(--hl, var(--color-gold)) 60%, transparent) 94%,
     transparent 94%
   );
   -webkit-box-decoration-break: clone;
@@ -278,7 +292,7 @@ body {
   background-size: 56px 56px;
 }
 
-/* The lowercase "db insights" wordmark: Plus Jakarta Sans Bold, slightly
+/* The lowercase "db insights" wordmark: Space Grotesk Bold, slightly
    tight letter-spacing, upright (the Brand Mark carries the slant).
    Usage: <span class="wordmark">db insights</span> */
 .wordmark {

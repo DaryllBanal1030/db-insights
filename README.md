@@ -28,13 +28,17 @@ Replaces the previous site at `db-insights.vercel.app`.
 - **[Astro](https://astro.build)** (static output) — ships HTML/CSS with almost no JavaScript.
 - **[Tailwind CSS v4](https://tailwindcss.com)** — utility CSS, configured entirely in
   `src/styles/global.css` (no `tailwind.config.js` in v4).
-- **Fonts** (self-hosted via [`@fontsource`](https://fontsource.org)): Plus Jakarta Sans for
-  headlines and the lowercase "db insights" wordmark, Inter for body text, JetBrains Mono for
-  code only.
+- **Fonts** (self-hosted via [`@fontsource`](https://fontsource.org)): **Space Grotesk** for
+  headlines, labels and the lowercase "db insights" wordmark (chosen Nov 5, 2026 over Plus Jakarta
+  Sans, Bricolage Grotesque, Schibsted Grotesk, Instrument Sans and Manrope), Inter for body text,
+  JetBrains Mono for code only.
 - **Colours**: Masterbrand navy `#0B1B39` + white, and one Sub-brand Accent per section
   (teal Spatial, amber Analytics, violet Automate, coral Learning), all in `src/styles/global.css`.
-  **Insight Gold** (`#F5B700`) marks the one thing to remember: wrap ONE phrase per screen in
-  `<span class="insight">…</span>`. Add `corners` to a card for the gold corner accents.
+  **Highlights** mark the one thing to remember, ONE per screen. In a post's title or body, wrap it
+  in `==double equals==`; in a component, use `<span class="insight">…</span>`. The colour follows
+  the Sub-brand (teal DBSpatial, gold DBAnalytics, violet DBAutomate, coral DBLearning); the
+  Masterbrand (home page, Field Notes without a Sub-brand) uses Insight Gold. Add `corners` to a
+  card for the gold corner accents.
 - **Deploy target**: Vercel (static).
 - **Sitemap**: `@astrojs/sitemap` writes `sitemap-index.xml` on every build so Google can find
   every page. Nothing to maintain; new posts are added automatically.

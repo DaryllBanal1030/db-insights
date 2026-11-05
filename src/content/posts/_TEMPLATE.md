@@ -9,7 +9,10 @@
 #
 # This file itself is never published (its name starts with "_").
 
-title: "What ₱1,000 bought in 2018 vs today"
+# Put the ONE thing to remember in ==double equals==, in the title or the
+# body. It shows in the post's Sub-brand colour (teal for DBSpatial, gold for
+# DBAnalytics, violet for DBAutomate, coral for DBLearning).
+title: "What ==₱1,000== bought in 2018 vs today"
 date: 2026-11-11
 # One of: Map Breakdown · Map Reel · Data Story · Build Log · Lesson · Field Note
 format: "Data Story"
@@ -25,7 +28,7 @@ Write the post here in Markdown.
 
 ## A heading
 
-A paragraph with `inline code`, a [link](https://psa.gov.ph), and a list:
+A paragraph with a ==highlight==, `inline code`, a [link](https://psa.gov.ph), and a list:
 
 - one
 - two

@@ -1,0 +1,23 @@
+---
+/* =============================================================================
+   PostTitle.astro — a post title, with its ==highlight== shown as a highlight.
+   =============================================================================
+   Post titles can mark the one thing to remember with ==double equals==, the
+   same way the post body can. This renders the highlighted part as
+   <mark class="insight">, which takes the colour from `--hl` (set to the
+   post's Sub-brand Accent by the page or card around it).
+
+   Use plainTitle() from src/lib/posts.ts wherever the title goes into a
+   <title> tag or meta description, so search engines never see the == marks.
+============================================================================= */
+
+import { titleParts } from "../lib/posts";
+
+interface Props {
+  title: string;
+}
+
+const parts = titleParts(Astro.props.title);
+---
+
+{parts.map((part) => (part.hl ? <mark class="insight">{part.text}</mark> : part.text))}

@@ -8,7 +8,8 @@
 ============================================================================= */
 
 import SubBrandTag from "./SubBrandTag.astro";
-import { formatDate, tagOf, urlOf, type Post } from "../lib/posts";
+import PostTitle from "./PostTitle.astro";
+import { accentStyleOf, formatDate, tagOf, urlOf, type Post } from "../lib/posts";
 
 interface Props {
   posts: Post[];
@@ -24,6 +25,7 @@ const { posts } = Astro.props;
         <a
           href={urlOf(post)}
           class="card-lift group block rounded-2xl border border-border bg-surface p-4 sm:p-5"
+          style={accentStyleOf(post)}
         >
           <div class="flex flex-wrap items-center gap-x-3 gap-y-2 text-xs text-faint">
             <SubBrandTag section={tagOf(post)} />
@@ -33,7 +35,7 @@ const { posts } = Astro.props;
             <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
           </div>
           <h3 class="mt-2 text-base font-bold tracking-tight sm:text-lg">
-            {post.data.title}
+            <PostTitle title={post.data.title} />
           </h3>
           <p class="mt-1 text-muted">{post.data.summary}</p>
         </a>

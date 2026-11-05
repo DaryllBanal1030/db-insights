@@ -15,7 +15,16 @@ import { render } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import SubBrandTag from "../../components/SubBrandTag.astro";
 import { BRAND, SECTIONS } from "../../lib/hub";
-import { formatDate, getPosts, sectionOf, tagOf, type Post } from "../../lib/posts";
+import {
+  accentStyleOf,
+  formatDate,
+  getPosts,
+  plainTitle,
+  sectionOf,
+  tagOf,
+  type Post,
+} from "../../lib/posts";
+import PostTitle from "../../components/PostTitle.astro";
 import NewTabNote from "../../components/NewTabNote.astro";
 
 export async function getStaticPaths() {
@@ -34,13 +43,13 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 const section = SECTIONS[sectionOf(post)];
 
-// The post's Sub-brand Accent, for its bullets (see `.post-body li::marker`
-// in global.css). A Masterbrand post (no tag) falls back to the white/navy ink.
-const tag = tagOf(post);
-const accentStyle = tag ? `--post-accent: var(--color-${tag.key})` : undefined;
+// The post's Sub-brand Accent, for its ==highlights== and bullets (see
+// `.insight` and `.post-body li::marker` in global.css). A Masterbrand post
+// (no tag) keeps Insight Gold highlights and white/navy bullets.
+const accentStyle = accentStyleOf(post);
 ---
 
-<BaseLayout title={`${post.data.title} · ${BRAND.name}`} description={post.data.summary}>
+<BaseLayout title={`${plainTitle(post.data.title)} · ${BRAND.name}`} description={post.data.summary}>
   <article class="mx-auto max-w-3xl px-6 pb-16 pt-12 sm:pb-20 sm:pt-16" style={accentStyle}>
     <!-- Back link to the section this post lives in. -->
     <a href={section.path} class="text-sm text-muted transition-colors hover:text-text">
@@ -55,7 +64,7 @@ const accentStyle = tag ? `--post-accent: var(--color-${tag.key})` : undefined;
         <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
       </div>
       <h1 class="mt-4 text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
-        {post.data.title}
+        <PostTitle title={post.data.title} />
       </h1>
       <p class="mt-4 text-lg text-muted">{post.data.summary}</p>
     </header>

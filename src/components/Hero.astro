@@ -17,7 +17,7 @@
 ============================================================================= */
 
 import { BRAND, FOLLOW_LINKS, POST_TIME, SECTIONS, WEEKLY_SLOTS } from "../lib/hub";
-import { getPosts, urlOf } from "../lib/posts";
+import { getPosts, plainTitle, urlOf } from "../lib/posts";
 import NewTabNote from "./NewTabNote.astro";
 import SubBrandTag from "./SubBrandTag.astro";
 
@@ -122,7 +122,7 @@ const [latest] = await getPosts();
             <>
               Latest:{" "}
               <a href={urlOf(latest)} class="font-semibold text-text underline underline-offset-4">
-                {latest.data.title}
+                {plainTitle(latest.data.title)}
               </a>
             </>
           ) : (
