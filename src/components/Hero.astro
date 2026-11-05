@@ -48,13 +48,15 @@ const [latest] = await getPosts();
       </p>
 
       <!-- Headline: the standard bio line, with the wordmark in front.
-           `text-balance` evens out the line lengths of a short headline. -->
+           `text-balance` evens out the line lengths of a short headline.
+           "data and maps" is this screen's ONE Insight Gold highlight
+           (`.insight` in global.css): the thing to remember. -->
       <h1
         id="hero-heading"
         class="mt-5 text-balance text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl lg:text-[3.4rem]"
       >
-        <span class="wordmark">db insights</span>: data and maps of the
-        Philippines, by Daryll Banal.
+        <span class="wordmark">db insights</span>: <span class="insight">data and maps</span>
+        of the Philippines, by Daryll Banal.
       </h1>
 
       <!-- Subline. -->
@@ -83,9 +85,10 @@ const [latest] = await getPosts();
       </div>
     </div>
 
-    <!-- Right: the weekly rhythm card. -->
+    <!-- Right: the weekly rhythm card. `corners` adds the gold corner
+         accents, the Masterbrand signature (like a carousel's cover slide). -->
     <aside
-      class="rounded-2xl border border-border bg-surface/80 p-5 shadow-xl shadow-black/10 backdrop-blur-sm sm:p-6"
+      class="corners rounded-2xl border border-border bg-surface/80 p-5 shadow-xl shadow-black/10 backdrop-blur-sm sm:p-6"
       aria-labelledby="weekly-heading"
     >
       <div class="flex items-baseline justify-between gap-3">

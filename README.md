@@ -33,6 +33,8 @@ Replaces the previous site at `db-insights.vercel.app`.
   code only.
 - **Colours**: Masterbrand navy `#0B1B39` + white, and one Sub-brand Accent per section
   (teal Spatial, amber Analytics, violet Automate, coral Learning), all in `src/styles/global.css`.
+  **Insight Gold** (`#F5B700`) marks the one thing to remember: wrap ONE phrase per screen in
+  `<span class="insight">…</span>`. Add `corners` to a card for the gold corner accents.
 - **Deploy target**: Vercel (static).
 - **Sitemap**: `@astrojs/sitemap` writes `sitemap-index.xml` on every build so Google can find
   every page. Nothing to maintain; new posts are added automatically.

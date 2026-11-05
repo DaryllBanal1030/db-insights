@@ -51,12 +51,17 @@
   --color-on-accent: var(--on-accent);
   --color-live: var(--live);
 
-  /* Sub-brand Accents. Fixed hex values (they don't change between themes)
-     because they're only ever used as FILLS with navy text on top — the
-     Sub-brand Tag and thin accent bars — never as text on the page. That keeps
-     contrast safe in both light and dark. Gives us `bg-spatial`,
-     `border-analytics`, etc. Masterbrand navy is `--color-navy`. */
+  /* Two colour roles (BRAND-GUIDE.md "Colour"):
+     - Sub-brand Accent = what something is about: tags, bars, numbers,
+       bullets. Masterbrand items use the white/navy ink (`--accent`) instead.
+     - Insight Gold = the one thing to remember: ONE highlighted word or
+       number per screen, plus the Masterbrand's corner accents.
+     Fixed hex values (same in both themes). On the light theme they're used
+     as fills, bars and highlighter marks, never as text colour, because
+     teal/amber text on white is too faint to read.
+     Gives us `bg-spatial`, `text-gold`, `border-analytics`, etc. */
   --color-navy: #0b1b39;
+  --color-gold: #f5b700;      /* Insight Gold (same amber as DBAnalytics) */
   --color-spatial: #2dd4bf;   /* DBSpatial   — teal   */
   --color-analytics: #f5b700; /* DBAnalytics — amber  */
   --color-automate: #8b7cf6;  /* DBAutomate  — violet */
@@ -214,6 +219,57 @@ body {
   background-size: 14px 14px;
 }
 
+/* INSIGHT GOLD HIGHLIGHT — "the one thing to remember". Use on ONE word or
+   phrase per screen: <span class="insight">data and maps</span>.
+   Dark theme: gold text on navy (9.5:1 contrast).
+   Light theme: navy text over a gold highlighter stroke, because gold text
+   on white would be unreadable (1.9:1). `box-decoration-break: clone`
+   repeats the stroke cleanly when the phrase wraps onto two lines. */
+.insight {
+  color: var(--color-gold);
+}
+:root[data-theme="light"] .insight {
+  color: inherit;
+  background-image: linear-gradient(
+    transparent 62%,
+    rgba(245, 183, 0, 0.6) 62%,
+    rgba(245, 183, 0, 0.6) 94%,
+    transparent 94%
+  );
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* CORNER ACCENTS — the Masterbrand signature from the post templates
+   (dbinsights-brand/templates/build_carousel.py): a gold triangle in the
+   top-left and bottom-right corners, on the first and last "slide". On the
+   site they mark the hero's weekly card (the cover) and the About card at the
+   end of the home page. Add `corners` to a card; it needs no other markup.
+   ::before / ::after are CSS-drawn extra boxes, so there's no extra HTML. */
+.corners {
+  position: relative;
+  overflow: hidden;
+  --corner: 3.25rem;
+}
+.corners::before,
+.corners::after {
+  content: "";
+  position: absolute;
+  width: var(--corner);
+  height: var(--corner);
+  pointer-events: none;
+}
+.corners::before {
+  top: 0;
+  left: 0;
+  background: linear-gradient(135deg, var(--color-gold) 0 34%, transparent 34%);
+}
+.corners::after {
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(315deg, var(--color-gold) 0 34%, transparent 34%);
+}
+
 /* The faint engineered line-grid drawn behind the hero. */
 .grid-motif {
   background-image:
@@ -262,6 +318,12 @@ body {
 .post-body ul {
   list-style: disc;
   padding-left: 1.25em;
+}
+/* Bullets and list numbers in the post's Sub-brand Accent. The post page
+   sets `--post-accent` on the article (white/navy ink for Masterbrand). */
+.post-body li::marker {
+  color: var(--post-accent, var(--accent));
+  font-weight: 700;
 }
 .post-body ol {
   list-style: decimal;

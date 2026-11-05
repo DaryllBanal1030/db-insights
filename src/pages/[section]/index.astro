@@ -38,7 +38,7 @@ const isSubBrand = section.key !== "notes";
   description={`${section.focus} ${BRAND.bio}`}
 >
   <section>
-    <div class="mx-auto max-w-3xl px-6 pb-20 pt-16 sm:pb-28 sm:pt-24">
+    <div class="mx-auto max-w-3xl px-6 pb-16 pt-12 sm:pb-20 sm:pt-16">
       <!-- Header: Sub-brand Tag, name, focus, and the Phase line. -->
       <div data-reveal>
         <!-- A thin bar in the Sub-brand Accent: the only other place it's used. -->
@@ -50,13 +50,22 @@ const isSubBrand = section.key !== "notes";
           {section.name}
         </h1>
         <p class="mt-4 max-w-prose text-lg text-muted">{section.focus}</p>
-        <p class="mt-4 text-sm text-faint">
-          {section.formats.join(" · ")} · Phase {section.phase}
-        </p>
+        <!-- Post Formats + Phase as chips. The dots use the Sub-brand Accent
+             (white/navy ink for Field Notes): it shows what the page is about. -->
+        <ul class="mt-5 flex flex-wrap gap-2 text-sm">
+          {
+            [...section.formats, `Phase ${section.phase} · from ${section.startsShort}`].map((label) => (
+              <li class="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1 text-muted">
+                <span class:list={["h-1.5 w-1.5 rounded-full", section.barClass]} aria-hidden="true" />
+                {label}
+              </li>
+            ))
+          }
+        </ul>
       </div>
 
       <!-- Posts, or the coming-soon state if there are none yet. -->
-      <div class="mt-12" data-reveal>
+      <div class="mt-10" data-reveal>
         {posts.length > 0 ? <PostList posts={posts} /> : <ComingSoon section={section} />}
       </div>
     </div>

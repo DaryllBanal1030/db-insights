@@ -23,7 +23,7 @@ const publicDir = join(__dirname, "..", "public");
 const NAVY = "#0B1B39";
 const WHITE = "#FFFFFF";
 const MUTED = "#AAB7CD";
-const ACCENTS = ["#2DD4BF", "#F5B700", "#8B7CF6", "#FF6B5B"]; // Spatial, Analytics, Automate, Learning
+const GOLD = "#F5B700"; // Insight Gold: the one thing to remember + corner accents
 
 // The Solid Mark's shapes, copied verbatim from
 // dbinsights-brand/logo/brand-mark.svg (never redraw the mark). Its own
@@ -42,8 +42,10 @@ const markAt = (x, y, height, fill) => {
 };
 
 // ---- Open Graph image: 1200 x 630 -----------------------------------------
-// Navy card: Solid Mark + "db insights" wordmark, the tagline, the bio line,
-// and a strip of the four Sub-brand Accents along the bottom.
+// Navy card styled like a carousel cover slide (dbinsights-brand/templates):
+// gold corner accents top-left and bottom-right, Solid Mark + "db insights"
+// wordmark, the tagline, and the bio line with "Data and maps" as the one
+// Insight Gold highlight.
 const ogSvg = `
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <defs>
@@ -62,11 +64,12 @@ const ogSvg = `
   <text x="82" y="330" font-family="'Plus Jakarta Sans', sans-serif" font-size="26" font-weight="600" letter-spacing="6" fill="${MUTED}">DATA • PLACES • BETTER DECISIONS</text>
 
   <!-- bio line -->
-  <text x="80" y="420" font-family="'Plus Jakarta Sans', sans-serif" font-size="50" font-weight="700" fill="${WHITE}">Data and maps of the Philippines,</text>
+  <text x="80" y="420" font-family="'Plus Jakarta Sans', sans-serif" font-size="50" font-weight="700" fill="${WHITE}"><tspan fill="${GOLD}">Data and maps</tspan> of the Philippines,</text>
   <text x="80" y="484" font-family="'Plus Jakarta Sans', sans-serif" font-size="50" font-weight="700" fill="${WHITE}">by Daryll Banal.</text>
 
-  <!-- Sub-brand Accent strip -->
-  ${ACCENTS.map((c, i) => `<rect x="${i * 300}" y="618" width="300" height="12" fill="${c}"/>`).join("")}
+  <!-- corner accents (same geometry as the templates: 34% of a square) -->
+  <path d="M0 0H62L0 62Z" fill="${GOLD}"/>
+  <path d="M1200 630H1138L1200 568Z" fill="${GOLD}"/>
 </svg>`;
 
 // ---- apple-touch-icon: 180 x 180 ------------------------------------------

@@ -33,10 +33,15 @@ interface Props {
 const { post } = Astro.props;
 const { Content } = await render(post);
 const section = SECTIONS[sectionOf(post)];
+
+// The post's Sub-brand Accent, for its bullets (see `.post-body li::marker`
+// in global.css). A Masterbrand post (no tag) falls back to the white/navy ink.
+const tag = tagOf(post);
+const accentStyle = tag ? `--post-accent: var(--color-${tag.key})` : undefined;
 ---
 
 <BaseLayout title={`${post.data.title} · ${BRAND.name}`} description={post.data.summary}>
-  <article class="mx-auto max-w-3xl px-6 pb-20 pt-16 sm:pb-28 sm:pt-24">
+  <article class="mx-auto max-w-3xl px-6 pb-16 pt-12 sm:pb-20 sm:pt-16" style={accentStyle}>
     <!-- Back link to the section this post lives in. -->
     <a href={section.path} class="text-sm text-muted transition-colors hover:text-text">
       ← {section.name}
