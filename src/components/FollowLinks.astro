@@ -22,7 +22,7 @@ import NewTabNote from "./NewTabNote.astro";
     <span class="font-semibold text-text">{BRAND.hashtag}</span>.
   </p>
 
-  <ul class="mt-4 divide-y divide-hairline">
+  <ul class="mt-4 divide-y divide-hairline" data-stagger>
     {
       FOLLOW_LINKS.map((link) => (
         <li class="flex min-h-14 items-center justify-between gap-3 py-2">
@@ -39,7 +39,7 @@ import NewTabNote from "./NewTabNote.astro";
               href={link.url}
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex min-h-11 shrink-0 items-center rounded-lg bg-accent px-4 text-sm font-semibold text-on-accent transition-opacity hover:opacity-90"
+              class="inline-flex min-h-11 shrink-0 items-center rounded-lg bg-accent px-4 text-sm font-semibold text-on-accent press hover:opacity-90"
             >
               Follow ↗
               <NewTabNote />

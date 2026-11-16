@@ -18,7 +18,8 @@ interface Props {
 const { posts } = Astro.props;
 ---
 
-<ul class="grid gap-3">
+<!-- `data-stagger`: posts rise in one after another (global.css). -->
+<ul class="grid gap-3" data-stagger>
   {
     posts.map((post) => (
       <li>

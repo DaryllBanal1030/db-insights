@@ -39,7 +39,8 @@ const layout: { key: SectionKey; wide: boolean; span: string }[] = [
   label="the sections"
   title="Pick your corner of PH data"
 >
-  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+  <!-- `data-stagger`: the cards rise in one after another (global.css). -->
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" data-stagger>
     {
       layout.map(({ key, wide, span }) => {
         const section = SECTIONS[key];
@@ -55,7 +56,8 @@ const layout: { key: SectionKey; wide: boolean; span: string }[] = [
             {wide && (
               <span class="pointer-events-none absolute -right-2 -top-2 h-28 w-36" aria-hidden="true">
                 <span class="dot-grid absolute inset-0 [mask-image:radial-gradient(circle_at_top_right,black,transparent_75%)]" />
-                <span class:list={["absolute right-12 top-10 h-2.5 w-2.5 rounded-full ring-4 ring-surface", section.barClass]} />
+                {/* `accent-dot`: sends out one ring when the card is hovered. */}
+                <span class:list={["accent-dot absolute right-12 top-10 h-2.5 w-2.5 rounded-full ring-4 ring-surface", section.barClass]} />
               </span>
             )}
 

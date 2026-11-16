@@ -39,6 +39,12 @@ Replaces the previous site at `db-insights.vercel.app`.
   the Sub-brand (teal DBSpatial, gold DBAnalytics, violet DBAutomate, coral DBLearning); the
   Masterbrand (home page, Field Notes without a Sub-brand) uses Insight Gold. Add `corners` to a
   card for the gold corner accents.
+- **Motion** (CSS only, no animation library; see "MOTION" at the end of
+  `src/styles/global.css`): smooth page-to-page transitions with the nav bar standing still, a
+  short hero entrance where the highlight "draws in", a "Today" marker on the weekly card
+  (Mon/Wed/Fri, Manila time), cards that rise in one after another (`data-stagger`), a ping
+  from the section cards' accent dot on hover, and a press dip on buttons (`press`). All of it
+  switches off for visitors whose device asks for reduced motion.
 - **Deploy target**: Vercel (static).
 - **Sitemap**: `@astrojs/sitemap` writes `sitemap-index.xml` on every build so Google can find
   every page. Nothing to maintain; new posts are added automatically.

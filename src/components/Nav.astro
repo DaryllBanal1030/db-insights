@@ -36,8 +36,10 @@ const current = Astro.url.pathname;
 const isCurrent = (href: string) => !href.includes("#") && current.startsWith(href);
 ---
 
+<!-- `site-header` gives the bar a view-transition name (global.css), so it
+     stays still while the rest of the page cross-fades between pages. -->
 <header
-  class="sticky top-0 z-40 border-b border-hairline bg-bg/80 backdrop-blur-md"
+  class="site-header sticky top-0 z-40 border-b border-hairline bg-bg/80 backdrop-blur-md"
 >
   <nav
     aria-label="Primary"
@@ -78,7 +80,7 @@ const isCurrent = (href: string) => !href.includes("#") && current.startsWith(hr
         href={linkedin.url}
         target="_blank"
         rel="noopener noreferrer"
-        class="hidden min-h-11 items-center rounded-lg bg-accent px-4 text-sm font-semibold text-on-accent transition-opacity hover:opacity-90 sm:inline-flex"
+        class="hidden min-h-11 items-center rounded-lg bg-accent px-4 text-sm font-semibold text-on-accent press hover:opacity-90 sm:inline-flex"
       >
         Follow ↗
         <NewTabNote />

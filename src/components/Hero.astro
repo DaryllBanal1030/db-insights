@@ -8,8 +8,11 @@
              visitor sees at a glance what they get by following.
    On phones the card stacks under the text.
 
-   No `data-reveal` here on purpose: the hero is the first thing on screen,
-   so it shows immediately instead of fading in.
+   No `data-reveal` here on purpose: the hero is the first thing on screen.
+   Instead it has a short entrance (classes `hero-in` / `hero-card`, see
+   "MOTION" in global.css): the headline shows instantly, the pieces around
+   it rise in one after another (`--i` = order), and the gold highlight
+   "draws in". On Mon / Wed / Fri the script at the bottom marks today's row.
 
    Copy comes from the brand docs: the tagline and bio line from BRAND, the
    weekly slots from WEEKLY_SLOTS (both in src/lib/hub.ts), the promise from
@@ -43,7 +46,7 @@ const [latest] = await getPosts();
     <!-- Left: the pitch. -->
     <div>
       <!-- Tagline: uppercase and letter-spaced, as the brand guide specifies. -->
-      <p class="font-display text-xs font-semibold uppercase tracking-[0.25em] text-muted">
+      <p class="hero-in font-display text-xs font-semibold uppercase tracking-[0.25em] text-muted">
         {BRAND.tagline}
       </p>
 
@@ -55,30 +58,30 @@ const [latest] = await getPosts();
         id="hero-heading"
         class="mt-5 text-balance text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl lg:text-[3.4rem]"
       >
-        <span class="wordmark">db insights</span>: <span class="insight">data and maps</span>
+        <span class="wordmark">db insights</span>: <span class="insight draw">data and maps</span>
         of the Philippines, by Daryll Banal.
       </h1>
 
       <!-- Subline. -->
-      <p class="mt-5 max-w-xl text-lg text-muted">
+      <p class="hero-in mt-5 max-w-xl text-lg text-muted" style="--i: 1">
         Learn to turn PH data and maps into better decisions, one short post
         at a time. Built only from public data.
       </p>
 
       <!-- Buttons: full width on mobile, inline from sm up. -->
-      <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+      <div class="hero-in mt-8 flex flex-col gap-3 sm:flex-row" style="--i: 2">
         <a
           href={linkedin.url}
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex min-h-12 items-center justify-center rounded-lg bg-accent px-6 text-sm font-semibold text-on-accent transition-opacity hover:opacity-90"
+          class="inline-flex min-h-12 items-center justify-center rounded-lg bg-accent px-6 text-sm font-semibold text-on-accent press hover:opacity-90"
         >
           Follow on LinkedIn ↗
           <NewTabNote />
         </a>
         <a
           href="#sub-brands"
-          class="inline-flex min-h-12 items-center justify-center rounded-lg border border-border px-6 text-sm font-semibold text-text transition-colors hover:border-accent"
+          class="inline-flex min-h-12 items-center justify-center rounded-lg border border-border px-6 text-sm font-semibold text-text press hover:border-accent"
         >
           Explore the sections
         </a>
@@ -88,7 +91,7 @@ const [latest] = await getPosts();
     <!-- Right: the weekly rhythm card. `corners` adds the gold corner
          accents, the Masterbrand signature (like a carousel's cover slide). -->
     <aside
-      class="corners rounded-2xl border border-border bg-surface/80 p-5 shadow-xl shadow-black/10 backdrop-blur-sm sm:p-6"
+      class="hero-card corners rounded-2xl border border-border bg-surface/80 p-5 shadow-xl shadow-black/10 backdrop-blur-sm sm:p-6"
       aria-labelledby="weekly-heading"
     >
       <div class="flex items-baseline justify-between gap-3">
@@ -100,8 +103,12 @@ const [latest] = await getPosts();
 
       <ul class="mt-4 grid gap-2">
         {
-          WEEKLY_SLOTS.map((slot) => (
-            <li class="flex items-center gap-3 rounded-xl border border-hairline bg-bg/60 p-3">
+          WEEKLY_SLOTS.map((slot, i) => (
+            <li
+              class="hero-in flex items-center gap-3 rounded-xl border border-hairline bg-bg/60 p-3"
+              style={`--i: ${i + 3}`}
+              data-day={slot.day}
+            >
               {/* The day, in a small square. */}
               <span class="grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-border font-display text-sm font-bold">
                 {slot.day}
@@ -109,6 +116,11 @@ const [latest] = await getPosts();
               <span class="min-w-0 flex-1">
                 <span class="block text-sm font-semibold">{slot.format}</span>
                 {slot.note && <span class="block text-xs text-faint">{slot.note}</span>}
+                {/* Hidden until the script below finds that today is this day. */}
+                <span class="today-badge mt-1 hidden items-center gap-1.5 text-xs font-semibold text-text">
+                  <span class="today-ping h-1.5 w-1.5 rounded-full bg-live" aria-hidden="true" />
+                  Today
+                </span>
               </span>
               <SubBrandTag section={slot.section ? SECTIONS[slot.section] : null} />
             </li>
@@ -135,3 +147,19 @@ const [latest] = await getPosts();
     </aside>
   </div>
 </section>
+
+<script>
+  // Marks today's posting day on the weekly card. Runs in the visitor's
+  // browser, so "today" is always current even though the page itself was
+  // built earlier. We use Manila time (where the posts go out), not the
+  // visitor's own time zone.
+  const today = new Date().toLocaleDateString("en-US", {
+    weekday: "short",
+    timeZone: "Asia/Manila",
+  }); // e.g. "Mon"
+  const row = document.querySelector<HTMLElement>(`[data-day="${today}"]`);
+  if (row) {
+    row.classList.add("is-today");
+    row.querySelector(".today-badge")?.classList.replace("hidden", "flex");
+  }
+</script>

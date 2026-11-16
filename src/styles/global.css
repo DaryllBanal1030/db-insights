@@ -374,3 +374,170 @@ mark.insight {
   font-size: 0.875rem;
   line-height: 1.6;
 }
+
+/* =============================================================================
+   MOTION
+   =============================================================================
+   Rules every animation here follows:
+   - Only `transform` and `opacity` move things (cheap for the browser, and
+     nothing else on the page jumps around).
+   - Shared timing tokens below, so everything has the same rhythm.
+   - Each animation means something: a page change, "look here", "this is
+     today", "you pressed this". No motion just for decoration.
+   - Visitors whose device asks for less motion get none of it: the page
+     transition is wrapped in a reduced-motion check, and the entrance and
+     stagger rules only apply under `.reveal-enabled`, a class the head
+     script in BaseLayout adds ONLY when reduced motion is NOT requested.
+============================================================================= */
+:root {
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1); /* fast start, gentle stop */
+  --dur-fast: 150ms;  /* presses, small state changes */
+  --dur-mid: 250ms;   /* page transitions */
+  --dur-slow: 450ms;  /* entrances */
+}
+
+/* Keyframes used below. */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes slide-in {
+  from { opacity: 0; transform: translateX(16px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes ping {
+  from { opacity: 0.7; transform: scale(1); }
+  to   { opacity: 0; transform: scale(2.6); }
+}
+
+/* ---- 1. Page-to-page transitions ------------------------------------------
+   Cross-document View Transitions: when you click to another page, the old
+   page fades out and the new one rises in, while the nav bar (named
+   "site-header" in Nav.astro) stays perfectly still. Pure CSS, no script.
+   Browsers that don't support it (e.g. Firefox today) simply load the page
+   normally, so nothing breaks. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+.site-header {
+  view-transition-name: site-header;
+}
+::view-transition-old(root) {
+  animation: var(--dur-fast) ease-in both fade-out;
+}
+::view-transition-new(root) {
+  animation: var(--dur-mid) var(--ease-out) both rise;
+}
+@keyframes fade-out {
+  to { opacity: 0; }
+}
+
+/* ---- 2. Hero entrance (home page, on load) ---------------------------------
+   The headline itself appears instantly (it's the first thing people read,
+   and search engines time how fast it shows). Around it, the tagline,
+   subline and buttons rise in one after another, and the weekly card slides
+   in from the right with its rows following. `--i` is each element's place
+   in the sequence (set in Hero.astro); every step waits 70ms more.
+   `backwards` means "look like the first frame while waiting", and once the
+   animation ends the element's normal styles take over again. */
+.reveal-enabled .hero-in {
+  animation: rise var(--dur-slow) var(--ease-out) backwards;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+.reveal-enabled .hero-card {
+  animation: slide-in var(--dur-slow) var(--ease-out) backwards;
+  animation-delay: 140ms;
+}
+
+/* The ONE highlight "draws in" just after the headline appears:
+   light theme — the highlighter stroke sweeps left to right;
+   dark theme — the words warm from white to the highlight colour. */
+@keyframes draw-stroke {
+  from { background-size: 0% 100%; }
+  to   { background-size: 100% 100%; }
+}
+@keyframes warm-up {
+  from { color: var(--text); }
+}
+.reveal-enabled .insight.draw {
+  animation: warm-up 700ms var(--ease-out) 350ms backwards;
+}
+/* Both classes sit on <html>, so they're chained (no space between). */
+.reveal-enabled:root[data-theme="light"] .insight.draw {
+  background-repeat: no-repeat;
+  animation: draw-stroke 700ms var(--ease-out) 350ms backwards;
+}
+
+/* ---- 3. "Today" on the weekly card -----------------------------------------
+   Hero.astro's script marks today's row (Manila time) on Mon / Wed / Fri.
+   The row gets the ink border and a small "Today" badge; the badge's dot
+   pings three times, then stops (motion that never ends is distracting). */
+.is-today {
+  border-color: var(--accent) !important;
+}
+.today-ping {
+  position: relative;
+}
+.today-ping::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: inherit;
+}
+.reveal-enabled .today-ping::after {
+  animation: ping 1.2s var(--ease-out) 600ms 3 both;
+}
+
+/* ---- 4. Staggered reveals --------------------------------------------------
+   Put `data-stagger` on a grid or list inside a revealing section, and its
+   children rise in one after another (60ms apart) when the section scrolls
+   into view, instead of all at once. `--i` comes from :nth-child below, so
+   no extra markup is needed. Using an animation (not a transition) keeps it
+   separate from the cards' hover lift. */
+.reveal-enabled [data-reveal].is-visible [data-stagger] > * {
+  animation: rise var(--dur-slow) var(--ease-out) backwards;
+  animation-delay: calc(var(--i, 0) * 60ms + 80ms);
+}
+[data-stagger] > :nth-child(2) { --i: 1; }
+[data-stagger] > :nth-child(3) { --i: 2; }
+[data-stagger] > :nth-child(4) { --i: 3; }
+[data-stagger] > :nth-child(5) { --i: 4; }
+[data-stagger] > :nth-child(6) { --i: 5; }
+[data-stagger] > :nth-child(n + 7) { --i: 6; }
+
+/* ---- 5. Small interactions -------------------------------------------------
+   Press feedback: buttons dip to 98% while pressed, so a tap visibly
+   registers. Add `press` to a button-like link. */
+.press {
+  transition:
+    opacity var(--dur-fast) ease,
+    transform var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) ease;
+}
+.press:active {
+  transform: scale(0.98);
+}
+
+/* The accent dot on the wide section cards (one highlighted data point):
+   hovering the card sends out one ring from the dot, like a location ping. */
+.accent-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: inherit;
+  opacity: 0;
+}
+.group:hover .accent-dot::after,
+.group:focus-visible .accent-dot::after {
+  animation: ping 900ms var(--ease-out) 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .group:hover .accent-dot::after,
+  .group:focus-visible .accent-dot::after {
+    animation: none;
+  }
+}
