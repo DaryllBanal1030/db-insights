@@ -45,6 +45,8 @@ export interface Section {
   phase: 1 | 2 | 3;
   /** When the first post lands, in words. */
   starts: string;
+  /** The same date as YYYY-MM-DD, so the site can tell if it has passed. */
+  startsOn: string;
   /** The same, short enough for a small chip, e.g. "Jan 2027". */
   startsShort: string;
   /**
@@ -66,7 +68,8 @@ export const SECTIONS: Record<SectionKey, Section> = {
     focus: "Geospatial work: maps, location data and places in the Philippines.",
     formats: ["Map Breakdowns", "Map Reels"],
     phase: 1,
-    starts: "launch week, Mon Nov 9, 2026",
+    starts: "Mon Nov 9, 2026",
+    startsOn: "2026-11-09",
     startsShort: "Nov 9",
     tagClass: "bg-spatial text-navy",
     barClass: "bg-spatial",
@@ -79,7 +82,8 @@ export const SECTIONS: Record<SectionKey, Section> = {
     focus: "Data analysis and Data Stories, each built around one chart.",
     formats: ["Data Stories"],
     phase: 1,
-    starts: "launch week, Mon Nov 9, 2026",
+    starts: "Mon Nov 9, 2026",
+    startsOn: "2026-11-09",
     startsShort: "Nov 9",
     tagClass: "bg-analytics text-navy",
     barClass: "bg-analytics",
@@ -93,6 +97,7 @@ export const SECTIONS: Record<SectionKey, Section> = {
     formats: ["Build Logs"],
     phase: 2,
     starts: "Mon Jan 4, 2027",
+    startsOn: "2027-01-04",
     startsShort: "Jan 2027",
     tagClass: "bg-automate text-navy",
     barClass: "bg-automate",
@@ -106,6 +111,7 @@ export const SECTIONS: Record<SectionKey, Section> = {
     formats: ["Lessons"],
     phase: 3,
     starts: "Mon Mar 1, 2027",
+    startsOn: "2027-03-01",
     startsShort: "Mar 2027",
     tagClass: "bg-learning text-navy",
     barClass: "bg-learning",
@@ -118,7 +124,8 @@ export const SECTIONS: Record<SectionKey, Section> = {
     focus: "Short first-person stories and lessons from Daryll's analyst work.",
     formats: ["Field Notes"],
     phase: 1,
-    starts: "launch week, Mon Nov 9, 2026",
+    starts: "Mon Nov 9, 2026",
+    startsOn: "2026-11-09",
     startsShort: "Nov 9",
     tagClass: "bg-accent text-on-accent",
     barClass: "bg-accent",
@@ -195,6 +202,7 @@ export const BRAND = {
   hashtag: "#DBInsightsPH",
   /** Launch date of the first LinkedIn post. */
   launch: "Mon Nov 9, 2026",
+  launchOn: "2026-11-09",
 };
 
 export interface FollowLink {
@@ -233,3 +241,19 @@ export const FOLLOW_LINKS: FollowLink[] = [
     startsNote: "Starts in Phase 3",
   },
 ];
+
+// ---------------------------------------------------------------------------
+// Dates
+// ---------------------------------------------------------------------------
+
+/**
+ * True once a YYYY-MM-DD date (in Manila time) has arrived. Pages use it to
+ * switch wording from "starts Mon Jan 4" to "live since Mon Jan 4".
+ *
+ * Note: the site is static, so this is checked when the site is BUILT, not
+ * when someone visits. Every push to GitHub rebuilds it (e.g. when you add a
+ * post), which keeps the wording current.
+ */
+export function hasStarted(isoDate: string, now: Date = new Date()): boolean {
+  return new Date(`${isoDate}T00:00:00+08:00`).getTime() <= now.getTime();
+}

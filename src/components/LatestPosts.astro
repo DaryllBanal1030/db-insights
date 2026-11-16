@@ -3,21 +3,47 @@
    LatestPosts.astro — the newest posts from every section.
    =============================================================================
    Content only (no section wrapper): the home page places it in the left
-   column of LatestAndFollow.astro. Shows up to four posts. Before launch
-   there are none, so it says when the first post lands instead.
+   column of LatestAndFollow.astro. Shows up to four posts. With none on
+   the site yet it shows a note instead: "launching on ..." before the launch
+   date, "live on LinkedIn, archive coming soon" after it (hasStarted()).
 ============================================================================= */
 
 import PostList from "./PostList.astro";
-import { BRAND } from "../lib/hub";
+import { BRAND, FOLLOW_LINKS, hasStarted } from "../lib/hub";
+import NewTabNote from "./NewTabNote.astro";
 import { getPosts } from "../lib/posts";
 
 // .slice(0, 4) keeps only the first four (getPosts already sorts newest first).
 const posts = (await getPosts()).slice(0, 4);
+const launched = hasStarted(BRAND.launchOn);
+const linkedin = FOLLOW_LINKS.find((link) => link.platform === "LinkedIn")!;
 ---
 
 {
   posts.length > 0 ? (
     <PostList posts={posts} />
+  ) : launched ? (
+    <div class="flex h-full flex-col justify-center rounded-2xl border border-dashed border-border px-6 py-8">
+      <p class="font-display text-xs font-semibold uppercase tracking-[0.2em] text-faint">
+        Archive coming soon
+      </p>
+      <p class="mt-2 text-balance font-display text-xl font-bold tracking-tight">
+        New posts go up on LinkedIn every Monday, Wednesday and Friday.
+      </p>
+      <p class="mt-2 text-sm text-muted">
+        Map Breakdowns, Data Stories and Field Notes will be collected here
+        soon. Until then, catch them on LinkedIn.
+      </p>
+      <a
+        href={linkedin.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="press mt-4 inline-flex min-h-11 items-center self-start text-sm font-semibold text-text underline underline-offset-4 hover:opacity-80"
+      >
+        See the posts on LinkedIn ↗
+        <NewTabNote />
+      </a>
+    </div>
   ) : (
     <div class="flex h-full flex-col justify-center rounded-2xl border border-dashed border-border px-6 py-8">
       <p class="font-display text-xs font-semibold uppercase tracking-[0.2em] text-faint">

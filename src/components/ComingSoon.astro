@@ -2,12 +2,16 @@
 /* =============================================================================
    ComingSoon.astro — the empty state for a section with no posts yet.
    =============================================================================
-   Names the Sub-brand and its Phase, says when the first post lands, and
-   points to LinkedIn (the Home Platform, where every post appears first).
+   Names the Sub-brand and its Phase and points to LinkedIn (the Home
+   Platform, where every post appears first). Two wordings, picked by
+   hasStarted() from src/lib/hub.ts:
+     - before the section's start date: "DBAutomate starts in Phase 2, ..."
+     - after it (posts are on LinkedIn but not on the site yet):
+       "DBSpatial has been live on LinkedIn since ..."
    It disappears on its own once the section has one published post.
 ============================================================================= */
 
-import { FOLLOW_LINKS, type Section } from "../lib/hub";
+import { FOLLOW_LINKS, hasStarted, type Section } from "../lib/hub";
 import NewTabNote from "./NewTabNote.astro";
 
 interface Props {
@@ -16,6 +20,7 @@ interface Props {
 
 const { section } = Astro.props;
 const linkedin = FOLLOW_LINKS.find((link) => link.platform === "LinkedIn")!;
+const live = hasStarted(section.startsOn);
 ---
 
 <!-- `--hl` makes the highlight below use this section's colour (teal on
@@ -26,16 +31,33 @@ const linkedin = FOLLOW_LINKS.find((link) => link.platform === "LinkedIn")!;
 >
   <p class="flex items-center gap-2 font-display text-xs font-semibold uppercase tracking-[0.2em] text-faint">
     <span class:list={["h-1.5 w-1.5 rounded-full", section.barClass]} aria-hidden="true"></span>
-    Coming soon · Phase {section.phase}
+    {live ? `Live on LinkedIn · Phase ${section.phase}` : `Coming soon · Phase ${section.phase}`}
   </p>
-  <p class="mt-3 font-display text-xl font-bold tracking-tight sm:text-2xl">
-    {section.name} starts in Phase {section.phase},
-    <span class="insight">{section.starts}</span>.
-  </p>
-  <p class="mt-3 max-w-prose text-muted">
-    {section.formats.join(" and ")} will collect here. Every post goes up on
-    LinkedIn first, so follow there to catch the first one.
-  </p>
+  {
+    live ? (
+      <>
+        <p class="mt-3 font-display text-xl font-bold tracking-tight sm:text-2xl">
+          {section.name} has been live on LinkedIn since{" "}
+          <span class="insight">{section.starts}</span>.
+        </p>
+        <p class="mt-3 max-w-prose text-muted">
+          {section.formats.join(" and ")} will be collected here soon. Every
+          post goes up on LinkedIn first, so follow there for the next one.
+        </p>
+      </>
+    ) : (
+      <>
+        <p class="mt-3 font-display text-xl font-bold tracking-tight sm:text-2xl">
+          {section.name} starts in Phase {section.phase},{" "}
+          <span class="insight">{section.starts}</span>.
+        </p>
+        <p class="mt-3 max-w-prose text-muted">
+          {section.formats.join(" and ")} will collect here. Every post goes up on
+          LinkedIn first, so follow there to catch the first one.
+        </p>
+      </>
+    )
+  }
   <a
     href={linkedin.url}
     target="_blank"

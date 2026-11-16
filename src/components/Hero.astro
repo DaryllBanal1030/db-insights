@@ -19,15 +19,17 @@
    the LinkedIn headline. The employer is named only on /about (Experience).
 ============================================================================= */
 
-import { BRAND, FOLLOW_LINKS, POST_TIME, SECTIONS, WEEKLY_SLOTS } from "../lib/hub";
+import { BRAND, FOLLOW_LINKS, POST_TIME, SECTIONS, WEEKLY_SLOTS, hasStarted } from "../lib/hub";
 import { getPosts, plainTitle, urlOf } from "../lib/posts";
 import NewTabNote from "./NewTabNote.astro";
 import SubBrandTag from "./SubBrandTag.astro";
 
 const linkedin = FOLLOW_LINKS.find((link) => link.platform === "LinkedIn")!;
 
-// The card's footer: the newest post once there is one, the launch date before.
+// The card's footer: the newest post once one is on the site; otherwise the
+// launch date, worded "First post: ..." before it and "Live since ..." after.
 const [latest] = await getPosts();
+const launched = hasStarted(BRAND.launchOn);
 ---
 
 <section class="relative overflow-hidden" aria-labelledby="hero-heading">
@@ -135,6 +137,19 @@ const [latest] = await getPosts();
               Latest:{" "}
               <a href={urlOf(latest)} class="font-semibold text-text underline underline-offset-4">
                 {plainTitle(latest.data.title)}
+              </a>
+            </>
+          ) : launched ? (
+            <>
+              Live since <span class="font-semibold text-text">{BRAND.launch}</span> ·{" "}
+              <a
+                href={linkedin.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="font-semibold text-text underline underline-offset-4"
+              >
+                see the posts ↗
+                <NewTabNote />
               </a>
             </>
           ) : (
