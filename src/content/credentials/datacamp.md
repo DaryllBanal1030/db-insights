@@ -1,11 +1,10 @@
 ---
-# PLACEHOLDER — replace with your real DataCamp certification details.
-title: "Data Analyst certification"
-issuer: "DataCamp"
-# Add the real year (e.g. year: "2025"); it's hidden until then.
-# year: "20XX"
+# From the certificate PDF (DAA0018315048474), certified March 24, 2026.
+# The verify link is DataCamp's public page for this certificate.
+title: "Associate Data Analyst"
+issuer: "DataCamp certification"
+year: "2026"
 tag: "DataCamp"
-# Optional: shows a "Verify ↗" link. Uncomment with your real certificate URL.
-# verifyUrl: "https://www.datacamp.com/certificate/REPLACE_ME"
-order: 1
+verifyUrl: "https://www.datacamp.com/certificate/DAA0018315048474"
+order: 2
 ---

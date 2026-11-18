@@ -1,9 +1,9 @@
 ---
-# PLACEHOLDER — update the year. (No verifyUrl: demonstrates the no-link state.)
+# No certificate file found for this one yet. Add the year (e.g. year: "2025")
+# and it shows on the card; it's hidden until then.
 title: "CSE Professional passer"
 issuer: "Civil Service Commission — Career Service Professional eligibility"
-# Add the real year (e.g. year: "2025"); it's hidden until then.
 # year: "20XX"
 tag: "CSE"
-order: 3
+order: 5
 ---
