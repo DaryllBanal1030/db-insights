@@ -1,7 +1,7 @@
-# DB Insights Hub — daryllbanal.com
+# DB Insights Hub — db-insights.vercel.app
 
 The **DB Insights Hub**: one fast, static site built with **Astro + Tailwind CSS** that will
-live at **https://daryllbanal.com**. *DB Insights: data and maps of the Philippines, by Daryll Banal.*
+live at **https://db-insights.vercel.app/** (daryllbanal.com once that domain is secured). *DB Insights: data and maps of the Philippines, by Daryll Banal.*
 
 Each Sub-brand is a section of the Hub, never a separate domain
 (see `dbinsights-brand/docs/adr/0002-personal-domain-hub.md`):
@@ -191,7 +191,7 @@ only appears once `public/daryll.jpg` exists, the two placeholder projects have
 
 ## Pointing daryllbanal.com at the site (Daryll's to-do — not done yet)
 
-`astro.config.mjs` already uses `site: 'https://daryllbanal.com'` for canonical and social-share
+When the domain is secured, change `site` in `astro.config.mjs` (and the Sitemap line in `public/robots.txt`) to it; today both use https://db-insights.vercel.app for canonical and social-share
 URLs, but nothing points the domain at Vercel yet. In order:
 
 1. **Register `daryllbanal.com`** (prep-week task in BRAND-GUIDE.md "Key dates").

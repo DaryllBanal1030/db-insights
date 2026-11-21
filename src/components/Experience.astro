@@ -4,26 +4,44 @@
    =============================================================================
    Static. Entries are a plain data array; the markup maps over them. A vertical
    line runs down the left, with an accent dot marking each entry.
+
+   An entry can list several `roles` at the same organisation (newest first),
+   so a promotion shows as one entry with its progression instead of separate
+   cards. Source for the PRIME roles and dates: Daryll's resume (Oct 2026).
+   This section is the ONLY place on the site that names the employer.
 ============================================================================= */
 
 import Section from "./Section.astro";
 
-const timeline = [
+interface Role {
+  title: string;
+  period: string;
+}
+interface Entry {
+  org: string;
+  roles: Role[]; // newest first; the first one is the current/last role
+  bullets: string[];
+  tags: string[];
+}
+
+const timeline: Entry[] = [
   {
-    role: "Research Analyst",
-    org: "PRIME Philippines",
-    period: "May 2025 – present",
-    bullets: [
-      "Build Python and SQL pipelines that turn raw market data into analysis-ready datasets.",
-      "Produce dashboards and reports that inform real-estate and macroeconomic decisions.",
-      "Automate recurring data collection and cleaning to speed up research turnaround.",
+    org: "PRIME Philippines – Research & Advisory",
+    roles: [
+      { title: "Senior Research Analyst", period: "Aug 2026 – present" },
+      { title: "Research Analyst", period: "May 2025 – Aug 2026" },
+      { title: "Data Analyst Intern", period: "Jan – Mar 2025" },
     ],
-    tags: ["Python", "SQL", "Power BI", "Excel"],
+    bullets: [
+      "Designed and run the team's research database (PostgreSQL, hosted in Docker).",
+      "Lead feasibility, highest-and-best-use and market-scan studies from data collection to client presentation.",
+      "Validate and deduplicate multi-source market data, and map sites and catchments in QGIS.",
+    ],
+    tags: ["Python", "SQL", "PostgreSQL", "Docker", "QGIS", "Power BI"],
   },
   {
-    role: "Self-directed data projects",
     org: "Independent",
-    period: "2024 – ongoing",
+    roles: [{ title: "Self-directed data projects", period: "2024 – ongoing" }],
     bullets: [
       "Designed an end-to-end Philippine macroeconomy dashboard with downloadable CSV exports.",
       "Modeled data in PostgreSQL and built ETL workflows to keep the series up to date.",
@@ -32,9 +50,8 @@ const timeline = [
     tags: ["PostgreSQL", "Streamlit", "ETL", "Docker"],
   },
   {
-    role: "BS Computer Engineering, cum laude",
     org: "Pamantasan ng Lungsod ng Maynila",
-    period: "2021 – 2025",
+    roles: [{ title: "BS Computer Engineering, cum laude", period: "2021 – 2025" }],
     bullets: [
       "Graduated cum laude with a focus on computing fundamentals and systems.",
       "Built a foundation in programming, databases, and engineering problem-solving.",
@@ -55,12 +72,22 @@ const timeline = [
             aria-hidden="true"
           />
           <p class="font-display font-semibold text-xs uppercase tracking-[0.15em] text-faint">
-            {entry.period}
+            {entry.roles[0].period}
           </p>
           <h3 class="mt-2 text-lg font-semibold tracking-tight">
-            {entry.role}
+            {entry.roles[0].title}
             <span class="text-muted"> · {entry.org}</span>
           </h3>
+          {/* Earlier roles at the same organisation: the promotion path. */}
+          {entry.roles.length > 1 && (
+            <ul class="mt-2 space-y-1 text-sm text-muted">
+              {entry.roles.slice(1).map((r) => (
+                <li>
+                  {r.title} <span class="text-faint">· {r.period}</span>
+                </li>
+              ))}
+            </ul>
+          )}
           <ul class="mt-3 space-y-2">
             {entry.bullets.map((b) => (
               <li class="flex gap-3 text-muted">

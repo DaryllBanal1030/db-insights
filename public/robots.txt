@@ -3,4 +3,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://daryllbanal.com/sitemap-index.xml
+Sitemap: https://db-insights.vercel.app/sitemap-index.xml
