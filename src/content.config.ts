@@ -53,6 +53,11 @@ const posts = defineCollection({
     source: z.string().optional(),
     // Link to the original post on LinkedIn (the Home Platform).
     linkedinUrl: z.string().url().optional(),
+    // Optional cover image, a path under public/ (e.g.
+    // "/img/posts/2026-11-23-where-filipinos-live.webp"), and a short
+    // description of it. Shown as the thumbnail on /about's Featured work.
+    cover: z.string().optional(),
+    coverAlt: z.string().optional(),
     // `draft: true` keeps a post out of the built site while you work on it.
     draft: z.boolean().default(false),
   }),

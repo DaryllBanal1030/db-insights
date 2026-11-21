@@ -39,7 +39,11 @@
    Register tokens with Tailwind. `inline` => utilities reference the variables,
    so they follow the active theme. The actual values are set further down.
 ----------------------------------------------------------------------------- */
-@theme inline {
+/* `static`: always output every token below as a CSS variable on :root.
+   Without it, Tailwind only outputs the ones it sees written out in the code,
+   and components that build names on the fly (var(--color-${key})) got
+   nothing back, e.g. DBAutomate highlights fell back to gold. */
+@theme inline static {
   --color-bg: var(--bg);
   --color-surface: var(--surface);
   --color-border: var(--border);

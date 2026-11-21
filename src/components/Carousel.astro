@@ -1,8 +1,12 @@
 ---
 /* =============================================================================
-   Carousel.astro — the featured-work carousel (our second interactive island).
+   Carousel.astro — /about's Featured work carousel (an interactive island).
    =============================================================================
-   Sources cards from the projects collection: featured entries, sorted by order.
+   One slide per Sub-brand that publishes work: DBSpatial, DBAnalytics and
+   DBAutomate. Each slide shows that section's newest post (SectionSlide.astro),
+   or when its first post lands. It fills itself from src/content/posts/.
+   (Until Nov 21, 2026 this showed the projects collection; the macro
+   dashboard there is archived with `featured: false`.)
 
    DESIGN OF THE INTERACTION (and why it's robust + accessible):
    - The track is a horizontally scrolling flex row with CSS scroll-snap. That
@@ -18,16 +22,18 @@
      button, so it looks the same but is easy to hit.
 ============================================================================= */
 
-import { getCollection } from "astro:content";
-import ProjectCard from "./ProjectCard.astro";
+import SectionSlide from "./SectionSlide.astro";
+import { SECTIONS, type SectionKey } from "../lib/hub";
+import { getPosts } from "../lib/posts";
 
-// getCollection reads every file in src/content/projects, validated against the
-// schema. We keep only featured ones and sort by `order`.
-const projects = (await getCollection("projects"))
-  .filter((p) => p.data.featured)
-  .sort((a, b) => a.data.order - b.data.order);
+// The Sub-brands shown, in order. getPosts() returns newest first, so [0] is
+// the latest post (or undefined if the section has none yet).
+const keys: SectionKey[] = ["spatial", "analytics", "automate"];
+const slides = await Promise.all(
+  keys.map(async (key) => ({ section: SECTIONS[key], post: (await getPosts(key))[0] })),
+);
 
-const hasControls = projects.length > 1;
+const hasControls = slides.length > 1;
 ---
 
 <div class="carousel mx-auto max-w-3xl" data-carousel>
@@ -42,17 +48,17 @@ const hasControls = projects.length > 1;
     tabindex="0"
     role="group"
     aria-roledescription="carousel"
-    aria-label="Featured projects"
+    aria-label="Featured work by section"
   >
     {
-      projects.map((p, i) => (
+      slides.map((s, i) => (
         <div
           class="carousel-slide w-full shrink-0 snap-center"
           role="group"
           aria-roledescription="slide"
-          aria-label={`${i + 1} of ${projects.length}: ${p.data.title}`}
+          aria-label={`${i + 1} of ${slides.length}: ${s.section.name}`}
         >
-          <ProjectCard project={p.data} />
+          <SectionSlide section={s.section} post={s.post} />
         </div>
       ))
     }
@@ -65,7 +71,7 @@ const hasControls = projects.length > 1;
           type="button"
           data-prev
           class="grid h-11 w-11 place-items-center rounded-full border border-border text-muted transition-colors hover:border-accent hover:text-accent"
-          aria-label="Previous project"
+          aria-label="Previous slide"
         >
           <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M15 18l-6-6 6-6" />
@@ -74,14 +80,14 @@ const hasControls = projects.length > 1;
 
         {/* role="group" (not "tablist"): these are plain buttons, and the
             current one is marked with aria-current by the script below. */}
-        <div class="flex items-center" data-dots role="group" aria-label="Choose project">
-          {projects.map((p, i) => (
+        <div class="flex items-center" data-dots role="group" aria-label="Choose a section">
+          {slides.map((s, i) => (
             <button
               type="button"
               data-dot
               data-index={i}
               class="grid h-11 w-11 place-items-center rounded-full"
-              aria-label={`Go to project ${i + 1}: ${p.data.title}`}
+              aria-label={`Go to slide ${i + 1}: ${s.section.name}`}
             >
               <span class="dot-mark h-2.5 w-2.5 rounded-full border border-border transition-colors" aria-hidden="true" />
             </button>
@@ -92,7 +98,7 @@ const hasControls = projects.length > 1;
           type="button"
           data-next
           class="grid h-11 w-11 place-items-center rounded-full border border-border text-muted transition-colors hover:border-accent hover:text-accent"
-          aria-label="Next project"
+          aria-label="Next slide"
         >
           <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M9 18l6-6-6-6" />

@@ -1,0 +1,120 @@
+---
+/* =============================================================================
+   SectionSlide.astro — one slide of /about's Featured work carousel.
+   =============================================================================
+   Shows the newest post from one Sub-brand (DBSpatial, DBAnalytics or
+   DBAutomate). It fills itself from src/content/posts/, so publishing a post
+   updates the slide with no code changes.
+   - With a post: Sub-brand Tag, Format · date, title, summary, the post's
+     cover image if it has one, and a link to the post.
+   - Without one yet: a short card saying when that Sub-brand's first post
+     lands (or that it's on LinkedIn already), linking to the section page.
+   The thin top bar and the highlights use the Sub-brand's colour.
+============================================================================= */
+
+import SubBrandTag from "./SubBrandTag.astro";
+import PostTitle from "./PostTitle.astro";
+import { hasStarted, type Section } from "../lib/hub";
+import { accentStyleOf, formatDate, urlOf, type Post } from "../lib/posts";
+
+interface Props {
+  section: Section;
+  post?: Post; // the newest post in this section, if there is one
+}
+
+const { section, post } = Astro.props;
+const live = hasStarted(section.startsOn);
+// Singular Format name for the "coming" text, e.g. "Data Stories" -> "Data Story".
+const firstFormat = section.formats[0].replace(/ies$/, "y").replace(/s$/, "");
+---
+
+<article
+  class="flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-surface"
+  style={post ? accentStyleOf(post) : `--hl: var(--color-${section.key})`}
+>
+  <span class:list={["h-1 w-full", section.barClass]} aria-hidden="true"></span>
+
+  <div class="flex flex-1 flex-col gap-5 p-5 sm:flex-row sm:p-6">
+    {
+      post?.data.cover ? (
+        // A fixed 4:3 box (`aspect`) reserves the space, so nothing jumps
+        // while the image loads; `object-cover` crops the image to fill it.
+        <img
+          src={post.data.cover}
+          alt={post.data.coverAlt ?? ""}
+          width="1600"
+          height="2000"
+          loading="lazy"
+          decoding="async"
+          class="aspect-[4/3] w-full shrink-0 rounded-xl border border-hairline bg-bg object-cover sm:aspect-[4/5] sm:w-40"
+        />
+      ) : (
+        // No image yet: a dot-grid panel the same size, with ONE dot in the
+        // Sub-brand colour (the brand's "one data point / one place" motif),
+        // so every slide has the same shape. Purely decorative.
+        <div
+          class="dot-grid relative aspect-[4/3] w-full shrink-0 rounded-xl border border-hairline bg-bg sm:aspect-[4/5] sm:w-40"
+          aria-hidden="true"
+        >
+          <span
+            class:list={["absolute left-[58%] top-[42%] h-3.5 w-3.5 rounded-full ring-4 ring-bg", section.barClass]}
+          />
+        </div>
+      )
+    }
+
+    <div class="flex flex-1 flex-col">
+      <div class="flex flex-wrap items-center gap-x-3 gap-y-2 text-xs text-faint">
+        <SubBrandTag section={section} />
+        {
+          post ? (
+            <>
+              <span>{post.data.format}</span>
+              <span aria-hidden="true">·</span>
+              <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+            </>
+          ) : (
+            <span>Phase {section.phase}</span>
+          )
+        }
+      </div>
+
+      {
+        post ? (
+          <>
+            <h3 class="mt-3 text-balance text-lg font-bold tracking-tight sm:text-xl">
+              <PostTitle title={post.data.title} />
+            </h3>
+            <p class="mt-2 text-sm text-muted">{post.data.summary}</p>
+            <a
+              href={urlOf(post)}
+              class="press mt-auto inline-flex min-h-11 items-center self-start pt-3 text-sm font-semibold text-text underline underline-offset-4 hover:opacity-80"
+            >
+              Read the {post.data.format} →
+            </a>
+          </>
+        ) : (
+          <>
+            <h3 class="mt-3 text-balance text-lg font-bold tracking-tight sm:text-xl">
+              {live ? (
+                <>The first {firstFormat} is on its way.</>
+              ) : (
+                <>
+                  {section.formats.join(" and ")} start{" "}
+                  <span class="insight">{section.starts}</span>.
+                </>
+              )}
+            </h3>
+            <p class="mt-2 text-sm text-muted">{section.focus}</p>
+            <a
+              href={section.path}
+              class="press mt-auto inline-flex min-h-11 items-center self-start pt-3 text-sm font-semibold text-text underline underline-offset-4 hover:opacity-80"
+            >
+              See {section.name} →
+            </a>
+          </>
+        )
+      }
+    </div>
+  </div>
+</article>

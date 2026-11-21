@@ -11,6 +11,8 @@ summary: "12.4% of Filipinos live in Metro Manila, on just 0.2% of the land. A 3
 source: "Map: WorldPop 2020, 1 km grid (UN-adjusted); heights capped at 60,000 people/km². Figures: PSA 2024 Census of Population. Map data: WorldPop (www.worldpop.org), CC BY 4.0, DOI 10.5258/SOTON/WP00675."
 # Fill this in after posting on LinkedIn (Mon Nov 23, 2026), then uncomment:
 # linkedinUrl: "https://www.linkedin.com/posts/..."
+cover: "/img/posts/2026-11-23-where-filipinos-live.webp"
+coverAlt: "3D population density map of the Philippines, with the tallest red spikes in Metro Manila"
 draft: false
 ---
 
