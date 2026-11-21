@@ -68,9 +68,9 @@ export const SECTIONS: Record<SectionKey, Section> = {
     focus: "Geospatial work: maps, location data and places in the Philippines.",
     formats: ["Map Breakdowns", "Map Reels"],
     phase: 1,
-    starts: "Mon Nov 9, 2026",
-    startsOn: "2026-11-09",
-    startsShort: "Nov 9",
+    starts: "Mon Nov 23, 2026",
+    startsOn: "2026-11-23",
+    startsShort: "Nov 23",
     tagClass: "bg-spatial text-navy",
     barClass: "bg-spatial",
   },
@@ -82,9 +82,9 @@ export const SECTIONS: Record<SectionKey, Section> = {
     focus: "Data analysis and Data Stories, each built around one chart.",
     formats: ["Data Stories"],
     phase: 1,
-    starts: "Mon Nov 9, 2026",
-    startsOn: "2026-11-09",
-    startsShort: "Nov 9",
+    starts: "Mon Nov 23, 2026",
+    startsOn: "2026-11-23",
+    startsShort: "Nov 23",
     tagClass: "bg-analytics text-navy",
     barClass: "bg-analytics",
   },
@@ -124,9 +124,9 @@ export const SECTIONS: Record<SectionKey, Section> = {
     focus: "Short first-person stories and lessons from Daryll's analyst work.",
     formats: ["Field Notes"],
     phase: 1,
-    starts: "Mon Nov 9, 2026",
-    startsOn: "2026-11-09",
-    startsShort: "Nov 9",
+    starts: "Mon Nov 23, 2026",
+    startsOn: "2026-11-23",
+    startsShort: "Nov 23",
     tagClass: "bg-accent text-on-accent",
     barClass: "bg-accent",
   },
@@ -200,9 +200,10 @@ export const BRAND = {
   /** The standard bio line from BRAND-GUIDE.md "Presence & naming". */
   bio: "DB Insights: data and maps of the Philippines, by Daryll Banal.",
   hashtag: "#DBInsightsPH",
-  /** Launch date of the first LinkedIn post. */
-  launch: "Mon Nov 9, 2026",
-  launchOn: "2026-11-09",
+  /** Launch date. Moved from Mon Nov 9 to Mon Nov 23, 2026 for the relaunch
+   *  (Daryll, Nov 21); the Phase 1 sections above start on it too. */
+  launch: "Mon Nov 23, 2026",
+  launchOn: "2026-11-23",
 };
 
 export interface FollowLink {

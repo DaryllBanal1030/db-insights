@@ -30,8 +30,9 @@ Replaces the previous site at `db-insights.vercel.app`.
   `src/styles/global.css` (no `tailwind.config.js` in v4).
 - **Fonts** (self-hosted via [`@fontsource`](https://fontsource.org)): **Space Grotesk** for
   headlines, labels and the lowercase "db insights" wordmark (chosen Nov 5, 2026 over Plus Jakarta
-  Sans, Bricolage Grotesque, Schibsted Grotesk, Instrument Sans and Manrope), Inter for body text,
-  JetBrains Mono for code only.
+  Sans, Bricolage Grotesque, Schibsted Grotesk, Instrument Sans and Manrope), **Plus Jakarta Sans**
+  for body text (since Nov 21, 2026, replacing Inter, per the brand guide), JetBrains Mono for code
+  only.
 - **Colours**: Masterbrand navy `#0B1B39` + white, and one Sub-brand Accent per section
   (teal Spatial, amber Analytics, violet Automate, coral Learning), all in `src/styles/global.css`.
   **Highlights** mark the one thing to remember, ONE per screen. In a post's title or body, wrap it

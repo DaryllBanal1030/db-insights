@@ -3,7 +3,7 @@
 # The verify link is DataCamp's public page for this certificate.
 title: "Associate Data Engineer"
 issuer: "DataCamp certification"
-year: "2026"
+year: "Apr 2026"
 tag: "DataCamp"
 verifyUrl: "https://www.datacamp.com/certificate/DEA0011113249012"
 order: 1

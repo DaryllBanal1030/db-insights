@@ -3,7 +3,7 @@
 # Optional: add the badge's share link as verifyUrl to show a "Verify ↗" link.
 title: "Forward program"
 issuer: "McKinsey.org"
-year: "2026"
+year: "Jun 2026"
 tag: "McKinsey"
 order: 3
 ---

@@ -25,17 +25,14 @@
 
 /* Self-hosted fonts (no external CDN -> faster, privacy-friendly, no layout
    shift). The three site fonts:
-   - Space Grotesk (variable): headlines, labels and the "db insights" wordmark.
-     Chosen by Daryll on Nov 5, 2026 over Plus Jakarta Sans (see the
-     comparison in the README); BRAND-GUIDE.md still lists Jakarta until the
-     brand docs are updated to match.
-   - Inter: body text.
+   - Space Grotesk (variable): headlines, labels and the "db insights" wordmark
+     (chosen by Daryll Nov 5, 2026).
+   - Plus Jakarta Sans (variable): body text, buttons, chips, small print
+     (BRAND-GUIDE.md "Typography": replaced Inter on Nov 21, 2026). One
+     variable file covers every weight from 200 to 800.
    - JetBrains Mono (variable): code snippets ONLY (Build Logs, Lessons). */
 @import "@fontsource-variable/space-grotesk";
-@import "@fontsource/inter/400.css";
-@import "@fontsource/inter/500.css";
-@import "@fontsource/inter/600.css";
-@import "@fontsource/inter/700.css";
+@import "@fontsource-variable/plus-jakarta-sans";
 @import "@fontsource-variable/jetbrains-mono";
 
 /* -----------------------------------------------------------------------------
@@ -72,8 +69,8 @@
   --color-learning: #ff6b5b;  /* DBLearning  — coral  */
 
   /* `font-display` = Space Grotesk (headlines + wordmark). */
-  --font-display: "Space Grotesk Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk Variable", "Plus Jakarta Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Plus Jakarta Sans Variable", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono Variable", ui-monospace, "SFMono-Regular", monospace;
 }
 
