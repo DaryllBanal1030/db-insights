@@ -2,8 +2,7 @@
 /* =============================================================================
    Footer.astro — site footer.
    =============================================================================
-   Left: the Solid Mark + the copyright line. Right: the brand hashtag and the
-   build credit. "DB Insights" is always two words (never "DBInsights").
+   Left: the Solid Mark + the copyright line. Right: the brand hashtag. "DB Insights" is always two words (never "DBInsights").
 ============================================================================= */
 
 import BrandMark from "./BrandMark.astro";
@@ -19,7 +18,7 @@ import { BRAND } from "../lib/hub";
       © 2026 {BRAND.name} · by Daryll Banal
     </p>
     <p class="text-sm text-faint">
-      {BRAND.hashtag} · Built with Astro &amp; Tailwind
+      {BRAND.hashtag}
     </p>
   </div>
 </footer>

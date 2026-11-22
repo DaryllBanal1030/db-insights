@@ -7,7 +7,7 @@
 ============================================================================= */
 
 import { getCollection, type CollectionEntry } from "astro:content";
-import { FORMAT_SECTION, SECTIONS, type Section, type SectionKey } from "./hub";
+import { FORMAT_SECTION, SECTIONS, hasStarted, type Section, type SectionKey } from "./hub";
 
 export type Post = CollectionEntry<"posts">;
 
@@ -76,6 +76,17 @@ export async function getPosts(section?: SectionKey): Promise<Post[]> {
     (post) => !post.data.draft && (!section || sectionOf(post) === section),
   );
   return posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+}
+
+/**
+ * True while a post's date is still ahead (checked at build time, Manila).
+ * The site lists a post as soon as its file exists, so a post scheduled for
+ * Monday shows as "Coming Mon Nov 23" until then, not as "latest".
+ */
+export function isUpcoming(post: Post, now: Date = new Date()): boolean {
+  // The front-matter date ("2026-11-23") is read as that day; compare it
+  // against Manila midnight, the same rule as hasStarted() in hub.ts.
+  return !hasStarted(post.data.date.toISOString().slice(0, 10), now);
 }
 
 /** "Mon Nov 9, 2026" — the date style used across the brand docs. */

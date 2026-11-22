@@ -1,28 +1,20 @@
 ---
 /* =============================================================================
-   LatestPosts.astro — the newest posts from every section.
+   LatestPosts.astro — the home page's note while no post is on the site.
    =============================================================================
-   Content only (no section wrapper): the home page places it in the left
-   column of LatestAndFollow.astro. Shows up to four posts. With none on
-   the site yet it shows a note instead: "launching on ..." before the launch
+   Content only (no section wrapper): LatestAndFollow.astro shows it in place
+   of the posts when there are none yet. "Launching on ..." before the launch
    date, "live on LinkedIn, archive coming soon" after it (hasStarted()).
 ============================================================================= */
 
-import PostList from "./PostList.astro";
 import { BRAND, FOLLOW_LINKS, hasStarted } from "../lib/hub";
 import NewTabNote from "./NewTabNote.astro";
-import { getPosts } from "../lib/posts";
-
-// .slice(0, 4) keeps only the first four (getPosts already sorts newest first).
-const posts = (await getPosts()).slice(0, 4);
 const launched = hasStarted(BRAND.launchOn);
 const linkedin = FOLLOW_LINKS.find((link) => link.platform === "LinkedIn")!;
 ---
 
 {
-  posts.length > 0 ? (
-    <PostList posts={posts} />
-  ) : launched ? (
+  launched ? (
     <div class="flex h-full flex-col justify-center rounded-2xl border border-dashed border-border px-6 py-8">
       <p class="font-display text-xs font-semibold uppercase tracking-[0.2em] text-faint">
         Archive coming soon

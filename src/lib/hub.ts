@@ -35,8 +35,6 @@ export interface Section {
   path: string;
   /** Display name, e.g. "DBSpatial". */
   name: string;
-  /** Short nav label, e.g. "Spatial". */
-  navLabel: string;
   /** One line on what the section covers. */
   focus: string;
   /** The Post Formats published here. */
@@ -64,7 +62,6 @@ export const SECTIONS: Record<SectionKey, Section> = {
     key: "spatial",
     path: "/spatial",
     name: "DBSpatial",
-    navLabel: "Spatial",
     focus: "Geospatial work: maps, location data and places in the Philippines.",
     formats: ["Map Breakdowns", "Map Reels"],
     phase: 1,
@@ -78,7 +75,6 @@ export const SECTIONS: Record<SectionKey, Section> = {
     key: "analytics",
     path: "/analytics",
     name: "DBAnalytics",
-    navLabel: "Analytics",
     focus: "Data analysis and Data Stories, each built around one chart.",
     formats: ["Data Stories"],
     phase: 1,
@@ -92,7 +88,6 @@ export const SECTIONS: Record<SectionKey, Section> = {
     key: "automate",
     path: "/automate",
     name: "DBAutomate",
-    navLabel: "Automate",
     focus: "Automation: workflows, scripts and tools that save time.",
     formats: ["Build Logs"],
     phase: 2,
@@ -106,7 +101,6 @@ export const SECTIONS: Record<SectionKey, Section> = {
     key: "learning",
     path: "/learning",
     name: "DBLearning",
-    navLabel: "Learning",
     focus: "Upskilling: short on-camera Lessons that teach one data skill each.",
     formats: ["Lessons"],
     phase: 3,
@@ -120,7 +114,6 @@ export const SECTIONS: Record<SectionKey, Section> = {
     key: "notes",
     path: "/notes",
     name: "Field Notes",
-    navLabel: "Notes",
     focus: "Short first-person stories and lessons from Daryll's analyst work.",
     formats: ["Field Notes"],
     phase: 1,
@@ -184,7 +177,7 @@ export interface WeeklySlot {
 export const WEEKLY_SLOTS: WeeklySlot[] = [
   { day: "Mon", format: "Map Breakdown", section: "spatial" },
   { day: "Wed", format: "Data Story", section: "analytics" },
-  { day: "Fri", format: "Field Note", section: null, note: "Flex Slot" },
+  { day: "Fri", format: "Field Note", section: null },
 ];
 
 export const POST_TIME = "7:30 AM Manila";
@@ -239,7 +232,7 @@ export const FOLLOW_LINKS: FollowLink[] = [
     handle: "@daryllbanal",
     url: "https://youtube.com/@daryllbanal",
     speaksAs: "Personal",
-    startsNote: "Starts in Phase 3",
+    startsNote: "Starts Mar 2027",
   },
 ];
 
@@ -257,4 +250,13 @@ export const FOLLOW_LINKS: FollowLink[] = [
  */
 export function hasStarted(isoDate: string, now: Date = new Date()): boolean {
   return new Date(`${isoDate}T00:00:00+08:00`).getTime() <= now.getTime();
+}
+
+/**
+ * The plain-words status of a section, for chips and cards: "Live" once its
+ * start date has passed, otherwise "From Nov 23" / "From Jan 2027". Used
+ * instead of "Phase 1/2/3", which is planning language visitors don't know.
+ */
+export function startLabel(section: Section, now: Date = new Date()): string {
+  return hasStarted(section.startsOn, now) ? "Live" : `From ${section.startsShort}`;
 }

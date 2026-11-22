@@ -20,7 +20,7 @@
 ============================================================================= */
 
 import { BRAND, FOLLOW_LINKS, POST_TIME, SECTIONS, WEEKLY_SLOTS, hasStarted } from "../lib/hub";
-import { getPosts, plainTitle, urlOf } from "../lib/posts";
+import { formatDate, getPosts, isUpcoming, plainTitle, urlOf } from "../lib/posts";
 import NewTabNote from "./NewTabNote.astro";
 import SubBrandTag from "./SubBrandTag.astro";
 
@@ -134,7 +134,11 @@ const launched = hasStarted(BRAND.launchOn);
         {
           latest ? (
             <>
-              Latest:{" "}
+              {isUpcoming(latest) ? (
+                <>Coming {formatDate(latest.data.date)}:</>
+              ) : (
+                "Latest:"
+              )}{" "}
               <a href={urlOf(latest)} class="font-semibold text-text underline underline-offset-4">
                 {plainTitle(latest.data.title)}
               </a>

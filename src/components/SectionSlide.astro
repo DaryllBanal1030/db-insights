@@ -14,8 +14,8 @@
 
 import SubBrandTag from "./SubBrandTag.astro";
 import PostTitle from "./PostTitle.astro";
-import { hasStarted, type Section } from "../lib/hub";
-import { accentStyleOf, formatDate, urlOf, type Post } from "../lib/posts";
+import { hasStarted, startLabel, type Section } from "../lib/hub";
+import { accentStyleOf, isUpcoming, formatDate, urlOf, type Post } from "../lib/posts";
 
 interface Props {
   section: Section;
@@ -39,15 +39,16 @@ const firstFormat = section.formats[0].replace(/ies$/, "y").replace(/s$/, "");
       post?.data.cover ? (
         // A fixed 4:3 box (`aspect`) reserves the space, so nothing jumps
         // while the image loads; `object-cover` crops the image to fill it.
-        <img
-          src={post.data.cover}
-          alt={post.data.coverAlt ?? ""}
-          width="1600"
-          height="2000"
-          loading="lazy"
-          decoding="async"
-          class="aspect-[4/3] w-full shrink-0 rounded-xl border border-hairline bg-bg object-cover sm:aspect-[4/5] sm:w-40"
-        />
+        // `map-frame` (global.css) mounts the render like a print.
+        <span class="map-frame w-full shrink-0 sm:w-40">
+          <img
+            src={post.data.cover}
+            alt={post.data.coverAlt ?? ""}
+            loading="lazy"
+            decoding="async"
+            class="aspect-[4/3] w-full object-cover sm:aspect-[4/5]"
+          />
+        </span>
       ) : (
         // No image yet: a dot-grid panel the same size, with ONE dot in the
         // Sub-brand colour (the brand's "one data point / one place" motif),
@@ -71,10 +72,12 @@ const firstFormat = section.formats[0].replace(/ies$/, "y").replace(/s$/, "");
             <>
               <span>{post.data.format}</span>
               <span aria-hidden="true">·</span>
-              <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+              <time datetime={post.data.date.toISOString()}>
+                {isUpcoming(post) ? "Coming " : ""}{formatDate(post.data.date)}
+              </time>
             </>
           ) : (
-            <span>Phase {section.phase}</span>
+            <span>{startLabel(section)}</span>
           )
         }
       </div>

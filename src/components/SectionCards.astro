@@ -1,36 +1,39 @@
 ---
 /* =============================================================================
-   SectionCards.astro — the Hub sections as a "bento" grid of cards.
+   SectionCards.astro — the Hub sections: what's live, then what's coming.
    =============================================================================
-   A bento grid is a grid of cards in mixed sizes (like a bento box). Here the
-   size says what's live first:
-     - DBSpatial and DBAnalytics (Phase 1, live from launch) are wide cards
-     - DBAutomate and DBLearning (Phases 2 and 3) are small cards
-     - Field Notes is wide and closes the grid
-   Phone: one column. sm (640px+): two columns. lg (1024px+): four columns.
+   The live sections get the cards; the later ones get one quiet line each,
+   so the home page talks about this week, not 2027:
+     - DBSpatial, DBAnalytics and Field Notes (live from launch) are cards:
+       Sub-brand Tag + status chip, the name, one line on what it covers,
+       its Post Formats, and an arrow. Each has a faint dot-grid texture with
+       ONE dot in its Sub-brand Accent (a highlighted data point, which is
+       how the brand guide says an Accent may be used).
+     - DBAutomate and DBLearning sit under "Coming in 2027", one line each
+       with their dot, name, Post Format and start month, linking to their
+       pages. (This replaced the big DBLearning band, Nov 22, 2026.)
+   Phone: one column. sm (640px+): two columns, Field Notes full width.
+   lg (1024px+): three columns.
 
-   Each card: Sub-brand Tag + a Phase chip, the name, one line on what it
-   covers, its Post Formats, and an arrow. The wide cards get a faint dot-grid
-   texture with ONE dot in the Sub-brand Accent: a highlighted data point,
-   which is exactly how the brand guide says an Accent may be used.
-
-   All wording comes from SECTIONS in src/lib/hub.ts.
+   The status chip reads "Live" or "From Nov 23" (startLabel in hub.ts),
+   never "Phase 1". All wording comes from SECTIONS in src/lib/hub.ts.
 ============================================================================= */
 
 import Section from "./Section.astro";
 import SubBrandTag from "./SubBrandTag.astro";
-import { SECTIONS, type SectionKey } from "../lib/hub";
+import { SECTIONS, SECTION_LIST, hasStarted, startLabel, type SectionKey } from "../lib/hub";
 
-// Display order + size of each card. `wide` cards span two columns.
-// Tailwind needs the full class names written out (see hub.ts), so the span
-// classes live here as literal strings.
-const layout: { key: SectionKey; wide: boolean; span: string }[] = [
-  { key: "spatial", wide: true, span: "lg:col-span-2" },
-  { key: "analytics", wide: true, span: "lg:col-span-2" },
-  { key: "automate", wide: false, span: "" },
-  { key: "learning", wide: false, span: "" },
-  { key: "notes", wide: true, span: "sm:col-span-2" },
+// Cards: every section that starts with the launch (Phase 1), in order.
+const cards: { key: SectionKey; span: string }[] = [
+  { key: "spatial", span: "" },
+  { key: "analytics", span: "" },
+  { key: "notes", span: "sm:col-span-2 lg:col-span-1" },
 ];
+// The rest, one line each. Once a section's start date passes, it would read
+// "Live"; move it up into `cards` then.
+const later = SECTION_LIST.filter((s) => s.phase > 1);
+// The heading year comes from the data, e.g. "Coming in 2027".
+const laterYears = [...new Set(later.map((s) => s.startsOn.slice(0, 4)))].join(" and ");
 ---
 
 <Section
@@ -40,9 +43,9 @@ const layout: { key: SectionKey; wide: boolean; span: string }[] = [
   title="Pick your corner of PH data"
 >
   <!-- `data-stagger`: the cards rise in one after another (global.css). -->
-  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" data-stagger>
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-stagger>
     {
-      layout.map(({ key, wide, span }) => {
+      cards.map(({ key, span }) => {
         const section = SECTIONS[key];
         return (
           <a
@@ -52,20 +55,18 @@ const layout: { key: SectionKey; wide: boolean; span: string }[] = [
               span,
             ]}
           >
-            {/* Decorative texture for the wide cards: dot grid + one accent dot. */}
-            {wide && (
-              <span class="pointer-events-none absolute -right-2 -top-2 h-28 w-36" aria-hidden="true">
-                <span class="dot-grid absolute inset-0 [mask-image:radial-gradient(circle_at_top_right,black,transparent_75%)]" />
-                {/* `accent-dot`: sends out one ring when the card is hovered. */}
-                <span class:list={["accent-dot absolute right-12 top-10 h-2.5 w-2.5 rounded-full ring-4 ring-surface", section.barClass]} />
-              </span>
-            )}
+            {/* Decorative texture: dot grid + one accent dot. */}
+            <span class="pointer-events-none absolute -right-2 -top-2 h-28 w-36" aria-hidden="true">
+              <span class="dot-grid absolute inset-0 [mask-image:radial-gradient(circle_at_top_right,black,transparent_75%)]" />
+              {/* `accent-dot`: sends out one ring when the card is hovered. */}
+              <span class:list={["accent-dot absolute right-12 top-10 h-2.5 w-2.5 rounded-full ring-4 ring-surface", section.barClass]} />
+            </span>
 
             <span class="relative flex flex-wrap items-center gap-2">
               {/* Field Notes isn't a Sub-brand, so it gets the Masterbrand tag. */}
               <SubBrandTag section={key === "notes" ? null : section} />
               <span class="rounded-full border border-border px-2 py-0.5 text-xs text-muted">
-                Phase {section.phase} · {section.startsShort}
+                {startLabel(section)}
               </span>
             </span>
 
@@ -87,4 +88,35 @@ const layout: { key: SectionKey; wide: boolean; span: string }[] = [
       })
     }
   </div>
+
+  <!-- Coming later: one quiet line per section, no cards. -->
+  {
+    later.length > 0 && (
+      <div class="mt-6 border-t border-hairline pt-4">
+        <h3 class="font-display text-xs font-semibold uppercase tracking-[0.2em] text-faint">
+          Coming in {laterYears}
+        </h3>
+        <ul class="mt-2 grid gap-x-8 sm:grid-cols-2">
+          {later.map((section) => (
+            <li>
+              <a
+                href={section.path}
+                class="group flex min-h-11 flex-wrap items-center gap-x-2 gap-y-0.5 py-1 text-sm text-muted transition-colors hover:text-text"
+              >
+                <span class:list={["h-1.5 w-1.5 rounded-full", section.barClass]} aria-hidden="true" />
+                <span class="font-semibold text-text">{section.name}</span>
+                <span>
+                  {section.formats.join(" and ")} ·{" "}
+                  {hasStarted(section.startsOn) ? "Live" : `from ${section.startsShort}`}
+                </span>
+                <span class="transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true">
+                  →
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
+  }
 </Section>

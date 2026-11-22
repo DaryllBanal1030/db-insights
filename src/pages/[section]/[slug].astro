@@ -9,16 +9,22 @@
    `props` is handed to the page as Astro.props, so we pass the post along.
 
    render(post) turns the post's Markdown body into a <Content /> component.
+
+   The page ends with the Public Source, then an end block: the byline, the
+   next step on LinkedIn ("Answer on LinkedIn" once the post's linkedinUrl is
+   filled in; "Follow on LinkedIn" to the profile until then), and a link to
+   more posts from the same section, so a reader never hits a dead end.
 ============================================================================= */
 
 import { render } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import SubBrandTag from "../../components/SubBrandTag.astro";
-import { BRAND, SECTIONS } from "../../lib/hub";
+import { BRAND, FOLLOW_LINKS, SECTIONS } from "../../lib/hub";
 import {
   accentStyleOf,
   formatDate,
   getPosts,
+  isUpcoming,
   plainTitle,
   sectionOf,
   tagOf,
@@ -47,6 +53,11 @@ const section = SECTIONS[sectionOf(post)];
 // `.insight` and `.post-body li::marker` in global.css). A Masterbrand post
 // (no tag) keeps Insight Gold highlights and white/navy bullets.
 const accentStyle = accentStyleOf(post);
+
+// The end block's LinkedIn button: the post itself once its URL is known,
+// otherwise Daryll's profile.
+const linkedin = FOLLOW_LINKS.find((link) => link.platform === "LinkedIn")!;
+const postUrl = post.data.linkedinUrl;
 ---
 
 <BaseLayout title={`${plainTitle(post.data.title)} · ${BRAND.name}`} description={post.data.summary}>
@@ -61,12 +72,14 @@ const accentStyle = accentStyleOf(post);
         <SubBrandTag section={tagOf(post)} />
         <span>{post.data.format}</span>
         <span aria-hidden="true">·</span>
-        <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+        <time datetime={post.data.date.toISOString()}>
+          {isUpcoming(post) ? "Coming " : ""}{formatDate(post.data.date)}
+        </time>
       </div>
-      <h1 class="mt-4 text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
+      <h1 class="mt-4 text-balance text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
         <PostTitle title={post.data.title} />
       </h1>
-      <p class="mt-4 text-lg text-muted">{post.data.summary}</p>
+      <p class="mt-4 max-w-[68ch] text-lg text-muted">{post.data.summary}</p>
     </header>
 
     <!-- The Markdown body. Its tags are styled by `.post-body` in global.css. -->
@@ -74,28 +87,47 @@ const accentStyle = accentStyleOf(post);
       <Content />
     </div>
 
-    <!-- Footer: Public Source + the original LinkedIn post, when given. -->
-    {
-      (post.data.source || post.data.linkedinUrl) && (
-        <footer class="mt-12 border-t border-hairline pt-6 text-sm text-muted">
-          {post.data.source && (
-            <p>
-              <span class="font-semibold text-text">Source:</span> {post.data.source}
-            </p>
-          )}
-          {post.data.linkedinUrl && (
-            <a
-              href={post.data.linkedinUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="mt-3 inline-block underline underline-offset-4 hover:text-text"
-            >
-              Read and comment on LinkedIn ↗
-              <NewTabNote />
-            </a>
-          )}
-        </footer>
-      )
-    }
+    <!-- Footer: the Public Source, then the end block (byline + next steps). -->
+    <footer class="mt-12 border-t border-hairline pt-6">
+      {
+        post.data.source && (
+          <p class="max-w-[68ch] text-sm text-muted">
+            <span class="font-semibold text-text">Source:</span> {post.data.source}
+          </p>
+        )
+      }
+
+      <div class="mt-8 flex flex-col gap-5 rounded-2xl border border-border bg-surface p-5 sm:p-6 md:flex-row md:items-center md:justify-between">
+        <div class="min-w-0">
+          <p class="font-display text-base font-bold tracking-tight">
+            By <a href="/about" class="underline underline-offset-4 hover:opacity-80">Daryll Banal</a>
+          </p>
+          <p class="mt-1 text-sm text-muted">
+            {
+              postUrl
+                ? "Got an answer or a question? Join the thread on LinkedIn."
+                : "Every post goes up on LinkedIn first. Follow to catch the next one."
+            }
+          </p>
+        </div>
+        <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap md:shrink-0">
+          <a
+            href={postUrl ?? linkedin.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="press inline-flex min-h-11 items-center justify-center rounded-lg bg-accent px-5 text-sm font-semibold text-on-accent hover:opacity-90"
+          >
+            {postUrl ? "Answer on LinkedIn ↗" : "Follow on LinkedIn ↗"}
+            <NewTabNote />
+          </a>
+          <a
+            href={section.path}
+            class="press inline-flex min-h-11 items-center justify-center rounded-lg border border-border px-5 text-sm font-semibold text-text hover:border-accent"
+          >
+            More {section.name} →
+          </a>
+        </div>
+      </div>
+    </footer>
   </article>
 </BaseLayout>

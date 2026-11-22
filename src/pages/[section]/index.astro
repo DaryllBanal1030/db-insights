@@ -18,7 +18,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import SubBrandTag from "../../components/SubBrandTag.astro";
 import PostList from "../../components/PostList.astro";
 import ComingSoon from "../../components/ComingSoon.astro";
-import { BRAND, SECTIONS, SECTION_KEYS, type SectionKey } from "../../lib/hub";
+import { BRAND, SECTIONS, SECTION_KEYS, startLabel, type SectionKey } from "../../lib/hub";
 import { getPosts } from "../../lib/posts";
 
 export function getStaticPaths() {
@@ -39,22 +39,22 @@ const isSubBrand = section.key !== "notes";
 >
   <section>
     <div class="mx-auto max-w-3xl px-6 pb-16 pt-12 sm:pb-20 sm:pt-16">
-      <!-- Header: Sub-brand Tag, name, focus, and the Phase line. -->
+      <!-- Header: Sub-brand Tag, name, focus, and the status line. -->
       <div data-reveal>
         <!-- A thin bar in the Sub-brand Accent: the only other place it's used. -->
         <div class:list={["h-1 w-12 rounded-full", section.barClass]} aria-hidden="true"></div>
         <div class="mt-6">
           <SubBrandTag section={isSubBrand ? section : null} />
         </div>
-        <h1 class="mt-4 text-4xl font-bold tracking-tight sm:text-5xl">
+        <h1 class="mt-4 text-balance text-4xl font-bold tracking-tight sm:text-5xl">
           {section.name}
         </h1>
         <p class="mt-4 max-w-prose text-lg text-muted">{section.focus}</p>
-        <!-- Post Formats + Phase as chips. The dots use the Sub-brand Accent
+        <!-- Post Formats + status ("Live" / "From Jan 2027") as chips. The dots use the Sub-brand Accent
              (white/navy ink for Field Notes): it shows what the page is about. -->
         <ul class="mt-5 flex flex-wrap gap-2 text-sm">
           {
-            [...section.formats, `Phase ${section.phase} · from ${section.startsShort}`].map((label) => (
+            [...section.formats, startLabel(section)].map((label) => (
               <li class="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1 text-muted">
                 <span class:list={["h-1.5 w-1.5 rounded-full", section.barClass]} aria-hidden="true" />
                 {label}
@@ -66,7 +66,7 @@ const isSubBrand = section.key !== "notes";
 
       <!-- Posts, or the coming-soon state if there are none yet. -->
       <div class="mt-10" data-reveal>
-        {posts.length > 0 ? <PostList posts={posts} /> : <ComingSoon section={section} />}
+        {posts.length > 0 ? <PostList posts={posts} level={2} /> : <ComingSoon section={section} />}
       </div>
     </div>
   </section>

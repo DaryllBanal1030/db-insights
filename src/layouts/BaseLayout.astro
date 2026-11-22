@@ -62,10 +62,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
          preloading every font would slow the page down instead. -->
     <link rel="preload" href={headlineFont} as="font" type="font/woff2" crossorigin />
 
-    <!-- Colours the phone browser's address bar to match the site:
-         navy for dark-mode visitors, white for light-mode visitors. -->
-    <meta name="theme-color" content="#0b1b39" media="(prefers-color-scheme: dark)" />
-    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <!-- Colours the phone browser's address bar to match the site: navy
+         for the dark theme, white for light. The no-flash script below sets
+         it for the theme in use, and ThemeToggle updates it on each switch,
+         so it follows the toggle, not just the phone's setting. -->
+    <meta name="theme-color" content="#0b1b39" />
 
     <!-- Primary SEO -->
     <title>{title}</title>
@@ -107,6 +108,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
           // Dark is the default (no attribute); only set the attribute for light.
           if (theme === "light") {
             document.documentElement.setAttribute("data-theme", "light");
+            document
+              .querySelector('meta[name="theme-color"]')
+              .setAttribute("content", "#ffffff");
           }
         } catch (e) {
           /* localStorage may be unavailable (e.g. privacy mode) — ignore. */

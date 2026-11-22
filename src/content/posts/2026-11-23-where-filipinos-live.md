@@ -7,7 +7,7 @@
 title: "Where Filipinos live, one square kilometre at a time"
 date: 2026-11-23
 format: "Map Breakdown"
-summary: "12.4% of Filipinos live in Metro Manila, on just 0.2% of the land. A 3D map of where everyone lives, one 1 km square at a time."
+summary: "A 3D map of where everyone in the Philippines lives, one 1 km square at a time."
 source: "Map: WorldPop 2020, 1 km grid (UN-adjusted); heights capped at 60,000 people/km². Figures: PSA 2024 Census of Population. Map data: WorldPop (www.worldpop.org), CC BY 4.0, DOI 10.5258/SOTON/WP00675."
 # Fill this in after posting on LinkedIn (Mon Nov 23, 2026), then uncomment:
 # linkedinUrl: "https://www.linkedin.com/posts/..."
@@ -18,7 +18,9 @@ draft: false
 
 <!-- The image is a web copy (WebP, 1600 × 2000) of
      dbinsights-brand/posts/post-01/render/DBInsights-post01.png, served as-is
-     from public/img/posts/. width/height stop the page jumping while it loads. -->
+     from public/img/posts/. width/height stop the page jumping while it loads.
+     The link under it opens the image on its own, where phones can zoom in. -->
+<figure class="map-frame">
 <img
   src="/img/posts/2026-11-23-where-filipinos-live.webp"
   width="1600"
@@ -26,6 +28,11 @@ draft: false
   decoding="async"
   alt="3D map of the Philippines' population density on a 1 km grid (WorldPop 2020). Each square kilometre is a column whose height and colour show people per km², from cream (1 to 10) through gold to deep red (over 5,000). The tallest red spikes crowd Metro Manila; smaller spikes stand at Cebu City, Davao City, Iloilo City, Bacolod City, Zamboanga City and Puerto Princesa City. Text on the map: 12.4% of Filipinos live in the National Capital Region, on just 0.2% of the land."
 />
+<figcaption>
+<span>Map: WorldPop 2020, 1 km grid</span>
+<a href="/img/posts/2026-11-23-where-filipinos-live.webp">Open the full-size map</a>
+</figcaption>
+</figure>
 
 12.4% of Filipinos live on ==0.2% of the country's land==.
 

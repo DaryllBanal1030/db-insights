@@ -1,21 +1,29 @@
 ---
 /* =============================================================================
-   PostList.astro — a list of post cards (title, date, Format, Sub-brand Tag).
+   PostList.astro — a list of post cards (cover, tag, Format, date, title).
    =============================================================================
-   Used on the home page ("latest posts", across every section) and on each
+   Used on the home page (the posts after the featured one) and on each
    section page. It receives the posts already fetched and sorted; it only
    renders them. The empty case is handled by the page (see ComingSoon).
+
+   A post with a `cover` shows it as a thumbnail on the left: the maps are
+   the work, so they lead. `level` sets the title's heading level, so the
+   outline stays h1 → h2 on a section page and h2 → h3 under a home section.
+   A post dated after today reads "Coming Mon Nov 23, 2026" (isUpcoming).
 ============================================================================= */
 
 import SubBrandTag from "./SubBrandTag.astro";
 import PostTitle from "./PostTitle.astro";
-import { accentStyleOf, formatDate, tagOf, urlOf, type Post } from "../lib/posts";
+import { accentStyleOf, formatDate, isUpcoming, tagOf, urlOf, type Post } from "../lib/posts";
 
 interface Props {
   posts: Post[];
+  /** Heading level for the titles: 2 on a section page, 3 inside a section. */
+  level?: 2 | 3;
 }
 
-const { posts } = Astro.props;
+const { posts, level = 3 } = Astro.props;
+const Heading = `h${level}` as "h2" | "h3";
 ---
 
 <!-- `data-stagger`: posts rise in one after another (global.css). -->
@@ -25,20 +33,38 @@ const { posts } = Astro.props;
       <li>
         <a
           href={urlOf(post)}
-          class="card-lift group block rounded-2xl border border-border bg-surface p-4 sm:p-5"
+          class="card-lift group flex gap-4 rounded-2xl border border-border bg-surface p-3 sm:gap-5 sm:p-4"
           style={accentStyleOf(post)}
         >
-          <div class="flex flex-wrap items-center gap-x-3 gap-y-2 text-xs text-faint">
-            <SubBrandTag section={tagOf(post)} />
-            <span>{post.data.format}</span>
-            <span aria-hidden="true">·</span>
-            {/* <time datetime> gives machines the exact date; people see the nice one. */}
-            <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
-          </div>
-          <h3 class="mt-2 text-base font-bold tracking-tight sm:text-lg">
-            <PostTitle title={post.data.title} />
-          </h3>
-          <p class="mt-1 text-muted">{post.data.summary}</p>
+          {post.data.cover && (
+            // The thumbnail is decorative here: the title next to it names
+            // the post, so alt="" keeps screen readers from reading it twice.
+            <span class="map-frame w-24 shrink-0 self-start sm:w-36">
+              <img
+                src={post.data.cover}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                class="aspect-[4/5] w-full object-cover"
+              />
+            </span>
+          )}
+          <span class="flex min-w-0 flex-1 flex-col py-1">
+            <span class="flex flex-wrap items-center gap-x-3 gap-y-2 text-xs text-faint">
+              <SubBrandTag section={tagOf(post)} />
+              <span>{post.data.format}</span>
+              <span aria-hidden="true">·</span>
+              {/* <time datetime> gives machines the exact date; people see the nice one. */}
+              <time datetime={post.data.date.toISOString()}>
+                {isUpcoming(post) ? "Coming " : ""}
+                {formatDate(post.data.date)}
+              </time>
+            </span>
+            <Heading class="mt-2 text-balance text-base font-bold tracking-tight sm:text-lg">
+              <PostTitle title={post.data.title} />
+            </Heading>
+            <span class="mt-1 block text-sm text-muted sm:text-base">{post.data.summary}</span>
+          </span>
         </a>
       </li>
     ))

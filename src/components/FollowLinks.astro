@@ -2,17 +2,24 @@
 /* =============================================================================
    FollowLinks.astro — where to follow DB Insights, as a compact list.
    =============================================================================
-   Content only (no section wrapper): the home page places it in the right
-   column of LatestAndFollow.astro.
+   Content only (no section wrapper): the home page places it beside or under
+   the latest posts in LatestAndFollow.astro (`wide` = full-width row).
 
    Reads FOLLOW_LINKS from src/lib/hub.ts. A platform that hasn't started yet
    shows its start note instead of a link, so there are no dead links before
-   the Facebook Page (Dec 7, 2026) or YouTube (Phase 3) go live. To switch one
+   the Facebook Page (Dec 7, 2026) or YouTube (Mar 2027) go live. To switch one
    on, set its `startsNote` to null in hub.ts.
 ============================================================================= */
 
 import { BRAND, FOLLOW_LINKS } from "../lib/hub";
 import NewTabNote from "./NewTabNote.astro";
+
+interface Props {
+  /** Full-width row: the three platforms side by side from `sm` up. */
+  wide?: boolean;
+}
+
+const { wide = false } = Astro.props;
 ---
 
 <div class="rounded-2xl border border-border bg-surface p-5">
@@ -22,7 +29,13 @@ import NewTabNote from "./NewTabNote.astro";
     <span class="font-semibold text-text">{BRAND.hashtag}</span>.
   </p>
 
-  <ul class="mt-4 divide-y divide-hairline" data-stagger>
+  <ul
+    class:list={[
+      "mt-4 divide-y divide-hairline",
+      wide && "sm:grid sm:grid-cols-3 sm:gap-6 sm:divide-y-0",
+    ]}
+    data-stagger
+  >
     {
       FOLLOW_LINKS.map((link) => (
         <li class="flex min-h-14 items-center justify-between gap-3 py-2">

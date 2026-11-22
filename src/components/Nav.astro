@@ -7,7 +7,9 @@
           Sub-brand Accent, an About link, a Follow button (sm and up), and
           the theme toggle.
    Mobile: the links collapse into a <details> dropdown (a native, accessible,
-           zero-JS disclosure widget — no framework island needed).
+           zero-JS disclosure widget — no framework island needed). The
+           dropdown ends with its own Follow button, since the bar's one is
+           hidden on the narrowest phones.
 ============================================================================= */
 
 import ThemeToggle from "./ThemeToggle.astro";
@@ -22,7 +24,7 @@ const linkedin = FOLLOW_LINKS.find((link) => link.platform === "LinkedIn")!;
 const links = [
   ...SECTION_LIST.map((section) => ({
     href: section.path,
-    label: section.navLabel,
+    label: section.name,
     dot: section.barClass,
   })),
   { href: "/about", label: "About", dot: null },
@@ -119,6 +121,15 @@ const isCurrent = (href: string) => !href.includes("#") && current.startsWith(hr
               </a>
             ))
           }
+          <a
+            href={linkedin.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="press mt-1 flex min-h-11 items-center justify-center rounded-md bg-accent px-3 text-sm font-semibold text-on-accent hover:opacity-90"
+          >
+            Follow on LinkedIn ↗
+            <NewTabNote />
+          </a>
         </div>
       </details>
     </div>

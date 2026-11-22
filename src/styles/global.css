@@ -87,7 +87,7 @@
 :root {
   --bg: #0b1b39;           /* Masterbrand navy */
   --surface: #11244a;
-  --border: #22396a;       /* card borders */
+  --border: #2c4679;       /* card borders (about 1.9:1 on navy, 1.7:1 on surface) */
   --hairline: #182d58;     /* subtle dividers */
   --text: #f2f5fa;
   --muted: #aab7cd;
@@ -109,7 +109,7 @@
 :root[data-theme="light"] {
   --bg: #ffffff;
   --surface: #f3f5f9;
-  --border: #dce2ec;
+  --border: #d3dae6;
   --hairline: #e6eaf1;
   --text: #0b1b39;         /* Masterbrand navy */
   --muted: #4a5873;
@@ -217,6 +217,23 @@ body {
   border-color: var(--accent);
 }
 
+/* MAP FRAME — the matte around a map render. The renders are printed on a
+   near-white page, so on navy they'd sit as a bare white slab. The frame
+   gives them a mount instead: a padded surface panel, a border, and the
+   image inset with smaller rounded corners, like a print in a passe-partout.
+   Used on post cards, the home feature and the post page. */
+.map-frame {
+  display: block;
+  padding: 0.375rem;
+  border: 1px solid var(--border);
+  border-radius: 0.875rem;
+  background: var(--surface);
+}
+.map-frame img {
+  display: block;
+  border-radius: 0.5rem;
+}
+
 /* A faint dot grid, like points on a map. Used as a texture in the corner of
    the section cards; it uses the same low-contrast colour as the hero grid. */
 .dot-grid {
@@ -315,6 +332,11 @@ mark.insight {
 .post-body > * + * {
   margin-top: 1.25em;
 }
+/* Text at a readable measure (about 68 characters a line). Figures and code
+   blocks keep the full column. */
+.post-body > :not(figure, pre, img) {
+  max-width: 68ch;
+}
 .post-body h2 {
   margin-top: 2em;
   font-size: 1.5rem;
@@ -355,6 +377,18 @@ mark.insight {
 .post-body img {
   border-radius: 0.75rem;
   border: 1px solid var(--border);
+}
+.post-body figure.map-frame img {
+  border: 0;
+}
+.post-body figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+  padding: 0.5rem 0.25rem 0.125rem;
+  font-size: 0.875rem;
+  color: var(--muted);
 }
 /* Inline code + code blocks: the one place JetBrains Mono is used. */
 .post-body code {

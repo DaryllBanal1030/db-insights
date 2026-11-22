@@ -1,24 +1,48 @@
 ---
 /* =============================================================================
-   LatestAndFollow.astro — home section 02: latest posts beside follow links.
+   LatestAndFollow.astro — home section 02: the newest post, then follow links.
    =============================================================================
-   Two things a visitor wants next to each other: what's new, and where to get
-   more. Side by side from `lg` up (posts take 3/5 of the width, follow 2/5);
-   stacked on phones, posts first.
+   The newest post leads, big, with its map (FeaturedPost). Under it, the
+   next few posts (PostList) beside where to follow (FollowLinks); when the
+   featured post is the only one, the follow links take the full width.
+   With no posts on the site yet, LatestPosts shows the launch note instead.
+
+   The title says "Coming Mon Nov 23, 2026" while the newest post is still
+   ahead (isUpcoming), so a scheduled post is never called "fresh".
 ============================================================================= */
 
 import Section from "./Section.astro";
+import FeaturedPost from "./FeaturedPost.astro";
+import PostList from "./PostList.astro";
 import LatestPosts from "./LatestPosts.astro";
 import FollowLinks from "./FollowLinks.astro";
+import { formatDate, getPosts, isUpcoming } from "../lib/posts";
+
+// Newest first (getPosts sorts), so `feature` is the newest post.
+const [feature, ...rest] = (await getPosts()).slice(0, 4);
+const title =
+  feature && isUpcoming(feature)
+    ? `Coming ${formatDate(feature.data.date)}`
+    : "Fresh from LinkedIn";
+const followWide = Boolean(feature) && rest.length === 0;
 ---
 
-<Section id="latest" index={2} label="latest posts" title="Fresh from LinkedIn">
-  <div class="grid gap-4 lg:grid-cols-5">
-    <div class="lg:col-span-3">
-      <LatestPosts />
-    </div>
-    <div class="lg:col-span-2">
-      <FollowLinks />
+<Section id="latest" index={2} label="latest posts" title={title}>
+  {feature && <FeaturedPost post={feature} />}
+  <div class:list={["grid gap-4 lg:grid-cols-5", feature && "mt-4"]}>
+    {
+      !feature ? (
+        <div class="lg:col-span-3">
+          <LatestPosts />
+        </div>
+      ) : rest.length > 0 ? (
+        <div class="lg:col-span-3">
+          <PostList posts={rest} />
+        </div>
+      ) : null
+    }
+    <div class={followWide ? "lg:col-span-5" : "lg:col-span-2"}>
+      <FollowLinks wide={followWide} />
     </div>
   </div>
 </Section>
