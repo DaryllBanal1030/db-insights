@@ -1,14 +1,18 @@
 ---
 # Post 01: the first Map Breakdown (DBSpatial, Population theme).
-# Text from dbinsights-brand/posts/post-01/caption-worldpop.md; method from
-# dbinsights-brand/guides/WORLDPOP-POST-01.md. Figures are PSA 2024; the map
-# is WorldPop 2020. The caption file asks to confirm the national figure
-# (375.8 per km², 112,727,776 people) against PSA's official 2024 release.
+# Text from dbinsights-brand/posts/post-01/caption-worldpop.md (the SEO
+# rewrite); method from dbinsights-brand/guides/WORLDPOP-POST-01.md.
+# Figures are PSA's official ones: "Highlights on the Population Density in
+# the Philippines based on the 2024 Census of Population (2024 POPCEN)",
+# released Dec 17, 2025, ref. 2025-414 (LMB 2019 land areas; 112,727,776
+# people on an estimated 300,000 km²). No city-level densities: those used
+# 2013 land areas and aren't confirmed yet. The map is WorldPop 2020; no
+# number in the text is read off the map.
 title: "Where Filipinos live, one square kilometre at a time"
 date: 2026-11-23
 format: "Map Breakdown"
 summary: "A 3D map of where everyone in the Philippines lives, one 1 km square at a time."
-source: "Map: WorldPop 2020, 1 km grid (UN-adjusted); heights capped at 60,000 people/km². Figures: PSA 2024 Census of Population. Map data: WorldPop (www.worldpop.org), CC BY 4.0, DOI 10.5258/SOTON/WP00675."
+source: "Map: WorldPop 2020, 1 km grid (UN-adjusted); heights capped at 60,000 people/km². Map data: WorldPop (www.worldpop.org), CC BY 4.0, DOI 10.5258/SOTON/WP00675. Figures: PSA, Highlights on the Population Density in the Philippines based on the 2024 Census of Population (released Dec 17, 2025, ref. 2025-414)."
 # Fill this in after posting on LinkedIn (Mon Nov 23, 2026), then uncomment:
 # linkedinUrl: "https://www.linkedin.com/posts/..."
 cover: "/img/posts/2026-11-23-where-filipinos-live.webp"
@@ -26,7 +30,7 @@ draft: false
   width="1600"
   height="2000"
   decoding="async"
-  alt="3D map of the Philippines' population density on a 1 km grid (WorldPop 2020). Each square kilometre is a column whose height and colour show people per km², from cream (1 to 10) through gold to deep red (over 5,000). The tallest red spikes crowd Metro Manila; smaller spikes stand at Cebu City, Davao City, Iloilo City, Bacolod City, Zamboanga City and Puerto Princesa City. Text on the map: 12.4% of Filipinos live in the National Capital Region, on just 0.2% of the land."
+  alt="3D map of the Philippines' population density on a 1 km grid (WorldPop 2020). Each square kilometre is a column whose height and colour show people per km², from cream (1 to 10) through gold and orange to deep red (over 5,000). The tallest red spikes crowd Metro Manila; smaller spikes stand at Cebu City, Davao City, Iloilo City, Bacolod City, Zamboanga City and Puerto Princesa City. Text on the map: 12.4% of Filipinos live in Metro Manila, on just 0.2% of the land. That's 22,561 people per km², 60 times the national average of 376 (PSA, 2024)."
 />
 <figcaption>
 <span>Map: WorldPop 2020, 1 km grid</span>
@@ -34,26 +38,26 @@ draft: false
 </figcaption>
 </figure>
 
-12.4% of Filipinos live on ==0.2% of the country's land==.
+Population density map of the Philippines: 12.4% of Filipinos live in Metro Manila, on just ==0.2% of the land==.
 
-That's Metro Manila: 14 million people on about 620 km². I mapped where everyone lives, one square kilometre at a time. Each spike is a 1 km square; the taller and redder, the more people in it.
+Each column on this map is one square kilometre. The taller and redder it is, the more people live there. Look at Luzon and you can see the country's population piling into one corner.
 
-## What stood out
+## What the census says
 
-- Metro Manila averages 22,600 people per km², 60 times the national average of 375.8.
-- The City of Manila alone reaches 76,164 per km², the densest in the country. Mandaluyong (50,151) and Pasay (32,440) follow.
+From PSA's 2024 Census of Population:
+
+- Metro Manila has 22,561 people per km², more than 60 times the national average of 376.
+- CALABARZON is next at 1,102. The Cordillera is the least crowded region at 86.
 - Metro Manila, CALABARZON and Central Luzon together hold 39% of Filipinos on 13% of the land.
-- Davao City has almost as many people as the City of Manila (1.85M vs 1.90M), spread over about 98 times the land. That's why its spike looks modest.
-- Only about 1 in 3 cities and municipalities (567 of 1,624) are denser than the national average. A few very crowded places pull the average up.
-
-## Two questions for you
-
-1. Find your hometown on the map: tall red spike or flat cream?
-2. If one big employer or government office moved out of Metro Manila, where should it go, and why?
 
 ## How I made it
 
-- **Data:** WorldPop's 2020 population density grid for the Philippines, 1 km squares, adjusted to the UN national total. The PSA 2024 figures above come from the census, not from the map.
-- **Heights:** linear, so the countryside stays low and the cities spike, and capped at 60,000 people per km², so a few single cells that are model artefacts don't turn into giant fake needles.
-- **Colour:** five density classes, cream through gold to deep red, the same classes as the legend.
-- **Tools:** QGIS to reproject the grid and turn density into heights, Blender to build and light the 3D columns, and PowerPoint for the title, legend and city labels.
+I took WorldPop's 1 km population grid, prepared it in QGIS, built the 3D columns in Blender, and added the labels in PowerPoint.
+
+These are the main steps, not a full tutorial. If you'd like a complete step-by-step guide, tell me in the comments on LinkedIn. If enough people ask, I'll write one.
+
+## Your turn
+
+Now find your hometown. Is it a red spike or flat cream?
+
+On Wednesday: the 10 most crowded cities outside Metro Manila.
