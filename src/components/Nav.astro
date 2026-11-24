@@ -3,9 +3,13 @@
    Nav.astro — sticky top navigation.
    =============================================================================
    Left:  the Solid Mark + the lowercase "db insights" wordmark (links home).
-   Right: the Hub sections (/spatial … /notes), each with a dot in its
-          Sub-brand Accent, an About link, a Follow button (sm and up), and
-          the theme toggle.
+   Right: the sections that have started (DBSpatial, DBAnalytics, Field
+          Notes), each with a dot in its Sub-brand Accent, an About link, a
+          Follow button (sm and up), and the theme toggle. Sections that
+          start later (DBAutomate, DBLearning) stay out of the bar; the phone
+          menu lists them under a quieter "Coming in 2027" label, and the
+          home page has a line for them. They join the bar on their own once
+          their start date passes (hasStarted in hub.ts).
    Mobile: the links collapse into a <details> dropdown (a native, accessible,
            zero-JS disclosure widget — no framework island needed). The
            dropdown ends with its own Follow button, since the bar's one is
@@ -15,20 +19,25 @@
 import ThemeToggle from "./ThemeToggle.astro";
 import BrandMark from "./BrandMark.astro";
 import NewTabNote from "./NewTabNote.astro";
-import { FOLLOW_LINKS, SECTION_LIST } from "../lib/hub";
+import { FOLLOW_LINKS, SECTION_LIST, hasStarted } from "../lib/hub";
 
 const linkedin = FOLLOW_LINKS.find((link) => link.platform === "LinkedIn")!;
 
 // The nav links, built from the sections in src/lib/hub.ts plus "About"
 // (the portfolio page, src/pages/about.astro).
+const toLink = (section: (typeof SECTION_LIST)[number]) => ({
+  href: section.path,
+  label: section.name,
+  dot: section.barClass,
+});
 const links = [
-  ...SECTION_LIST.map((section) => ({
-    href: section.path,
-    label: section.name,
-    dot: section.barClass,
-  })),
+  ...SECTION_LIST.filter((s) => hasStarted(s.startsOn)).map(toLink),
   { href: "/about", label: "About", dot: null },
 ];
+// Not started yet: only in the phone menu, under a small label.
+const laterSections = SECTION_LIST.filter((s) => !hasStarted(s.startsOn));
+const laterLinks = laterSections.map(toLink);
+const laterYears = [...new Set(laterSections.map((s) => s.startsOn.slice(0, 4)))].join(" and ");
 
 // Astro.url is the URL of the page being built. We use it to mark the link
 // for the current section with aria-current="page" (screen readers announce
@@ -120,6 +129,25 @@ const isCurrent = (href: string) => !href.includes("#") && current.startsWith(hr
                 {link.label}
               </a>
             ))
+          }
+          {
+            laterLinks.length > 0 && (
+              <>
+                <p class="mt-2 border-t border-hairline px-3 pb-1 pt-3 font-display text-[0.6875rem] font-semibold uppercase tracking-[0.18em] text-faint">
+                  Coming in {laterYears}
+                </p>
+                {laterLinks.map((link) => (
+                  <a
+                    href={link.href}
+                    aria-current={isCurrent(link.href) ? "page" : undefined}
+                    class="nav-link flex min-h-11 items-center gap-2.5 rounded-md px-3 text-sm text-faint transition-colors hover:bg-bg hover:text-text"
+                  >
+                    <span class:list={["h-1.5 w-1.5 rounded-full opacity-70", link.dot]} aria-hidden="true" />
+                    {link.label}
+                  </a>
+                ))}
+              </>
+            )
           }
           <a
             href={linkedin.url}

@@ -7,7 +7,15 @@
 ============================================================================= */
 
 import { getCollection, type CollectionEntry } from "astro:content";
-import { FORMAT_SECTION, SECTIONS, hasStarted, type Section, type SectionKey } from "./hub";
+import {
+  FORMAT_SECTION,
+  SECTIONS,
+  hasStarted,
+  sectionStatus,
+  type Section,
+  type SectionKey,
+  type SectionStatus,
+} from "./hub";
 
 export type Post = CollectionEntry<"posts">;
 
@@ -98,4 +106,14 @@ export function formatDate(date: Date): string {
     year: "numeric",
     timeZone: "Asia/Manila",
   });
+}
+
+/**
+ * A section's honest status (see sectionStatus in hub.ts), counting only its
+ * posts that are already out: a post scheduled for later doesn't make a
+ * section "Live".
+ */
+export async function statusOf(section: Section): Promise<SectionStatus> {
+  const out = (await getPosts(section.key)).filter((post) => !isUpcoming(post));
+  return sectionStatus(section, out.length);
 }

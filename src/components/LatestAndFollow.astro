@@ -1,6 +1,6 @@
 ---
 /* =============================================================================
-   LatestAndFollow.astro — home section 02: the newest post, then follow links.
+   LatestAndFollow.astro — home section 01: the newest post, then follow links.
    =============================================================================
    The newest post leads, big, with its map (FeaturedPost). Under it, the
    next few posts (PostList) beside where to follow (FollowLinks); when the
@@ -27,7 +27,7 @@ const title =
 const followWide = Boolean(feature) && rest.length === 0;
 ---
 
-<Section id="latest" index={2} label="latest posts" title={title}>
+<Section id="latest" index={1} label="latest posts" title={title}>
   {feature && <FeaturedPost post={feature} />}
   <div class:list={["grid gap-4 lg:grid-cols-5", feature && "mt-4"]}>
     {

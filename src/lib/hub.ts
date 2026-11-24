@@ -252,11 +252,76 @@ export function hasStarted(isoDate: string, now: Date = new Date()): boolean {
   return new Date(`${isoDate}T00:00:00+08:00`).getTime() <= now.getTime();
 }
 
+// ---------------------------------------------------------------------------
+// Section status: one rule, one wording, everywhere
+// ---------------------------------------------------------------------------
+
+const DAY_NAMES: Record<string, string> = {
+  Mon: "Monday",
+  Tue: "Tuesday",
+  Wed: "Wednesday",
+  Thu: "Thursday",
+  Fri: "Friday",
+};
+
+export interface SectionStatus {
+  /** live = has a published post; first = started, first post not up yet;
+   *  later = its start date is still ahead. */
+  state: "live" | "first" | "later";
+  /** Short, for chips: "Live", "First Data Story: Wed", "From Jan 2027". */
+  label: string;
+  /** A sentence, for empty states: "The first Data Story goes up on Wednesday." */
+  sentence: string;
+  /** The same sentence in two parts, so a page can highlight the "when":
+   *  lead "The first Data Story goes up on LinkedIn on " + when "Wednesday". */
+  lead: string;
+  when: string;
+}
+
 /**
- * The plain-words status of a section, for chips and cards: "Live" once its
- * start date has passed, otherwise "From Nov 23" / "From Jan 2027". Used
- * instead of "Phase 1/2/3", which is planning language visitors don't know.
+ * What a section can honestly claim. "Live" needs CONTENT, not just a date:
+ * a section whose start date has passed but has no post yet says when its
+ * first post goes up, using its weekly slot (Mon/Wed/Fri), never a new date.
+ * Use statusOf() in posts.ts, which counts the section's posts for you.
+ * (Replaced the date-only "startLabel", Nov 24, 2026: /analytics and /notes
+ * read "Live" before their first post existed.)
  */
-export function startLabel(section: Section, now: Date = new Date()): string {
-  return hasStarted(section.startsOn, now) ? "Live" : `From ${section.startsShort}`;
+export function sectionStatus(
+  section: Section,
+  publishedCount: number,
+  now: Date = new Date(),
+): SectionStatus {
+  if (publishedCount > 0) {
+    return { state: "live", label: "Live", sentence: `${section.name} is live.`, lead: "", when: "" };
+  }
+  if (hasStarted(section.startsOn, now)) {
+    const slot = WEEKLY_SLOTS.find(
+      (s) => FORMAT_SECTION[s.format as Format] === section.key,
+    );
+    if (slot) {
+      const day = DAY_NAMES[slot.day] ?? slot.day;
+      const lead = `The first ${slot.format} goes up on LinkedIn on `;
+      return {
+        state: "first",
+        label: `First ${slot.format}: ${slot.day}`,
+        sentence: `${lead}${day}.`,
+        lead,
+        when: day,
+      };
+    }
+    return {
+      state: "first",
+      label: "Coming soon",
+      sentence: `The first ${section.formats[0]} are on their way.`,
+      lead: `The first ${section.formats[0]} are `,
+      when: "on their way",
+    };
+  }
+  return {
+    state: "later",
+    label: `From ${section.startsShort}`,
+    sentence: `${section.name} starts ${section.starts}.`,
+    lead: `${section.name} starts `,
+    when: section.starts,
+  };
 }

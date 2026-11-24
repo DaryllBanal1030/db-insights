@@ -142,6 +142,14 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Paragraphs and list items avoid a lone word on their last line ("376.").
+   Browsers that don't know `text-wrap: pretty` just wrap as before. */
+p,
+li,
+figcaption {
+  text-wrap: pretty;
+}
+
 /* Visible, on-brand focus ring for keyboard users (accessibility). */
 :focus-visible {
   outline: 2px solid var(--accent);
@@ -332,10 +340,12 @@ mark.insight {
 .post-body > * + * {
   margin-top: 1.25em;
 }
-/* Text at a readable measure (about 68 characters a line). Figures and code
-   blocks keep the full column. */
+/* Text at a readable measure: about 70 to 75 characters a line. Set in rem,
+   not `ch`: a `ch` is the width of "0", which is wider than an average
+   letter in Plus Jakarta Sans, so 68ch let lines run to about 98 characters.
+   Figures and code blocks keep the full column. */
 .post-body > :not(figure, pre, img) {
-  max-width: 68ch;
+  max-width: 32rem;
 }
 .post-body h2 {
   margin-top: 2em;

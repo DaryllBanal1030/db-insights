@@ -1,0 +1,63 @@
+---
+/* =============================================================================
+   FeaturedWork.astro — /about's "Featured work": real posts only.
+   =============================================================================
+   The carousel (Carousel.astro) shows one slide per Sub-brand: DBSpatial,
+   DBAnalytics, DBAutomate. While some of those have no post yet, most slides
+   would be "on its way" placeholders, which advertises how little exists.
+   So until EVERY carousel section has a published post, this shows:
+     - the published posts, newest first (up to three), as post cards
+     - one line naming what's next, each linking to its section, worded by
+       statusOf() in posts.ts ("First Data Story: Wed", "Build Logs from
+       Jan 2027"), so it never invents a date
+   Once all three sections have a post, it switches to the carousel by itself.
+============================================================================= */
+
+import Carousel from "./Carousel.astro";
+import PostList from "./PostList.astro";
+import { SECTIONS, type SectionKey } from "../lib/hub";
+import { getPosts, isUpcoming, statusOf } from "../lib/posts";
+
+// The carousel's sections (keep in step with `keys` in Carousel.astro).
+const carouselKeys: SectionKey[] = ["spatial", "analytics", "automate"];
+
+const published = (await getPosts()).filter((post) => !isUpcoming(post));
+const sections = await Promise.all(
+  carouselKeys.map(async (key) => ({ section: SECTIONS[key], status: await statusOf(SECTIONS[key]) })),
+);
+const carouselReady = sections.every(({ status }) => status.state === "live");
+// What's next: the carousel sections without a post yet.
+const next = sections
+  .filter(({ status }) => status.state !== "live")
+  .map(({ section, status }) => ({
+    href: section.path,
+    dot: section.barClass,
+    text: status.state === "later" ? `${section.formats[0]} from ${section.startsShort}` : status.label,
+  }));
+---
+
+{
+  carouselReady ? (
+    <Carousel />
+  ) : (
+    <div class="max-w-3xl">
+      {published.length > 0 && <PostList posts={published.slice(0, 3)} level={3} />}
+      {
+        next.length > 0 && (
+          <p class="mt-4 flex flex-wrap items-center gap-x-5 gap-y-1 text-sm text-muted">
+            <span class="font-semibold text-text">Next up</span>
+            {next.map((item) => (
+              <a
+                href={item.href}
+                class="inline-flex min-h-11 items-center gap-2 underline-offset-4 transition-colors hover:text-text hover:underline"
+              >
+                <span class:list={["h-1.5 w-1.5 rounded-full", item.dot]} aria-hidden="true" />
+                {item.text}
+              </a>
+            ))}
+          </p>
+        )
+      }
+    </div>
+  )
+}

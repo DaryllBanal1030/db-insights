@@ -14,8 +14,8 @@
 
 import SubBrandTag from "./SubBrandTag.astro";
 import PostTitle from "./PostTitle.astro";
-import { hasStarted, startLabel, type Section } from "../lib/hub";
-import { accentStyleOf, isUpcoming, formatDate, urlOf, type Post } from "../lib/posts";
+import { type Section } from "../lib/hub";
+import { accentStyleOf, isUpcoming, formatDate, statusOf, urlOf, type Post } from "../lib/posts";
 
 interface Props {
   section: Section;
@@ -23,9 +23,8 @@ interface Props {
 }
 
 const { section, post } = Astro.props;
-const live = hasStarted(section.startsOn);
-// Singular Format name for the "coming" text, e.g. "Data Stories" -> "Data Story".
-const firstFormat = section.formats[0].replace(/ies$/, "y").replace(/s$/, "");
+// Same status rule and wording as the section pages (statusOf in posts.ts).
+const status = await statusOf(section);
 ---
 
 <article
@@ -77,7 +76,7 @@ const firstFormat = section.formats[0].replace(/ies$/, "y").replace(/s$/, "");
               </time>
             </>
           ) : (
-            <span>{startLabel(section)}</span>
+            <span>{status.label}</span>
           )
         }
       </div>
@@ -99,14 +98,8 @@ const firstFormat = section.formats[0].replace(/ies$/, "y").replace(/s$/, "");
         ) : (
           <>
             <h3 class="mt-3 text-balance text-lg font-bold tracking-tight sm:text-xl">
-              {live ? (
-                <>The first {firstFormat} is on its way.</>
-              ) : (
-                <>
-                  {section.formats.join(" and ")} start{" "}
-                  <span class="insight">{section.starts}</span>.
-                </>
-              )}
+              {status.lead}
+              <span class="insight">{status.when}</span>.
             </h3>
             <p class="mt-2 text-sm text-muted">{section.focus}</p>
             <a

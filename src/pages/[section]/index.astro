@@ -18,8 +18,8 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import SubBrandTag from "../../components/SubBrandTag.astro";
 import PostList from "../../components/PostList.astro";
 import ComingSoon from "../../components/ComingSoon.astro";
-import { BRAND, SECTIONS, SECTION_KEYS, startLabel, type SectionKey } from "../../lib/hub";
-import { getPosts } from "../../lib/posts";
+import { BRAND, SECTIONS, SECTION_KEYS, type SectionKey } from "../../lib/hub";
+import { getPosts, statusOf } from "../../lib/posts";
 
 export function getStaticPaths() {
   // [{ params: { section: "spatial" } }, { params: { section: "analytics" } }, …]
@@ -31,6 +31,8 @@ const posts = await getPosts(section.key);
 // Field Notes is a section of the Masterbrand, not a Sub-brand, so its tag
 // reads "DB Insights" rather than repeating "Field Notes".
 const isSubBrand = section.key !== "notes";
+// "Live" only once the section has a post (statusOf in posts.ts).
+const status = await statusOf(section);
 ---
 
 <BaseLayout
@@ -50,11 +52,11 @@ const isSubBrand = section.key !== "notes";
           {section.name}
         </h1>
         <p class="mt-4 max-w-prose text-lg text-muted">{section.focus}</p>
-        <!-- Post Formats + status ("Live" / "From Jan 2027") as chips. The dots use the Sub-brand Accent
+        <!-- Post Formats + status ("Live" / "First Data Story: Wed" / "From Jan 2027") as chips. The dots use the Sub-brand Accent
              (white/navy ink for Field Notes): it shows what the page is about. -->
         <ul class="mt-5 flex flex-wrap gap-2 text-sm">
           {
-            [...section.formats, startLabel(section)].map((label) => (
+            [...section.formats, status.label].map((label) => (
               <li class="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1 text-muted">
                 <span class:list={["h-1.5 w-1.5 rounded-full", section.barClass]} aria-hidden="true" />
                 {label}

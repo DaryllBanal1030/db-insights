@@ -2,18 +2,18 @@
 /* =============================================================================
    ComingSoon.astro — the empty state for a section with no posts yet.
    =============================================================================
-   Says when the section starts and points to LinkedIn (the Home Platform,
-   where every post appears first). Two wordings, picked by hasStarted() from
-   src/lib/hub.ts:
-     - before the section's start date: "DBAutomate starts Mon Jan 4, 2027."
-     - after it (posts are on LinkedIn but not on the site yet):
-       "DBSpatial posts are on LinkedIn while this page catches up."
-   Field Notes go up on Fridays (the weekly rhythm), so their start line
-   names the day instead of claiming the launch Monday.
-   It disappears on its own once the section has one published post.
+   Says when the section's first post goes up and points to LinkedIn (the
+   Home Platform, where every post appears first). The wording comes from
+   statusOf() in src/lib/posts.ts, the same rule as the chips everywhere else:
+     - started, no post yet: "The first Data Story goes up on LinkedIn on
+       Wednesday." (its weekly slot day, never a made-up date)
+     - not started: "DBAutomate starts Mon Jan 4, 2027."
+   A section is only called "Live" once it has a post, and then this empty
+   state isn't shown at all.
 ============================================================================= */
 
-import { FOLLOW_LINKS, hasStarted, type Section } from "../lib/hub";
+import { FOLLOW_LINKS, type Section } from "../lib/hub";
+import { statusOf } from "../lib/posts";
 import NewTabNote from "./NewTabNote.astro";
 
 interface Props {
@@ -22,59 +22,26 @@ interface Props {
 
 const { section } = Astro.props;
 const linkedin = FOLLOW_LINKS.find((link) => link.platform === "LinkedIn")!;
-const live = hasStarted(section.startsOn);
-const isNotes = section.key === "notes";
+const status = await statusOf(section);
 ---
 
 <!-- `--hl` makes the highlight below use this section's colour (teal on
      /spatial, violet on /automate…). Field Notes keeps Insight Gold. -->
 <div
   class="rounded-xl border border-dashed border-border px-6 py-10 sm:px-10"
-  style={isNotes ? undefined : `--hl: var(--color-${section.key})`}
+  style={section.key === "notes" ? undefined : `--hl: var(--color-${section.key})`}
 >
   <p class="flex items-center gap-2 font-display text-xs font-semibold uppercase tracking-[0.2em] text-faint">
     <span class:list={["h-1.5 w-1.5 rounded-full", section.barClass]} aria-hidden="true"></span>
-    {live ? "Live on LinkedIn" : "Coming soon"}
+    {status.state === "first" ? "First post coming" : "Coming soon"}
   </p>
-  {
-    live ? (
-      <>
-        <p class="mt-3 text-balance font-display text-xl font-bold tracking-tight sm:text-2xl">
-          {isNotes ? (
-            <>New <span class="insight">Field Notes</span> go up on LinkedIn every Friday.</>
-          ) : (
-            <>
-              {section.formats.join(" and ")} go up on LinkedIn{" "}
-              <span class="insight">every week</span>.
-            </>
-          )}
-        </p>
-        <p class="mt-3 max-w-prose text-muted">
-          They'll be collected here soon. Every post goes up on LinkedIn
-          first, so follow there for the next one.
-        </p>
-      </>
-    ) : (
-      <>
-        <p class="mt-3 text-balance font-display text-xl font-bold tracking-tight sm:text-2xl">
-          {isNotes ? (
-            <>
-              Field Notes go up on Fridays, from the launch week of{" "}
-              <span class="insight">{section.starts}</span>.
-            </>
-          ) : (
-            <>
-              {section.name} starts <span class="insight">{section.starts}</span>.
-            </>
-          )}
-        </p>
-        <p class="mt-3 max-w-prose text-muted">
-          {section.formats.join(" and ")} will collect here. Every post goes up on
-          LinkedIn first, so follow there to catch the first one.
-        </p>
-      </>
-    )
-  }
+  <p class="mt-3 text-balance font-display text-xl font-bold tracking-tight sm:text-2xl">
+    {status.lead}<span class="insight">{status.when}</span>.
+  </p>
+  <p class="mt-3 max-w-prose text-muted">
+    {section.formats.join(" and ")} will collect here. Every post goes up on
+    LinkedIn first, so follow there to catch the first one.
+  </p>
   <a
     href={linkedin.url}
     target="_blank"

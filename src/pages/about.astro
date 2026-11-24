@@ -8,7 +8,7 @@
 
      header   name, role line, 2-sentence intro (+ photo once it exists)
      01       Experience: compact timeline (the only place the employer is named)
-     02       Featured work
+     02       Featured work: published posts (carousel once all 3 Sub-brands have one)
      03       Skills & credentials: chips + one-line credentials
      04       Contact
 
@@ -18,7 +18,7 @@
 import { existsSync } from "node:fs";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Section from "../components/Section.astro";
-import Carousel from "../components/Carousel.astro";
+import FeaturedWork from "../components/FeaturedWork.astro";
 import Experience from "../components/Experience.astro";
 import SkillsCredentials from "../components/SkillsCredentials.astro";
 import Contact from "../components/Contact.astro";
@@ -70,9 +70,10 @@ const hasPhoto = existsSync("public/daryll.jpg");
   <!-- 01 — Experience: compact timeline. -->
   <Experience />
 
-  <!-- 02 — Featured work: from the projects collection (one card for now). -->
+  <!-- 02 — Featured work: real posts only, until every Sub-brand has one;
+       then the one-slide-per-Sub-brand carousel (FeaturedWork.astro). -->
   <Section id="work" index={2} label="featured work">
-    <Carousel />
+    <FeaturedWork />
   </Section>
 
   <!-- 03 — Skills & credentials: chips + one-line credentials. -->

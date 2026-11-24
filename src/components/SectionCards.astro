@@ -15,13 +15,15 @@
    Phone: one column. sm (640px+): two columns, Field Notes full width.
    lg (1024px+): three columns.
 
-   The status chip reads "Live" or "From Nov 23" (startLabel in hub.ts),
-   never "Phase 1". All wording comes from SECTIONS in src/lib/hub.ts.
+   The status chip reads "Live" (has a post), "First Data Story: Wed" (started,
+   first post not up yet) or "From Jan 2027" (statusOf in posts.ts), never
+   "Phase 1". All wording comes from SECTIONS in src/lib/hub.ts.
 ============================================================================= */
 
 import Section from "./Section.astro";
 import SubBrandTag from "./SubBrandTag.astro";
-import { SECTIONS, SECTION_LIST, hasStarted, startLabel, type SectionKey } from "../lib/hub";
+import { SECTIONS, SECTION_LIST, type SectionKey } from "../lib/hub";
+import { statusOf } from "../lib/posts";
 
 // Cards: every section that starts with the launch (Phase 1), in order.
 const cards: { key: SectionKey; span: string }[] = [
@@ -34,11 +36,15 @@ const cards: { key: SectionKey; span: string }[] = [
 const later = SECTION_LIST.filter((s) => s.phase > 1);
 // The heading year comes from the data, e.g. "Coming in 2027".
 const laterYears = [...new Set(later.map((s) => s.startsOn.slice(0, 4)))].join(" and ");
+// Status of every section, worked out once (it counts each section's posts).
+const statuses = Object.fromEntries(
+  await Promise.all(SECTION_LIST.map(async (s) => [s.key, await statusOf(s)] as const)),
+);
 ---
 
 <Section
   id="sub-brands"
-  index={1}
+  index={2}
   label="the sections"
   title="Pick your corner of PH data"
 >
@@ -66,7 +72,7 @@ const laterYears = [...new Set(later.map((s) => s.startsOn.slice(0, 4)))].join("
               {/* Field Notes isn't a Sub-brand, so it gets the Masterbrand tag. */}
               <SubBrandTag section={key === "notes" ? null : section} />
               <span class="rounded-full border border-border px-2 py-0.5 text-xs text-muted">
-                {startLabel(section)}
+                {statuses[key].label}
               </span>
             </span>
 
@@ -107,7 +113,9 @@ const laterYears = [...new Set(later.map((s) => s.startsOn.slice(0, 4)))].join("
                 <span class="font-semibold text-text">{section.name}</span>
                 <span>
                   {section.formats.join(" and ")} ·{" "}
-                  {hasStarted(section.startsOn) ? "Live" : `from ${section.startsShort}`}
+                  {statuses[section.key].state === "later"
+                    ? `from ${section.startsShort}`
+                    : statuses[section.key].label}
                 </span>
                 <span class="transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true">
                   →

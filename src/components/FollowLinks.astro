@@ -32,13 +32,20 @@ const { wide = false } = Astro.props;
   <ul
     class:list={[
       "mt-4 divide-y divide-hairline",
-      wide && "sm:grid sm:grid-cols-3 sm:gap-6 sm:divide-y-0",
+      wide && "sm:grid sm:grid-cols-3 sm:gap-3 sm:divide-y-0",
     ]}
     data-stagger
   >
     {
       FOLLOW_LINKS.map((link) => (
-        <li class="flex min-h-14 items-center justify-between gap-3 py-2">
+        <li
+          class:list={[
+            "flex min-h-14 items-center justify-between gap-3 py-2",
+            // Wide row: one cell per platform, its status or button under
+            // its name, so the row reads as three groups, not six columns.
+            wide && "sm:flex-col sm:items-start sm:justify-between sm:rounded-xl sm:border sm:border-hairline sm:bg-bg/40 sm:p-4",
+          ]}
+        >
           <span class="min-w-0">
             <span class="block text-sm font-semibold">{link.platform}</span>
             <span class="block text-xs text-faint">
@@ -46,7 +53,9 @@ const { wide = false } = Astro.props;
             </span>
           </span>
           {link.startsNote ? (
-            <span class="shrink-0 text-right text-xs text-faint">{link.startsNote}</span>
+            <span class:list={["shrink-0 text-right text-xs text-faint", wide && "sm:flex sm:min-h-11 sm:items-center sm:text-left"]}>
+              {link.startsNote}
+            </span>
           ) : (
             <a
               href={link.url}

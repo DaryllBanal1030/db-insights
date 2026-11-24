@@ -9,8 +9,13 @@
    The employer is named on /about (Experience), not here.
 ============================================================================= */
 
+import { existsSync } from "node:fs";
 import Section from "./Section.astro";
 import BrandMark from "./BrandMark.astro";
+
+// Same photo as /about (public/daryll.jpg). Until it exists, the tile shows
+// the Solid Mark instead, never a broken image.
+const hasPhoto = existsSync("public/daryll.jpg");
 ---
 
 <Section id="about-daryll" index={3} label="about daryll" title="The person behind the posts">
@@ -18,13 +23,26 @@ import BrandMark from "./BrandMark.astro";
   <div
     class="corners grid gap-6 rounded-2xl border border-border bg-surface p-6 sm:p-8 md:grid-cols-[auto_1fr_auto] md:items-center"
   >
-    <!-- The Solid Mark in a small tile ("DB" = Daryll Banal). -->
-    <span
-      class="grid h-14 w-14 place-items-center rounded-xl bg-accent text-on-accent"
-      aria-hidden="true"
-    >
-      <BrandMark class="h-9 w-auto" />
-    </span>
+    <!-- Daryll's photo once public/daryll.jpg exists; until then the Solid
+         Mark in a small tile ("DB" = Daryll Banal). -->
+    {
+      hasPhoto ? (
+        <img
+          src="/daryll.jpg"
+          alt="Daryll Banal"
+          width="112"
+          height="112"
+          class="h-14 w-14 rounded-xl border border-border object-cover"
+        />
+      ) : (
+        <span
+          class="grid h-14 w-14 place-items-center rounded-xl bg-accent text-on-accent"
+          aria-hidden="true"
+        >
+          <BrandMark class="h-9 w-auto" />
+        </span>
+      )
+    }
 
     <p class="max-w-prose text-muted">
       I'm Daryll Banal, a senior research analyst who builds databases, data
@@ -36,7 +54,7 @@ import BrandMark from "./BrandMark.astro";
         href="/about"
         class="inline-flex min-h-11 items-center justify-center rounded-lg bg-accent px-5 text-sm font-semibold text-on-accent press hover:opacity-90"
       >
-        My work →
+        About me →
       </a>
       <a
         href="/about#contact"

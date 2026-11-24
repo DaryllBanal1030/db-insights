@@ -3,9 +3,10 @@
    index.astro — the Hub home page, route "/".
    =============================================================================
    Pages live in src/pages/. index.astro -> route "/". The home page is about
-   DB Insights: the pitch + weekly rhythm, its sections (live ones as cards,
-   2027 ones as a line each), the newest post with its map, where to follow,
-   and a short "About Daryll" card linking to /about (src/pages/about.astro).
+   DB Insights: the pitch + weekly rhythm, then the newest post with its map
+   (the proof, right after the hero), where to follow, the sections (live
+   ones as cards, 2027 ones as a line each), and a short "About Daryll" card
+   linking to /about (src/pages/about.astro).
 
    The section pages (/spatial, /analytics, …) are built by
    src/pages/[section]/index.astro.
@@ -22,11 +23,11 @@ import AboutTeaser from "../components/AboutTeaser.astro";
   <!-- Hero: the bio line, the main follow button, and the Mon/Wed/Fri card. -->
   <Hero />
 
-  <!-- 01 — The sections: live ones as cards, the 2027 ones as one line each. -->
-  <SectionCards />
-
-  <!-- 02 — The newest post with its map, then the follow links. -->
+  <!-- 01 — The newest post with its map, then the follow links. -->
   <LatestAndFollow />
+
+  <!-- 02 — The sections: live ones as cards, the 2027 ones as one line each. -->
+  <SectionCards />
 
   <!-- 03 — About Daryll: one card linking to /about. -->
   <AboutTeaser />
