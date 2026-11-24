@@ -325,3 +325,16 @@ export function sectionStatus(
     when: section.starts,
   };
 }
+
+/**
+ * The weekly rhythm in words, built from WEEKLY_SLOTS so it changes with
+ * them: days "Monday, Wednesday and Friday", formats "Map Breakdowns, Data
+ * Stories and Field Notes". Used by the follow blocks on post pages.
+ */
+const plural = (format: string) => (format.endsWith("y") ? `${format.slice(0, -1)}ies` : `${format}s`);
+const joinAnd = (items: string[]) =>
+  items.length < 2 ? items.join("") : `${items.slice(0, -1).join(", ")} and ${items.at(-1)}`;
+export const RHYTHM = {
+  days: joinAnd(WEEKLY_SLOTS.map((s) => DAY_NAMES[s.day] ?? s.day)),
+  formats: joinAnd(WEEKLY_SLOTS.map((s) => plural(s.format))),
+};

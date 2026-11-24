@@ -50,7 +50,13 @@ const posts = defineCollection({
     // formats get their Tag from their section automatically.
     subBrand: z.enum(SUB_BRAND_KEYS).optional(),
     // The Public Source(s) the post is built from, e.g. "PSA CPI (2018=100)".
+    // Shown in full at the end of the post.
     source: z.string().optional(),
+    // The same sources in a few words, printed at the TOP of the post page
+    // ("Source: PSA 2024 Census of Population · WorldPop 2020"). Naming the
+    // agency up front is how the strongest Philippine data explainers build
+    // trust (benchmark, Nov 24, 2026). Optional; leave it out if unsure.
+    sourceLine: z.string().optional(),
     // Link to the original post on LinkedIn (the Home Platform).
     linkedinUrl: z.string().url().optional(),
     // Optional cover image, a path under public/ (e.g.

@@ -5,7 +5,7 @@
    Left:  the Solid Mark + the lowercase "db insights" wordmark (links home).
    Right: the sections that have started (DBSpatial, DBAnalytics, Field
           Notes), each with a dot in its Sub-brand Accent, an About link, a
-          Follow button (sm and up), and the theme toggle. Sections that
+          Follow button (sm and up). Sections that
           start later (DBAutomate, DBLearning) stay out of the bar; the phone
           menu lists them under a quieter "Coming in 2027" label, and the
           home page has a line for them. They join the bar on their own once
@@ -16,7 +16,6 @@
            hidden on the narrowest phones.
 ============================================================================= */
 
-import ThemeToggle from "./ThemeToggle.astro";
 import BrandMark from "./BrandMark.astro";
 import NewTabNote from "./NewTabNote.astro";
 import { FOLLOW_LINKS, SECTION_LIST, hasStarted } from "../lib/hub";
@@ -97,8 +96,6 @@ const isCurrent = (href: string) => !href.includes("#") && current.startsWith(hr
         <NewTabNote />
       </a>
 
-      <!-- Theme toggle: a single instance, visible at every breakpoint. -->
-      <ThemeToggle />
 
       <!-- Mobile menu: native <details> disclosure, only shown below lg. -->
       <details class="nav-menu relative lg:hidden">

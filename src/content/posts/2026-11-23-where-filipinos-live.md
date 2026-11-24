@@ -13,6 +13,7 @@ date: 2026-11-23
 format: "Map Breakdown"
 summary: "A 3D map of where everyone in the Philippines lives, one 1 km square at a time."
 source: "Map: WorldPop 2020, 1 km grid (UN-adjusted); heights capped at 60,000 people/km². Map data: WorldPop (www.worldpop.org), CC BY 4.0, DOI 10.5258/SOTON/WP00675. Figures: PSA, Highlights on the Population Density in the Philippines based on the 2024 Census of Population (released Dec 17, 2025, ref. 2025-414)."
+sourceLine: "PSA 2024 Census of Population · WorldPop 2020"
 # The LinkedIn post (went out Mon Nov 23, 2026).
 linkedinUrl: "https://lnkd.in/p/gJwGKPD7"
 cover: "/img/posts/2026-11-23-where-filipinos-live.webp"

@@ -10,7 +10,12 @@
 
    render(post) turns the post's Markdown body into a <Content /> component.
 
-   The page ends with the Public Source, then an end block: the byline, the
+   The header names the source in a few words (`sourceLine`) and numbers the
+   post within its Format ("Map Breakdown #1"). Before the body's first
+   section heading sits a small follow block (FollowInline.astro), so a
+   reader who arrived from LinkedIn sees the ask early; the body is split on
+   its first <h2> to place it. The page ends with the Public Source, then an
+   end block: the byline, the
    next step on LinkedIn ("Answer on LinkedIn" once the post's linkedinUrl is
    filled in; "Follow on LinkedIn" to the profile until then), and a link to
    more posts from the same section, so a reader never hits a dead end.
@@ -19,10 +24,12 @@
 import { render } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import SubBrandTag from "../../components/SubBrandTag.astro";
-import { BRAND, FOLLOW_LINKS, SECTIONS } from "../../lib/hub";
+import { BRAND, FOLLOW_LINKS, RHYTHM, SECTIONS } from "../../lib/hub";
+import FollowInline from "../../components/FollowInline.astro";
 import {
   accentStyleOf,
   formatDate,
+  formatLabel,
   getPosts,
   isUpcoming,
   plainTitle,
@@ -47,6 +54,12 @@ interface Props {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+// The body as HTML, split at its first section heading so the follow block
+// can sit there. No <h2> (a short post) -> the block is left out.
+const bodyHtml = post.rendered?.html ?? "";
+const cut = bodyHtml.indexOf("<h2");
+const splitBody = cut > 0;
+const label = await formatLabel(post); // "Map Breakdown #1"
 const section = SECTIONS[sectionOf(post)];
 
 // The post's Sub-brand Accent, for its ==highlights== and bullets (see
@@ -70,7 +83,7 @@ const postUrl = post.data.linkedinUrl;
     <header class="mt-8">
       <div class="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-faint">
         <SubBrandTag section={tagOf(post)} />
-        <span>{post.data.format}</span>
+        <span>{label}</span>
         <span aria-hidden="true">·</span>
         <time datetime={post.data.date.toISOString()}>
           {isUpcoming(post) ? "Coming " : ""}{formatDate(post.data.date)}
@@ -80,11 +93,28 @@ const postUrl = post.data.linkedinUrl;
         <PostTitle title={post.data.title} />
       </h1>
       <p class="mt-4 max-w-[32rem] text-lg text-muted">{post.data.summary}</p>
+      {
+        post.data.sourceLine && (
+          <p class="mt-4 text-sm text-faint">
+            <span class="font-semibold text-muted">Source:</span> {post.data.sourceLine}
+          </p>
+        )
+      }
     </header>
 
     <!-- The Markdown body. Its tags are styled by `.post-body` in global.css. -->
     <div class="post-body mt-10">
-      <Content />
+      {
+        splitBody ? (
+          <>
+            <Fragment set:html={bodyHtml.slice(0, cut)} />
+            <FollowInline />
+            <Fragment set:html={bodyHtml.slice(cut)} />
+          </>
+        ) : (
+          <Content />
+        )
+      }
     </div>
 
     <!-- Footer: the Public Source, then the end block (byline + next steps). -->
@@ -108,6 +138,9 @@ const postUrl = post.data.linkedinUrl;
                 ? "Got an answer or a question? Join the thread on LinkedIn."
                 : "Every post goes up on LinkedIn first. Follow to catch the next one."
             }
+          </p>
+          <p class="mt-1 text-sm text-faint">
+            New posts every {RHYTHM.days}, 7:30 AM Manila.
           </p>
         </div>
         <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap md:shrink-0">

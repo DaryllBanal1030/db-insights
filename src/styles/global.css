@@ -10,15 +10,13 @@
      here becomes available as Tailwind utilities like `bg-x`, `text-x`,
      `border-x`. Same idea for `--font-x` -> `font-x`.
    - We use `@theme inline` so the utilities emit `var(--…)` references rather
-     than baking in a fixed hex value. THAT is what lets the same utility class
-     (e.g. `bg-bg`) render dark or light depending on the active theme.
+     than baking in a fixed hex value; the values live on `:root` below.
 
-   THEMING MODEL:
-   - Real color values live in plain CSS custom properties on `:root` (dark, the
-     default) and are overridden on `:root[data-theme="light"]`.
-   - The theme toggle (an Astro island, added in step 2) flips
-     `data-theme="light"` on the <html> element and the whole page recolors,
-     because every token is a CSS variable.
+   THEMING MODEL: light only (Daryll, Nov 24, 2026). The site used to default
+   to a dark navy theme with a light/dark toggle; it went light-only after a
+   benchmark of 21 personal-brand sites (all light by default) and because the
+   maps are rendered on white. Navy stays the brand colour: text, buttons,
+   the Brand Mark and the "ink" accents.
 ============================================================================= */
 
 @import "tailwindcss";
@@ -79,46 +77,23 @@
 }
 
 /* -----------------------------------------------------------------------------
-   DARK PALETTE — the default (dark-first). Built on the Masterbrand navy
-   #0B1B39 (BRAND-GUIDE.md "Colour"); surfaces are slightly lighter navies.
-   `--accent` is the Masterbrand "ink" (white on navy): buttons, focus rings,
-   section numbers. Sub-brand colours live in the @theme block above.
+   PALETTE — white base, navy text and navy "ink" (BRAND-GUIDE.md "Colour").
+   `--accent` is the Masterbrand ink (navy): buttons, focus rings, section
+   numbers. Sub-brand colours live in the @theme block above.
 ----------------------------------------------------------------------------- */
 :root {
-  --bg: #0b1b39;           /* Masterbrand navy */
-  --surface: #11244a;
-  --border: #2c4679;       /* card borders (about 1.9:1 on navy, 1.7:1 on surface) */
-  --hairline: #182d58;     /* subtle dividers */
-  --text: #f2f5fa;
-  --muted: #aab7cd;
-  --faint: #8494b1;
-  --accent: #ffffff;       /* Masterbrand white */
-  --on-accent: #0b1b39;    /* text that sits ON the accent fill */
-  --live: #3ddc97;         /* "Live" status green */
-
-  /* Faint line-grid motif behind the hero — light lines at very low opacity. */
-  --grid-line: rgba(255, 255, 255, 0.05);
-  --dot: rgba(255, 255, 255, 0.12);
-
-  color-scheme: dark;
-}
-
-/* -----------------------------------------------------------------------------
-   LIGHT PALETTE — white base, navy text and navy "ink".
------------------------------------------------------------------------------ */
-:root[data-theme="light"] {
   --bg: #ffffff;
   --surface: #f3f5f9;
   --border: #d3dae6;
   --hairline: #e6eaf1;
   --text: #0b1b39;         /* Masterbrand navy */
   --muted: #4a5873;
-  --faint: #5d6a83;       /* AA (4.5:1+) on both white and --surface */
+  --faint: #5d6a83;        /* AA (4.5:1+) on both white and --surface */
   --accent: #0b1b39;       /* Masterbrand navy */
   --on-accent: #ffffff;
   --live: #0b7f56;         /* green that passes AA (4.6:1) on light cards */
 
-  /* Grid motif on light = faint navy lines. */
+  /* Faint line-grid motif behind the hero = faint navy lines. */
   --grid-line: rgba(11, 27, 57, 0.05);
   --dot: rgba(11, 27, 57, 0.12);
 
@@ -256,20 +231,15 @@ figcaption {
    The colour comes from the `--hl` variable: Insight Gold by default (the
    Masterbrand), set to the Sub-brand Accent on a Sub-brand's pages, e.g.
    style="--hl: var(--color-spatial)" for a teal DBSpatial highlight.
-   Dark theme: the words in the accent colour on navy (5:1 to 9.5:1).
-   Light theme: navy words over a highlighter stroke in the accent colour,
-   because teal/amber/violet/coral text on white is too faint to read.
+   Navy words over a highlighter stroke in the accent colour, because
+   teal/amber/violet/coral text on white is too faint to read.
    `box-decoration-break: clone` repeats the stroke when a phrase wraps. */
 .insight,
 .post-body mark,
 mark.insight {
-  color: var(--hl, var(--color-gold));
-  background: none;
-  font-weight: inherit;
-}
-:root[data-theme="light"] .insight,
-:root[data-theme="light"] .post-body mark {
   color: inherit;
+  background-color: transparent;
+  font-weight: inherit;
   background-image: linear-gradient(
     transparent 62%,
     color-mix(in srgb, var(--hl, var(--color-gold)) 60%, transparent) 62%,
@@ -388,6 +358,14 @@ mark.insight {
   border-radius: 0.75rem;
   border: 1px solid var(--border);
 }
+/* The follow block placed inside a post (FollowInline.astro). Its own link
+   style, so the post's underlined-links rule doesn't reach its button. */
+.post-body .post-follow {
+  margin-top: 2.25em;
+}
+.post-body .post-follow a {
+  text-decoration: none;
+}
 .post-body figure.map-frame img {
   border: 0;
 }
@@ -496,21 +474,13 @@ mark.insight {
   animation-delay: 140ms;
 }
 
-/* The ONE highlight "draws in" just after the headline appears:
-   light theme — the highlighter stroke sweeps left to right;
-   dark theme — the words warm from white to the highlight colour. */
+/* The ONE highlight "draws in" just after the headline appears: the
+   highlighter stroke sweeps left to right. */
 @keyframes draw-stroke {
   from { background-size: 0% 100%; }
   to   { background-size: 100% 100%; }
 }
-@keyframes warm-up {
-  from { color: var(--text); }
-}
 .reveal-enabled .insight.draw {
-  animation: warm-up 700ms var(--ease-out) 350ms backwards;
-}
-/* Both classes sit on <html>, so they're chained (no space between). */
-.reveal-enabled:root[data-theme="light"] .insight.draw {
   background-repeat: no-repeat;
   animation: draw-stroke 700ms var(--ease-out) 350ms backwards;
 }

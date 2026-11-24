@@ -15,7 +15,7 @@
 import SubBrandTag from "./SubBrandTag.astro";
 import PostTitle from "./PostTitle.astro";
 import { type Section } from "../lib/hub";
-import { accentStyleOf, isUpcoming, formatDate, statusOf, urlOf, type Post } from "../lib/posts";
+import { accentStyleOf, isUpcoming, formatDate, formatLabel, statusOf, urlOf, type Post } from "../lib/posts";
 
 interface Props {
   section: Section;
@@ -25,6 +25,7 @@ interface Props {
 const { section, post } = Astro.props;
 // Same status rule and wording as the section pages (statusOf in posts.ts).
 const status = await statusOf(section);
+const label = post ? await formatLabel(post) : ""; // "Map Breakdown #1"
 ---
 
 <article
@@ -69,7 +70,7 @@ const status = await statusOf(section);
         {
           post ? (
             <>
-              <span>{post.data.format}</span>
+              <span>{label}</span>
               <span aria-hidden="true">·</span>
               <time datetime={post.data.date.toISOString()}>
                 {isUpcoming(post) ? "Coming " : ""}{formatDate(post.data.date)}

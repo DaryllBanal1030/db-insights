@@ -117,3 +117,22 @@ export async function statusOf(section: Section): Promise<SectionStatus> {
   const out = (await getPosts(section.key)).filter((post) => !isUpcoming(post));
   return sectionStatus(section, out.length);
 }
+
+/**
+ * A post's number within its Format, oldest first: the first Map Breakdown
+ * is #1, the next #2, and so on. It only counts posts on the site (no
+ * drafts), so it never invents anything. Shown as "Map Breakdown #1".
+ */
+export async function numberOf(post: Post): Promise<number> {
+  const same = await getCollection(
+    "posts",
+    (p) => !p.data.draft && p.data.format === post.data.format,
+  );
+  same.sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf() || a.id.localeCompare(b.id));
+  return same.findIndex((p) => p.id === post.id) + 1;
+}
+
+/** "Map Breakdown #1": the post's Format plus its number (numberOf). */
+export async function formatLabel(post: Post): Promise<string> {
+  return `${post.data.format} #${await numberOf(post)}`;
+}

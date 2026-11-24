@@ -18,6 +18,7 @@ import { SECTIONS } from "../lib/hub";
 import {
   accentStyleOf,
   formatDate,
+  formatLabel,
   isUpcoming,
   sectionOf,
   tagOf,
@@ -32,6 +33,7 @@ interface Props {
 const { post } = Astro.props;
 const tag = tagOf(post);
 const section = SECTIONS[sectionOf(post)];
+const label = await formatLabel(post); // "Map Breakdown #1"
 ---
 
 <a
@@ -62,7 +64,7 @@ const section = SECTIONS[sectionOf(post)];
     ></span>
     <span class="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 text-xs text-faint sm:text-sm">
       <SubBrandTag section={tag} />
-      <span>{post.data.format}</span>
+      <span>{label}</span>
       <span aria-hidden="true">·</span>
       <time datetime={post.data.date.toISOString()}>
         {isUpcoming(post) ? "Coming " : ""}{formatDate(post.data.date)}

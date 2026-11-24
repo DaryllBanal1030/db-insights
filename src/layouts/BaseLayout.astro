@@ -62,11 +62,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
          preloading every font would slow the page down instead. -->
     <link rel="preload" href={headlineFont} as="font" type="font/woff2" crossorigin />
 
-    <!-- Colours the phone browser's address bar to match the site: navy
-         for the dark theme, white for light. The no-flash script below sets
-         it for the theme in use, and ThemeToggle updates it on each switch,
-         so it follows the toggle, not just the phone's setting. -->
-    <meta name="theme-color" content="#0b1b39" />
+    <!-- Colours the phone browser's address bar to match the (light-only)
+         site: white. -->
+    <meta name="theme-color" content="#ffffff" />
 
     <!-- Primary SEO -->
     <title>{title}</title>
@@ -90,32 +88,14 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     <meta name="twitter:image" content={ogImage} />
 
     <!--
-      NO-FLASH THEME SCRIPT.
+      MOTION SWITCH.
       `is:inline` tells Astro to leave this script exactly as written and inject
       it as-is, so it runs SYNCHRONOUSLY in <head> BEFORE the page paints.
-      That prevents a "flash of the wrong theme" on load:
-        1. If the user previously chose a theme, use it (localStorage).
-        2. Otherwise fall back to their OS preference (prefers-color-scheme).
-      The theme toggle island (added next step) reads/writes the same key.
+      (It used to pick the light/dark theme too; the site is light-only since
+      Nov 24, 2026, so only the motion switch is left.)
     -->
     <script is:inline>
       (function () {
-        try {
-          const stored = localStorage.getItem("theme");
-          const prefersLight =
-            window.matchMedia("(prefers-color-scheme: light)").matches;
-          const theme = stored ?? (prefersLight ? "light" : "dark");
-          // Dark is the default (no attribute); only set the attribute for light.
-          if (theme === "light") {
-            document.documentElement.setAttribute("data-theme", "light");
-            document
-              .querySelector('meta[name="theme-color"]')
-              .setAttribute("content", "#ffffff");
-          }
-        } catch (e) {
-          /* localStorage may be unavailable (e.g. privacy mode) — ignore. */
-        }
-
         // Enable scroll-in motion ONLY when JS runs and the user is fine with
         // motion. Added here (in <head>, pre-paint) so [data-reveal] elements
         // start hidden without a flash. If this line never runs (JS off) or

@@ -14,7 +14,7 @@
 
 import SubBrandTag from "./SubBrandTag.astro";
 import PostTitle from "./PostTitle.astro";
-import { accentStyleOf, formatDate, isUpcoming, tagOf, urlOf, type Post } from "../lib/posts";
+import { accentStyleOf, formatDate, formatLabel, isUpcoming, tagOf, urlOf, type Post } from "../lib/posts";
 
 interface Props {
   posts: Post[];
@@ -24,12 +24,14 @@ interface Props {
 
 const { posts, level = 3 } = Astro.props;
 const Heading = `h${level}` as "h2" | "h3";
+// "Map Breakdown #1", worked out once per post.
+const labels = await Promise.all(posts.map(formatLabel));
 ---
 
 <!-- `data-stagger`: posts rise in one after another (global.css). -->
 <ul class="grid gap-3" data-stagger>
   {
-    posts.map((post) => (
+    posts.map((post, i) => (
       <li>
         <a
           href={urlOf(post)}
@@ -52,7 +54,7 @@ const Heading = `h${level}` as "h2" | "h3";
           <span class="flex min-w-0 flex-1 flex-col py-1">
             <span class="flex flex-wrap items-center gap-x-3 gap-y-2 text-xs text-faint">
               <SubBrandTag section={tagOf(post)} />
-              <span>{post.data.format}</span>
+              <span>{labels[i]}</span>
               <span aria-hidden="true">·</span>
               {/* <time datetime> gives machines the exact date; people see the nice one. */}
               <time datetime={post.data.date.toISOString()}>

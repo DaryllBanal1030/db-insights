@@ -1,0 +1,37 @@
+---
+/* =============================================================================
+   FollowInline.astro — a small follow block INSIDE a post.
+   =============================================================================
+   The post page ([section]/[slug].astro) puts it just before the body's first
+   section heading, so a reader who arrived from LinkedIn sees one clear ask
+   early, not only at the very end. One action (Follow on LinkedIn) and the
+   weekly promise, built from WEEKLY_SLOTS in hub.ts (RHYTHM), so the wording
+   changes with the schedule. (Pattern from the personal-brand benchmark,
+   Nov 24, 2026: Justin Welsh's mid-essay signup, FlowingData's one-line
+   promise.)
+============================================================================= */
+
+import { FOLLOW_LINKS, POST_TIME, RHYTHM } from "../lib/hub";
+import NewTabNote from "./NewTabNote.astro";
+
+const linkedin = FOLLOW_LINKS.find((link) => link.platform === "LinkedIn")!;
+---
+
+<aside
+  class="post-follow flex flex-col gap-3 rounded-xl border border-border bg-surface p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-5"
+  aria-label="Follow DB Insights"
+>
+  <div class="text-sm">
+    <p class="font-semibold text-text">A new post every {RHYTHM.days}.</p>
+    <p class="mt-0.5 text-muted">{RHYTHM.formats}, {POST_TIME}.</p>
+  </div>
+  <a
+    href={linkedin.url}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="press inline-flex min-h-11 shrink-0 items-center justify-center rounded-lg bg-accent px-4 text-sm font-semibold text-on-accent hover:opacity-90"
+  >
+    Follow on LinkedIn ↗
+    <NewTabNote />
+  </a>
+</aside>
