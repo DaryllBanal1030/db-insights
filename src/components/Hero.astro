@@ -19,6 +19,7 @@
    the LinkedIn headline. The employer is named only on /about (Experience).
 ============================================================================= */
 
+import { existsSync } from "node:fs";
 import { BRAND, FOLLOW_LINKS, POST_TIME, SECTIONS, WEEKLY_SLOTS, hasStarted } from "../lib/hub";
 import { formatDate, getPosts, isUpcoming, plainTitle, urlOf } from "../lib/posts";
 import NewTabNote from "./NewTabNote.astro";
@@ -30,6 +31,11 @@ const linkedin = FOLLOW_LINKS.find((link) => link.platform === "LinkedIn")!;
 // launch date, worded "First post: ..." before it and "Live since ..." after.
 const [latest] = await getPosts();
 const launched = hasStarted(BRAND.launchOn);
+
+// Daryll's photo (public/daryll.jpg) for the byline under the subline. The
+// benchmark's clearest lesson: people follow a person, so show the face on
+// the first screen. Left out if the file is ever missing (no broken image).
+const hasPhoto = existsSync("public/daryll.jpg");
 ---
 
 <section class="relative overflow-hidden" aria-labelledby="hero-heading">
@@ -69,6 +75,25 @@ const launched = hasStarted(BRAND.launchOn);
         Learn to turn PH data and maps into better decisions, one short post
         at a time. Built only from public data.
       </p>
+
+      <!-- Byline: Daryll's face and role, linking to /about. -->
+      {
+        hasPhoto && (
+          <a href="/about" class="hero-in group mt-6 inline-flex items-center gap-3" style="--i: 2">
+            <img
+              src="/daryll.jpg"
+              alt=""
+              width="48"
+              height="48"
+              class="h-12 w-12 rounded-full border border-border object-cover"
+            />
+            <span class="text-sm leading-tight">
+              <span class="block font-semibold text-text group-hover:underline">Daryll Banal</span>
+              <span class="block text-muted">Senior research analyst</span>
+            </span>
+          </a>
+        )
+      }
 
       <!-- Buttons: full width on mobile, inline from sm up. -->
       <div class="hero-in mt-8 flex flex-col gap-3 sm:flex-row" style="--i: 2">
