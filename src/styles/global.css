@@ -240,14 +240,30 @@ mark.insight {
   color: inherit;
   background-color: transparent;
   font-weight: inherit;
+  /* The stroke covers the lower half of the letters (about 48% to 84% of
+     the text height), like a real highlighter pen. Lower than that (it was
+     62% to 94% until Nov 25, 2026) it sits under the letters and reads as a
+     thick underline, especially in body text. */
   background-image: linear-gradient(
-    transparent 62%,
-    color-mix(in srgb, var(--hl, var(--color-gold)) 60%, transparent) 62%,
-    color-mix(in srgb, var(--hl, var(--color-gold)) 60%, transparent) 94%,
-    transparent 94%
+    transparent 48%,
+    color-mix(in srgb, var(--hl, var(--color-gold)) 55%, transparent) 48%,
+    color-mix(in srgb, var(--hl, var(--color-gold)) 55%, transparent) 84%,
+    transparent 84%
   );
+  padding-inline: 0.08em;
+  margin-inline: -0.04em;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
+}
+/* In body text the letters are small, so the stroke reaches a little higher
+   (about 38% to 88%); otherwise it still reads as an underline. */
+.post-body mark {
+  background-image: linear-gradient(
+    transparent 38%,
+    color-mix(in srgb, var(--hl, var(--color-gold)) 50%, transparent) 38%,
+    color-mix(in srgb, var(--hl, var(--color-gold)) 50%, transparent) 88%,
+    transparent 88%
+  );
 }
 
 /* CORNER ACCENTS — the Masterbrand signature from the post templates
@@ -303,9 +319,13 @@ mark.insight {
    (<h2>, <p>, <ul>, <code>…) with no classes, so we style those tags here,
    scoped to the `.post-body` wrapper on the post page.
 ----------------------------------------------------------------------------- */
+/* 17px with 1.65 line height: big enough to read comfortably, lines close
+   enough that a paragraph holds together (1.75 at 16px made each line float
+   on its own). */
 .post-body {
   color: var(--text);
-  line-height: 1.75;
+  font-size: 1.0625rem;
+  line-height: 1.65;
 }
 .post-body > * + * {
   margin-top: 1.25em;
