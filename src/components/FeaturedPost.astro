@@ -7,6 +7,9 @@
    title. Phone: the map on top, full width. sm and up: map left (5/12),
    words right (7/12), centred against the map.
 
+   The cover is shown whole (object-contain), never cropped: fine for the
+   tall map renders, essential for charts, whose edges carry the numbers.
+
    The whole card is one link. The image has alt="" because the title right
    next to it already names the post (the post page carries the full alt).
    A post dated after today reads "Coming Mon Nov 23, 2026" (isUpcoming).
@@ -51,7 +54,7 @@ const label = await formatLabel(post); // "Map Breakdown #1"
           src={post.data.cover}
           alt=""
           decoding="async"
-          class="aspect-[4/5] w-full object-cover"
+          class="aspect-[4/5] w-full bg-white object-contain"
         />
       </span>
     )

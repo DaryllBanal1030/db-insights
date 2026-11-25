@@ -38,7 +38,8 @@ const label = post ? await formatLabel(post) : ""; // "Map Breakdown #1"
     {
       post?.data.cover ? (
         // A fixed 4:3 box (`aspect`) reserves the space, so nothing jumps
-        // while the image loads; `object-cover` crops the image to fill it.
+        // while the image loads; `object-contain` shows the whole cover (a
+        // chart cropped at the edges would lose its numbers).
         // `map-frame` (global.css) mounts the render like a print.
         <span class="map-frame w-full shrink-0 sm:w-40">
           <img
@@ -46,7 +47,7 @@ const label = post ? await formatLabel(post) : ""; // "Map Breakdown #1"
             alt={post.data.coverAlt ?? ""}
             loading="lazy"
             decoding="async"
-            class="aspect-[4/3] w-full object-cover sm:aspect-[4/5]"
+            class="aspect-[4/3] w-full bg-white object-contain sm:aspect-[4/5]"
           />
         </span>
       ) : (
