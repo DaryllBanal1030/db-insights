@@ -1,0 +1,72 @@
+---
+/* =============================================================================
+   ViewCount.astro — "1,234 views" on a post page.
+   =============================================================================
+   Counts only, never who (see src/pages/api/views/[slug].ts). The page itself
+   is static, so the number is fetched in the browser after it loads:
+     - the first visit from this browser today counts a view (POST), and
+       is remembered in localStorage so a refresh doesn't count again;
+     - any other visit just reads the number (GET).
+   Until the counter has a number (no database connected yet, offline, or an
+   error) nothing is shown: no "0 views", no broken text. No live "viewing
+   now" count, by design (Daryll, Nov 25, 2026).
+============================================================================= */
+
+interface Props {
+  /** The post's id (its file name), e.g. "2026-11-23-where-filipinos-live". */
+  slug: string;
+}
+
+const { slug } = Astro.props;
+---
+
+<!-- Hidden until the script fills it in. aria-live is left off on purpose:
+     a number appearing after load isn't worth interrupting a screen reader. -->
+<span class="view-count hidden items-center gap-x-3" data-view-count={slug}>
+  <span aria-hidden="true">·</span>
+  <span data-view-count-text></span>
+</span>
+
+<script>
+  const DAY = 24 * 60 * 60 * 1000;
+  const format = new Intl.NumberFormat("en-US");
+
+  document.querySelectorAll<HTMLElement>("[data-view-count]").forEach(async (el) => {
+    const slug = el.dataset.viewCount;
+    if (!slug) return;
+
+    // Count once per browser per post per day; otherwise just read.
+    const seenKey = `viewed:${slug}`;
+    let seenRecently = false;
+    try {
+      const last = Number(localStorage.getItem(seenKey) ?? 0);
+      seenRecently = Date.now() - last < DAY;
+    } catch {
+      /* storage blocked (private mode): count, but still show the number */
+    }
+    // Automated browsers (tests, scrapers) read but never count.
+    const count = !seenRecently && !navigator.webdriver;
+
+    try {
+      const res = await fetch(`/api/views/${encodeURIComponent(slug)}`, {
+        method: count ? "POST" : "GET",
+      });
+      if (!res.ok) return;
+      const { views } = (await res.json()) as { views: number | null };
+      if (typeof views !== "number" || views < 1) return;
+
+      if (count) {
+        try {
+          localStorage.setItem(seenKey, String(Date.now()));
+        } catch {
+          /* ignore */
+        }
+      }
+      const text = el.querySelector("[data-view-count-text]");
+      if (text) text.textContent = `${format.format(views)} ${views === 1 ? "view" : "views"}`;
+      el.classList.replace("hidden", "inline-flex");
+    } catch {
+      /* offline or blocked: show nothing */
+    }
+  });
+</script>

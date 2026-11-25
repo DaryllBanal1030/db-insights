@@ -10,7 +10,8 @@
 
    render(post) turns the post's Markdown body into a <Content /> component.
 
-   The header names the source in a few words (`sourceLine`) and numbers the
+   The header shows how many times the post was viewed (ViewCount.astro; a
+   count only, never who) and names the source in a few words (`sourceLine`) and numbers the
    post within its Format ("Map Breakdown #1"). Before the body's first
    section heading sits a small follow block (FollowInline.astro), so a
    reader who arrived from LinkedIn sees the ask early; the body is split on
@@ -39,6 +40,7 @@ import {
 } from "../../lib/posts";
 import PostTitle from "../../components/PostTitle.astro";
 import NewTabNote from "../../components/NewTabNote.astro";
+import ViewCount from "../../components/ViewCount.astro";
 
 export async function getStaticPaths() {
   const posts = await getPosts();
@@ -88,6 +90,8 @@ const postUrl = post.data.linkedinUrl;
         <time datetime={post.data.date.toISOString()}>
           {isUpcoming(post) ? "Coming " : ""}{formatDate(post.data.date)}
         </time>
+        {/* "1,234 views": filled in by the browser (ViewCount.astro). */}
+        <ViewCount slug={post.id} />
       </div>
       <h1 class="mt-4 text-balance text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
         <PostTitle title={post.data.title} />
