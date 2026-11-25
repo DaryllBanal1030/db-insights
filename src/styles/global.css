@@ -319,23 +319,18 @@ mark.insight {
    (<h2>, <p>, <ul>, <code>…) with no classes, so we style those tags here,
    scoped to the `.post-body` wrapper on the post page.
 ----------------------------------------------------------------------------- */
-/* 17px with 1.65 line height: big enough to read comfortably, lines close
-   enough that a paragraph holds together (1.75 at 16px made each line float
-   on its own). */
+/* The post page is ONE column (608px of content, set on the <article> in
+   [section]/[slug].astro): text, figures and boxes share both edges. 18px
+   text keeps that width at a readable 75 to 80 characters a line; 1.65 line
+   height holds a paragraph together. (Until Nov 25, 2026 the text was capped
+   narrower than the figures, which left a ragged right edge.) */
 .post-body {
   color: var(--text);
-  font-size: 1.0625rem;
+  font-size: 1.125rem;
   line-height: 1.65;
 }
 .post-body > * + * {
   margin-top: 1.25em;
-}
-/* Text at a readable measure: about 70 to 75 characters a line. Set in rem,
-   not `ch`: a `ch` is the width of "0", which is wider than an average
-   letter in Plus Jakarta Sans, so 68ch let lines run to about 98 characters.
-   Figures and code blocks keep the full column. */
-.post-body > :not(figure, pre, img) {
-  max-width: 32rem;
 }
 .post-body h2 {
   margin-top: 2em;

@@ -23,7 +23,7 @@ const linkedin = FOLLOW_LINKS.find((link) => link.platform === "LinkedIn")!;
 >
   <div class="text-sm">
     <p class="font-semibold text-text">A new post every {RHYTHM.days}.</p>
-    <p class="mt-0.5 text-muted">{RHYTHM.formats}, {POST_TIME}.</p>
+    <p class="mt-0.5 text-muted">{RHYTHM.formats}, <span class="whitespace-nowrap">{POST_TIME}</span>.</p>
   </div>
   <a
     href={linkedin.url}
